@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قسم الكتابة - TOPIK II 쓰기</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
+        :root {
+            --surface: rgba(255, 255, 255, 0.75);
+            --surface-hover: rgba(255, 255, 255, 0.9);
+            --border: rgba(168, 139, 250, 0.4);
+            --text: #3b0764;
+            --text-light: #6b21a8;
+            --accent: #9333ea;
+            --accent-dark: #7e22ce;
+            --accent-light: #f3e8ff;
+            --correct: #059669;
+            --correct-bg: #d1fae5;
+            --wrong: #dc2626;
+            --wrong-bg: #fee2e2;
+            --warning: #f59e0b;
+            --warning-bg: #fef3c7;
+            --info: #3b82f6;
+            --info-bg: #dbeafe;
+            --shadow: 0 4px 20px rgba(147, 51, 234, 0.1);
+            --shadow-lg: 0 12px 40px rgba(147, 51, 234, 0.2);
+            --radius: 28px;
+            --radius-sm: 16px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(160deg, #f5f3ff 0%, #ede9fe 25%, #e0d5ff 50%, #d8c9ff 75%, #c4b5fd 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: var(--text);
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: clamp(12px, 2vw, 20px) 10px;
+        }
+
+        .main-screen {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .main-header { text-align: center; margin-bottom: 8px; }
+
+        .main-header .icon-big {
+            font-size: 56px; display: block; margin-bottom: 8px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .main-header h1 { font-weight: 900; font-size: 24px; color: var(--text); margin-bottom: 4px; }
+        .main-header p { font-size: 13px; color: var(--text-light); font-weight: 500; }
+
+        .back-home-row { display: flex; align-items: center; gap: 10px; }
+
+        .back-home-btn {
+            display: flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 25px;
+            background: var(--surface); border: 1px solid var(--border); color: var(--text);
+            cursor: pointer; font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 700;
+            transition: all 0.2s; backdrop-filter: blur(10px); text-decoration: none;
+        }
+
+        .back-home-btn:hover { background: var(--surface-hover); transform: translateX(3px); box-shadow: var(--shadow); }
+
+        /* ===== شرح نوع السؤال ===== */
+        .exam-tip-box {
+            background: linear-gradient(135deg, #fff9c4, #fff176);
+            border: 2px solid #fbc02d;
+            border-radius: 20px;
+            padding: 16px;
+            margin: 10px 0;
+            font-size: 13px;
+            line-height: 1.7;
+            box-shadow: 0 4px 12px rgba(251, 192, 45, 0.2);
+        }
+        .exam-tip-box .tip-title {
+            font-weight: 900; color: #f57f17; font-size: 15px; margin-bottom: 8px;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .exam-tip-box .tip-section {
+            margin: 8px 0; padding: 8px 12px; background: rgba(255, 255, 255, 0.6); border-radius: 12px;
+        }
+        .exam-tip-box .tip-label {
+            font-weight: 900; color: #e65100; font-size: 12px;
+        }
+        .exam-tip-box ul { margin: 4px 16px; font-size: 11px; }
+
+        .sections-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+        .section-card {
+            background: var(--surface); backdrop-filter: blur(15px); border-radius: 24px;
+            padding: 24px 18px; text-align: center; cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.6); box-shadow: var(--shadow);
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative; overflow: hidden; text-decoration: none; color: var(--text);
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+        }
+
+        .section-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: var(--accent); background: rgba(255, 255, 255, 0.9); }
+        .section-card:active { transform: scale(0.96); }
+
+        .section-card .card-icon { font-size: 48px; position: relative; z-index: 1; }
+        .section-card .card-title { font-weight: 900; font-size: 15px; position: relative; z-index: 1; }
+        .section-card .card-subtitle { font-size: 10px; color: var(--text-light); position: relative; z-index: 1; }
+
+        .section-card .card-badge {
+            display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 10px;
+            font-weight: 700; background: var(--accent-light); color: var(--accent-dark);
+            position: relative; z-index: 1;
+        }
+
+        .section-card::before {
+            content: ''; position: absolute; top: -30px; right: -30px; width: 80px; height: 80px;
+            background: rgba(168, 139, 250, 0.2); border-radius: 50%; transition: all 0.4s;
+        }
+
+        .section-card:hover::before { transform: scale(2.5); opacity: 0.6; }
+
+        .level-screen { display: none; width: 100%; max-width: 500px; padding: 20px; flex-direction: column; gap: 16px; }
+        .level-screen.active { display: flex; }
+
+        .level-header-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .level-title-area { flex: 1; text-align: center; }
+
+        .level-title-area .level-icon-big { font-size: 48px; display: block; margin-bottom: 4px; }
+        .level-title-area h2 { font-weight: 900; font-size: 18px; color: var(--text); }
+
+        .content-card {
+            background: var(--surface); backdrop-filter: blur(15px); border-radius: 24px;
+            padding: 20px; border: 2px solid rgba(255, 255, 255, 0.6); box-shadow: var(--shadow);
+        }
+
+        .content-card p { font-size: 13px; color: var(--text-light); margin-bottom: 12px; line-height: 1.7; }
+        .content-card h3 { font-weight: 900; font-size: 15px; margin-bottom: 8px; color: var(--text); }
+        .content-card h4 { font-weight: 900; font-size: 13px; margin-bottom: 6px; color: var(--accent-dark); }
+
+        .question-text { font-size: 14px; line-height: 1.9; margin-bottom: 12px; white-space: pre-line; }
+
+        .blank-inline {
+            display: inline-block; min-width: 60px; border-bottom: 2px solid var(--accent);
+            text-align: center; color: var(--accent-dark); font-weight: 700; padding: 0 6px; margin: 0 4px;
+        }
+
+        .wongoji-textarea {
+            width: 100%; min-height: 100px; border: 2px solid var(--border); border-radius: var(--radius-sm);
+            padding: 12px; font-family: 'Noto Sans KR', monospace; font-size: 14px; resize: vertical;
+            background: rgba(255, 255, 255, 0.7); line-height: 2; letter-spacing: 1px; transition: border-color 0.3s;
+        }
+
+        .wongoji-textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(147, 51, 234, 0.1); }
+        .char-count { text-align: left; font-size: 10px; color: var(--text-light); margin-top: 4px; }
+
+        .btn {
+            padding: 10px 18px; border-radius: 25px; border: none; cursor: pointer; font-weight: 700;
+            font-size: 12px; font-family: 'Tajawal', sans-serif; transition: all 0.2s;
+            display: inline-flex; align-items: center; gap: 5px;
+        }
+
+        .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: #fff; box-shadow: 0 4px 15px rgba(147, 51, 234, 0.3); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(147, 51, 234, 0.4); }
+        .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+        .btn-hint { background: var(--warning-bg); color: #92400e; border: 1px solid var(--warning); font-size: 10px; padding: 6px 10px; }
+        .btn-info { background: var(--info-bg); color: #1e40af; border: 1px solid var(--info); font-size: 10px; padding: 6px 10px; }
+        .btn-group { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+        .nav-buttons { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; gap: 8px; flex-wrap: wrap; }
+
+        .practice-row {
+            display: flex; align-items: center; gap: 8px; padding: 10px; margin-bottom: 6px;
+            background: rgba(243, 232, 255, 0.5); border-radius: 12px; border: 1px solid var(--border); flex-wrap: wrap;
+        }
+
+        .practice-input {
+            padding: 8px 12px; border: 1px solid var(--border); border-radius: 10px;
+            font-family: 'Noto Sans KR', sans-serif; min-width: 130px; flex: 1; font-size: 13px;
+            transition: border-color 0.3s; background: rgba(255, 255, 255, 0.8);
+        }
+
+        .practice-input:focus { outline: none; border-color: var(--accent); }
+
+        .correction-box { background: var(--wrong-bg); border: 1px solid var(--wrong); border-radius: var(--radius-sm); padding: 10px; margin-top: 8px; display: none; }
+        .correction-box.show { display: block; }
+
+        .correction-item { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; font-family: 'Noto Sans KR', sans-serif; font-size: 13px; }
+        .correction-item .wrong-text { text-decoration: line-through; color: var(--wrong); }
+        .correction-item .correct-text { color: var(--correct); font-weight: 700; }
+
+        .grading-result { background: #fff; border-radius: var(--radius-sm); padding: 14px; margin-top: 12px; border: 1px solid var(--border); display: none; }
+        .grading-result.show { display: block; }
+
+        .grade-score { font-size: 28px; font-weight: 900; color: var(--accent-dark); text-align: center; margin: 8px 0; }
+        .grade-details { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px; }
+        .grade-item { text-align: center; padding: 10px; background: var(--accent-light); border-radius: var(--radius-sm); }
+        .grade-item .label { font-size: 10px; color: var(--text-light); margin-bottom: 3px; }
+        .grade-item .value { font-weight: 900; font-size: 15px; color: var(--accent-dark); }
+
+        /* ===== نافذة ترجمة الكورية ===== */
+        .kr-translation-popup {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+            padding: 20px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            z-index: 999; max-width: 350px; width: 90%; font-family: 'Tajawal', sans-serif;
+            animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes popIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+        .kr-translation-popup .popup-close {
+            position: absolute; top: 8px; left: 12px; width: 28px; height: 28px;
+            border-radius: 50%; background: #ff5252; color: #fff; display: flex;
+            align-items: center; justify-content: center; cursor: pointer; font-weight: 900;
+            font-size: 14px; transition: 0.2s;
+        }
+        .kr-translation-popup .popup-close:hover { background: #d32f2f; transform: scale(1.1); }
+        .kr-clickable {
+            cursor: pointer; border-bottom: 2px dotted var(--accent); transition: all 0.2s;
+            display: inline-block; padding: 2px 4px; border-radius: 4px;
+        }
+        .kr-clickable:hover { background: var(--accent-light); color: var(--accent-dark); }
+
+        .toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: var(--text); color: #fff; padding: 12px 24px; border-radius: 30px;
+            font-size: 13px; font-weight: 700; z-index: 100; opacity: 0; transition: opacity 0.3s; pointer-events: none;
+        }
+
+        .toast.show { opacity: 1; }
+
+        @media (max-width: 480px) {
+            .main-screen, .level-screen { padding: 14px; }
+            .sections-grid { gap: 10px; }
+            .section-card { padding: 18px 14px; }
+            .section-card .card-icon { font-size: 38px; }
+            .grade-details { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- ========== الشاشة الرئيسية ========== -->
+<div class="main-screen" id="mainScreen">
+    <div class="back-home-row">
+        <button class="back-home-btn" onclick="goToHome()">
+            <i class="fa-solid fa-arrow-right"></i><span>رجوع للرئيسية</span>
+        </button>
+    </div>
+
+    <div class="main-header">
+        <span class="icon-big">📝</span>
+        <h1>قسم الكتابة الكورية</h1>
+        <p>TOPIK II 쓰기 - 4 مستويات تعليمية</p>
+    </div>
+
+    <!-- شرح طريقة أسئلة الكتابة في التوبيك -->
+    <div class="exam-tip-box">
+        <div class="tip-title">📋 كيف تأتي أسئلة الكتابة في امتحان TOPIK II؟</div>
+        <div class="tip-section">
+            <span class="tip-label">📌 الأسئلة 51-52: الإكمال السريع (10 نقاط لكل سؤال)</span>
+            <ul>
+                <li><strong>سؤال 51:</strong> نص قصير جداً (بريد، إعلان) به فراغان - املأ الفراغ بجملة مناسبة للسياق</li>
+                <li><strong>سؤال 52:</strong> نص معلوماتي به فراغان - استخدم كلمات أكاديمية مناسبة</li>
+                <li>⏱ الوقت المقترح: 5-7 دقائق للسؤالين معاً</li>
+            </ul>
+        </div>
+        <div class="tip-section">
+            <span class="tip-label">📊 السؤال 53: تحليل البيانات (30 نقطة)</span>
+            <ul>
+                <li>يُعطى رسم بياني (شريطي/دائري) + جدول بيانات</li>
+                <li>اكتب 200-300 حرف تصف فيه البيانات <strong>بدون رأي شخصي</strong></li>
+                <li>استخدم تعبيرات: 증가했다/감소했다, ~에 따르면, ~것으로 나타났다</li>
+                <li>⏱ الوقت المقترح: 15 دقيقة</li>
+            </ul>
+        </div>
+        <div class="tip-section">
+            <span class="tip-label">📝 السؤال 54: المقال التحليلي (50 نقطة)</span>
+            <ul>
+                <li>موضوع اجتماعي/ثقافي مع 3 أسئلة توجيهية</li>
+                <li>اكتب 600-700 حرف في <strong>مقدمة + عرض (첫째/둘째/셋째) + خاتمة</strong></li>
+                <li>استخدم مفردات أكاديمية ونهايات 한다체</li>
+                <li>⏱ الوقت المقترح: 30 دقيقة</li>
+            </ul>
+        </div>
+        <div class="tip-section">
+            <span class="tip-label">🧠 تكنيكات ذكية للحل:</span>
+            <ul>
+                <li>🔍 <strong>في سؤال 51:</strong> انتبه لمستوى الاحترام - الرسائل الشخصية (아/어) تختلف عن الإعلانات الرسمية (습니다)</li>
+                <li>📊 <strong>في سؤال 53:</strong> لا تكتب رأيك! فقط صف: 가장 높은 것은 ~이다، 다음으로 ~이/가 있다</li>
+                <li>📝 <strong>في سؤال 54:</strong> نظّم المقال بهيكل واضح: 최근 ~에 대한 관심이 높아지고 있다 (مقدمة)، 결론적으로 (خاتمة)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="sections-grid">
+        <div class="section-card" onclick="openLevel('level1')">
+            <div class="card-icon">🟢</div>
+            <div class="card-title">المستوى الأول</div>
+            <div class="card-subtitle">بناء الأساس - 5 دروس</div>
+            <span class="card-badge">50 تدريب</span>
+        </div>
+
+        <div class="section-card" onclick="openLevel('level2')">
+            <div class="card-icon">🟡</div>
+            <div class="card-title">المستوى الثاني</div>
+            <div class="card-subtitle">أدوات الكتابة - 3 دروس</div>
+            <span class="card-badge">30 تدريب</span>
+        </div>
+
+        <div class="section-card" onclick="openLevel('level3')">
+            <div class="card-icon">🟠</div>
+            <div class="card-title">المستوى الثالث</div>
+            <div class="card-subtitle">تدريب متقدم - 1 درس</div>
+            <span class="card-badge">10 تدريبات</span>
+        </div>
+
+        <div class="section-card" onclick="openLevel('level4')" style="border-color: rgba(239, 68, 68, 0.4);">
+            <div class="card-icon">🔴</div>
+            <div class="card-title">المستوى الرابع</div>
+            <div class="card-subtitle">محاكاة الامتحان</div>
+            <span class="card-badge" style="background:#fee2e2;color:#dc2626;">51-54</span>
+        </div>
+    </div>
+</div>
+
+<!-- ========== شاشات المستويات ========== -->
+<div class="level-screen" id="levelLevel1">
+    <div class="level-header-bar">
+        <button class="back-home-btn" onclick="goBackToMain()">
+            <i class="fa-solid fa-arrow-right"></i><span>رجوع</span>
+        </button>
+        <div class="level-title-area">
+            <span class="level-icon-big">🟢</span>
+            <h2>المستوى الأول: الأساسيات</h2>
+        </div>
+        <div style="width:50px;"></div>
+    </div>
+    <div class="content-card" id="level1Content"></div>
+    <div class="nav-buttons" id="level1Nav"></div>
+</div>
+
+<div class="level-screen" id="levelLevel2">
+    <div class="level-header-bar">
+        <button class="back-home-btn" onclick="goBackToMain()">
+            <i class="fa-solid fa-arrow-right"></i><span>رجوع</span>
+        </button>
+        <div class="level-title-area">
+            <span class="level-icon-big">🟡</span>
+            <h2>المستوى الثاني: أدوات الكتابة</h2>
+        </div>
+        <div style="width:50px;"></div>
+    </div>
+    <div class="content-card" id="level2Content"></div>
+    <div class="nav-buttons" id="level2Nav"></div>
+</div>
+
+<div class="level-screen" id="levelLevel3">
+    <div class="level-header-bar">
+        <button class="back-home-btn" onclick="goBackToMain()">
+            <i class="fa-solid fa-arrow-right"></i><span>رجوع</span>
+        </button>
+        <div class="level-title-area">
+            <span class="level-icon-big">🟠</span>
+            <h2>المستوى الثالث: تدريب متقدم</h2>
+        </div>
+        <div style="width:50px;"></div>
+    </div>
+    <div class="content-card" id="level3Content"></div>
+    <div class="nav-buttons" id="level3Nav"></div>
+</div>
+
+<div class="level-screen" id="levelLevel4">
+    <div class="level-header-bar">
+        <button class="back-home-btn" onclick="goBackToMain()">
+            <i class="fa-solid fa-arrow-right"></i><span>رجوع</span>
+        </button>
+        <div class="level-title-area">
+            <span class="level-icon-big">🔴</span>
+            <h2>المستوى الرابع: محاكاة الامتحان</h2>
+        </div>
+        <div style="width:50px;"></div>
+    </div>
+    <div class="content-card" id="level4Content"></div>
+    <div class="nav-buttons" id="level4Nav"></div>
+</div>
+
+<script src="writing-data.js"></script>
+<script src="writing-engine.js"></script>
+</body>
+</html>

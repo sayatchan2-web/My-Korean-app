@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنجازاتي | Kawaii Progress</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Fredoka:wght@400;600;700&display=swap');
+
+        :root {
+            --bg: #fdf2f8;
+            --card: rgba(255,255,255,0.65);
+            --border: rgba(255,255,255,0.7);
+            --text: #4a1d4a;
+            --accent: #f472b6;
+            --star-filled: #fbbf24;
+            --star-empty: #e5e7eb;
+            --progress-bg: #fce7f3;
+            --progress-fill: #f9a8d4;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 50%, #e1bee7 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: clamp(12px, 2vw, 20px) 10px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* فقاعات خلفية */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.4);
+            border-radius: 50%;
+            top: 10%;
+            left: 5%;
+            animation: floatBubble 6s ease-in-out infinite;
+            z-index: 0;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            bottom: 15%;
+            right: 8%;
+            animation: floatBubble 8s ease-in-out infinite reverse;
+            z-index: 0;
+        }
+        @keyframes floatBubble {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.05); }
+        }
+
+        .screen {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 40px;
+            border: 2px solid var(--border);
+            box-shadow: 0 20px 50px rgba(180, 100, 140, 0.2);
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .back-btn {
+            background: rgba(255,255,255,0.7);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+            backdrop-filter: blur(10px);
+        }
+        .back-btn:hover { background: white; transform: translateX(3px); }
+        .title-area { flex: 1; text-align: center; }
+        .title-area h1 { font-weight: 900; font-size: 24px; color: var(--text); }
+        .title-area p { font-size: 12px; color: #9c4d7c; }
+
+        /* شريط التقدم الرئيسي */
+        .progress-section {
+            background: rgba(255,255,255,0.5);
+            border-radius: 30px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+        .progress-bar {
+            height: 24px;
+            background: var(--progress-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            margin: 10px 0;
+            border: 1px solid rgba(255,255,255,0.8);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f9a8d4, #f472b6, #ec4899);
+            border-radius: 12px;
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+        }
+        /* أرنب صغير يسير على شريط التقدم */
+        .progress-character {
+            position: absolute;
+            top: -22px;
+            left: 0%;
+            font-size: 28px;
+            transition: left 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            z-index: 2;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.1));
+            transform: translateX(-50%);
+        }
+        .stars-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .star-icon {
+            font-size: 20px;
+            transition: transform 0.3s;
+        }
+        .star-icon.earned { transform: scale(1.2); }
+
+        /* بطاقات الإحصائيات */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .stat-card {
+            background: var(--card);
+            border-radius: 24px;
+            padding: 16px;
+            text-align: center;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            transition: transform 0.2s;
+        }
+        .stat-card:hover { transform: translateY(-3px); }
+        .stat-emoji { font-size: 32px; }
+        .stat-value { font-weight: 900; font-size: 22px; color: var(--text); margin: 4px 0; }
+        .stat-label { font-size: 11px; color: #9c4d7c; }
+
+        /* الشارات */
+        .badges-title { font-weight: 900; font-size: 16px; color: var(--text); }
+        .badges-grid {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .badge-item {
+            width: 70px;
+            height: 80px;
+            background: var(--card);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+        }
+        .badge-item.locked { opacity: 0.4; filter: grayscale(100%); }
+        .badge-item.unlocked { border-color: #fbbf24; background: #fff7e0; }
+        .badge-icon { font-size: 28px; }
+        .badge-name { font-size: 9px; font-weight: 700; color: var(--text); text-align: center; }
+
+        /* رسالة تشجيعية */
+        .encouragement {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: #ec4899;
+            background: rgba(255,255,255,0.6);
+            border-radius: 20px;
+            padding: 12px;
+            border: 1px dashed #f9a8d4;
+        }
+
+        @media (max-width: 520px) {
+            .screen {
+                max-width: 100%;
+                border-radius: 30px;
+                padding: 20px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="goBack()"><i class="fa-solid fa-arrow-right"></i> رجوع</button>
+            <div class="title-area">
+                <h1>🌟 إنجازاتي</h1>
+                <p>تابع تقدمك</p>
+            </div>
+        </div>
+
+        <!-- شريط التقدم -->
+        <div class="progress-section">
+            <div class="progress-label">
+                <span>📚 القصص المكتملة</span>
+                <span id="progressText">0 / 40</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+                <div class="progress-character" id="progressCharacter">🐰</div>
+            </div>
+            <div class="stars-row" id="starsRow"></div>
+        </div>
+
+        <!-- إحصائيات -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-emoji">📖</div>
+                <div class="stat-value" id="statStories">0</div>
+                <div class="stat-label">قصص مكتملة</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-emoji">⚡</div>
+                <div class="stat-value" id="statXP">0</div>
+                <div class="stat-label">نقطة خبرة</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-emoji">🎧</div>
+                <div class="stat-value" id="statListening">0</div>
+                <div class="stat-label">تمارين استماع</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-emoji">✍️</div>
+                <div class="stat-value" id="statWriting">0</div>
+                <div class="stat-label">تمارين كتابة</div>
+            </div>
+        </div>
+
+        <!-- الشارات -->
+        <div>
+            <div class="badges-title">🎖️ الشارات</div>
+            <div class="badges-grid" id="badgesGrid"></div>
+        </div>
+
+        <!-- رسالة تشجيعية -->
+        <div class="encouragement" id="encouragementMsg">
+            🐰 كل قصة تقرّبك من القمة!
+        </div>
+    </div>
+
+    <script>
+        const ACHIEVEMENTS_KEY = 'korean_app_achievements';
+        const TOTAL_STORIES = 40;
+
+        const encouragements = [
+            "🐰 كل قصة تقرّبك من القمة!",
+            "🌸 أنت تتقدم بثبات.. استمر!",
+            "🍰 كل صفحة تزيدك قوة!",
+            "🎀 الأرنب فخور بك!",
+            "🌟 أنت تصنع المعجزات يومًا بعد يوم!",
+            "🍭 تعلمك جميل مثل الحلوى!",
+            "💖 الكورية تحبك وأنت تحبها!"
+        ];
+
+        function getData() {
+            const stored = localStorage.getItem(ACHIEVEMENTS_KEY);
+            return stored ? JSON.parse(stored) : { storiesCompleted: 0, listeningCompleted: 0, writingCompleted: 0, xp: 0, badges: [] };
+        }
+
+        function buildUI() {
+            const data = getData();
+            const completed = Math.min(data.storiesCompleted, TOTAL_STORIES);
+            const percent = (completed / TOTAL_STORIES) * 100;
+
+            // شريط التقدم
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = completed + ' / ' + TOTAL_STORIES;
+            const character = document.getElementById('progressCharacter');
+            character.style.left = percent + '%';
+
+            // النجوم
+            const starsRow = document.getElementById('starsRow');
+            starsRow.innerHTML = '';
+            for (let i = 1; i <= 10; i++) {
+                const threshold = (i / 10) * TOTAL_STORIES;
+                const earned = completed >= threshold;
+                starsRow.innerHTML += `<span class="star-icon ${earned ? 'earned' : ''}" style="opacity:${earned ? 1 : 0.3};">⭐</span>`;
+            }
+
+            // الإحصائيات
+            document.getElementById('statStories').textContent = data.storiesCompleted;
+            document.getElementById('statXP').textContent = data.xp;
+            document.getElementById('statListening').textContent = data.listeningCompleted || 0;
+            document.getElementById('statWriting').textContent = data.writingCompleted || 0;
+
+            // الشارات
+            const allBadges = [
+                { id: 'first-story', icon: '📖', name: 'قارئ مبتدئ' },
+                { id: 'five-stories', icon: '🌟', name: 'قارئ نشط' },
+                { id: 'all-stories', icon: '👑', name: 'ملك القصص' },
+                { id: 'first-listen', icon: '🎧', name: 'مستمع' },
+                { id: 'first-write', icon: '✍️', name: 'كاتب' }
+            ];
+            const badgesGrid = document.getElementById('badgesGrid');
+            badgesGrid.innerHTML = allBadges.map(b => {
+                const unlocked = data.badges.includes(b.id);
+                return `<div class="badge-item ${unlocked ? 'unlocked' : 'locked'}">
+                    <span class="badge-icon">${b.icon}</span>
+                    <span class="badge-name">${b.name}</span>
+                </div>`;
+            }).join('');
+
+            // رسالة تشجيعية عشوائية
+            const randomMsg = encouragements[Math.floor(Math.random() * encouragements.length)];
+            document.getElementById('encouragementMsg').textContent = randomMsg;
+        }
+
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        window.addEventListener('DOMContentLoaded', buildUI);
+        window.addEventListener('pageshow', buildUI);
+    </script>
+</body>
+</html>

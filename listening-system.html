@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قسم الاستماع - TOPIK 듣기</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700&display=swap');
+        :root {
+            --surface: rgba(255,255,255,0.75); --surface-hover: rgba(255,255,255,0.9);
+            --border: rgba(236,64,122,0.3); --text: #4a1528; --text-light: #7a4a5a;
+            --accent: #e91e63; --accent-dark: #c2185b; --accent-light: #fce4ec;
+            --correct: #059669; --correct-bg: #d1fae5; --wrong: #dc2626; --wrong-bg: #fee2e2;
+            --warning: #f59e0b; --warning-bg: #fef3c7; --info: #3b82f6; --info-bg: #dbeafe;
+            --shadow: 0 4px 20px rgba(180,30,60,0.08);
+            --radius: 28px; --radius-sm: 16px;
+        }
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body {
+            font-family:'Tajawal',sans-serif;
+            background:linear-gradient(160deg,#fce4ec 0%,#f8bbd0 35%,#f48fb1 70%,#ec407a 100%);
+            background-attachment:fixed; min-height:100vh; color:var(--text);
+            display:flex; justify-content:center; align-items:flex-start;
+            padding: clamp(12px, 2vw, 20px) 10px;
+        }
+        .main-screen { width:100%; max-width:500px; padding:20px; display:flex; flex-direction:column; gap:16px; }
+        .back-btn {
+            display:flex; align-items:center; gap:6px; padding:8px 16px; border-radius:25px;
+            background:var(--surface); border:1px solid var(--border); color:var(--text);
+            cursor:pointer; font-size:13px; font-weight:700; transition:all .2s;
+        }
+        .back-btn:hover { background:var(--surface-hover); transform:translateX(3px); box-shadow:var(--shadow); }
+        .main-header { text-align:center; margin-bottom:8px; }
+        .main-header .icon-big { font-size:56px; display:block; animation:float 3s ease-in-out infinite; }
+        @keyframes float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-10px); } }
+        .main-header h1 { font-weight:900; font-size:24px; }
+
+        /* شرح نوع السؤال */
+        .exam-tip-box {
+            background:linear-gradient(135deg,#fff9c4,#fff176);
+            border:2px solid #fbc02d;
+            border-radius:20px;
+            padding:16px;
+            margin:10px 0;
+            font-size:13px;
+            line-height:1.7;
+            box-shadow:0 4px 12px rgba(251,192,45,0.2);
+        }
+        .exam-tip-box .tip-title {
+            font-weight:900; color:#f57f17; font-size:15px; margin-bottom:8px;
+            display:flex; align-items:center; gap:6px;
+        }
+        .exam-tip-box .tip-section {
+            margin:8px 0; padding:8px 12px; background:rgba(255,255,255,0.6); border-radius:12px;
+        }
+        .exam-tip-box .tip-label {
+            font-weight:900; color:#e65100; font-size:12px;
+        }
+
+        .sections-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+        .section-card {
+            background:var(--surface); backdrop-filter:blur(15px); border-radius:24px; padding:24px 18px;
+            text-align:center; cursor:pointer; border:2px solid rgba(255,255,255,0.6); box-shadow:var(--shadow);
+            transition:all .35s; display:flex; flex-direction:column; align-items:center; gap:8px;
+        }
+        .section-card:hover { transform:translateY(-6px); border-color:var(--accent); background:rgba(255,255,255,.9); }
+        .section-card .card-icon { font-size:48px; }
+        .section-card .card-title { font-weight:900; font-size:15px; }
+        .section-card .card-badge { padding:4px 12px; border-radius:12px; font-size:10px; font-weight:700; background:var(--accent-light); color:var(--accent-dark); }
+
+        .practice-screen { display:none; width:100%; max-width:500px; padding:20px; flex-direction:column; gap:16px; }
+        .practice-screen.active { display:flex; }
+
+        .audio-player-card {
+            background:var(--surface); backdrop-filter:blur(15px); border-radius:24px; padding:20px;
+            border:2px solid rgba(255,255,255,0.6); text-align:center;
+        }
+        .play-btn {
+            width:70px; height:70px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent-dark));
+            color:#fff; border:none; cursor:pointer; font-size:28px; margin:10px auto; display:flex;
+            align-items:center; justify-content:center; box-shadow:0 6px 20px rgba(233,30,99,0.4);
+        }
+        .play-btn.playing { animation:pulse-play 1s infinite; }
+        @keyframes pulse-play { 0%,100% { box-shadow:0 6px 20px rgba(233,30,99,0.4); } 50% { box-shadow:0 6px 30px rgba(220,38,38,0.6); } }
+        .audio-progress { width:100%; height:6px; background:var(--accent-light); border-radius:3px; margin-top:12px; overflow:hidden; }
+        .audio-progress-fill { height:100%; background:var(--accent); border-radius:3px; width:0%; transition:width .3s; }
+        .repeat-btn {
+            background:var(--surface); border:1px solid var(--border); padding:8px 16px; border-radius:20px;
+            cursor:pointer; font-size:12px; margin-top:8px; font-family:'Tajawal',sans-serif;
+        }
+
+        .question-card {
+            background:var(--surface); backdrop-filter:blur(15px); border-radius:24px; padding:20px;
+            border:2px solid rgba(255,255,255,0.6);
+        }
+        .question-text { font-size:15px; font-weight:700; margin-bottom:16px; }
+        .options-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+        .option-btn {
+            padding:14px; border-radius:14px; border:2px solid var(--border); background:var(--surface);
+            cursor:pointer; font-size:13px; font-weight:700; text-align:center; transition:all .2s;
+            font-family:'Noto Sans KR','Tajawal',sans-serif;
+        }
+        .option-btn:hover { background:var(--surface-hover); border-color:var(--accent); }
+        .option-btn.selected { border-color:var(--accent); background:var(--accent-light); }
+        .option-btn.correct { border-color:var(--correct); background:var(--correct-bg); color:#065f46; }
+        .option-btn.wrong { border-color:var(--wrong); background:var(--wrong-bg); color:#991b1b; }
+        .option-btn.locked { pointer-events:none; opacity:.85; }
+
+        .nav-buttons { display:flex; justify-content:space-between; gap:10px; margin-top:12px; flex-wrap:wrap; }
+        .btn {
+            padding:10px 18px; border-radius:25px; border:none; cursor:pointer; font-weight:700; font-size:12px;
+            font-family:'Tajawal',sans-serif; transition:all .2s; display:inline-flex; align-items:center; gap:5px;
+        }
+        .btn-primary { background:linear-gradient(135deg,var(--accent),var(--accent-dark)); color:#fff; box-shadow:0 4px 15px rgba(233,30,99,0.3); }
+        .btn-primary:hover { transform:translateY(-2px); }
+        .btn-secondary { background:var(--surface); color:var(--text); border:1px solid var(--border); }
+        .btn-info { background:var(--info-bg); color:#1e40af; border:1px solid var(--info); }
+
+        .score-bar { display:flex; justify-content:space-between; align-items:center; padding:12px 16px; background:var(--surface); border-radius:16px; border:1px solid var(--border); margin-bottom:8px; }
+        .score-text { font-weight:900; font-size:16px; }
+
+        .toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:var(--text); color:#fff; padding:12px 24px; border-radius:30px; font-size:13px; font-weight:700; z-index:100; opacity:0; transition:opacity .3s; pointer-events:none; }
+        .toast.show { opacity:1; }
+
+        .completion-screen { display:none; text-align:center; padding:40px 20px; background:var(--surface); border-radius:24px; border:2px solid rgba(255,255,255,0.6); }
+        .completion-screen.active { display:block; }
+        .completion-emoji { font-size:64px; }
+        .completion-score { font-size:36px; font-weight:900; color:var(--accent-dark); margin:12px 0; }
+
+        .explanation-box { background:var(--info-bg); border:1px solid var(--info); border-radius:var(--radius-sm); padding:12px; margin-top:10px; display:none; font-size:12px; line-height:1.6; }
+        .explanation-box.show { display:block; animation:bounceIn .3s ease; }
+        @keyframes bounceIn { 0% { transform:translateY(10px); opacity:0; } 60% { transform:translateY(-3px); opacity:1; } 100% { transform:translateY(0); opacity:1; } }
+        @media(max-width:520px) { .main-screen,.practice-screen { padding:14px; } .options-grid { grid-template-columns:1fr; } }
+    </style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- ========== الشاشة الرئيسية ========== -->
+<div class="main-screen" id="mainScreen">
+    <button class="back-btn" onclick="goToHome()"><i class="fa-solid fa-arrow-right"></i><span>رجوع للرئيسية</span></button>
+    <div class="main-header">
+        <span class="icon-big">🎧</span>
+        <h1>قسم الاستماع الكوري</h1>
+        <p style="color:var(--text-light);">TOPIK 듣기 - تدرب كأنك في الامتحان الحقيقي</p>
+    </div>
+
+    <!-- شرح طريقة أسئلة الاستماع في التوبيك -->
+    <div class="exam-tip-box">
+        <div class="tip-title">📋 كيف تأتي أسئلة الاستماع في امتحان TOPIK؟</div>
+        <div class="tip-section">
+            <span class="tip-label">🎯 نوع الأسئلة:</span>
+            <ul style="margin:4px 16px; font-size:12px;">
+                <li><strong>اختيار الإجابة الصحيحة</strong> بعد سماع حوار قصير</li>
+                <li><strong>اختيار المكان أو الموقف</strong> المناسب للحوار</li>
+                <li><strong>اختيار الفكرة الرئيسية</strong> أو موضوع المحادثة</li>
+                <li><strong>اختيار الرسم البياني</strong> المطابق للإحصائية المذكورة</li>
+                <li><strong>اختيار الرد المناسب</strong> أو الإجراء التالي</li>
+            </ul>
+        </div>
+        <div class="tip-section">
+            <span class="tip-label">🧠 تكنيكات ذكية للحل:</span>
+            <ul style="margin:4px 16px; font-size:12px;">
+                <li>🔍 <strong>اقرأ الخيارات أولاً</strong> قبل بدء الصوت لتعرف ما الذي تبحث عنه</li>
+                <li>👂 <strong>ركّز على الكلمات المفتاحية</strong> مثل: 장소 (مكان), 이유 (سبب), 방법 (طريقة)</li>
+                <li>📝 <strong>لاحظ نبرة الصوت</strong> - الحوارات الرسمية غالباً في أماكن العمل، الودية في المقاهي</li>
+                <li>⏱ <strong>لا تتوقف عند سؤال صعب</strong> - خمن الإجابة وانتقل فوراً للتالي</li>
+                <li>🔄 <strong>استخدم خاصية الإعادة</strong> بحكمة - مرة واحدة فقط في الامتحان الحقيقي</li>
+            </ul>
+        </div>
+        <div class="tip-section">
+            <span class="tip-label">📊 توزيع الأسئلة في TOPIK I:</span>
+            <span style="font-size:11px;">30 سؤال | 40 دقيقة | الأسئلة 1-4 صور + اختيارات، 5-20 حوارات قصيرة، 21-30 نصوص طويلة</span>
+        </div>
+    </div>
+
+    <div class="sections-grid">
+        <div class="section-card" onclick="startPractice('topik1')">
+            <div class="card-icon">🟢</div>
+            <div class="card-title">TOPIK I</div>
+            <span class="card-badge">30 سؤالاً - مبتدئ</span>
+        </div>
+        <div class="section-card" onclick="startPractice('topik2')">
+            <div class="card-icon">🔴</div>
+            <div class="card-title">TOPIK II</div>
+            <span class="card-badge">50 سؤالاً - متقدم</span>
+        </div>
+    </div>
+</div>
+
+<!-- ========== شاشة التمرين ========== -->
+<div class="practice-screen" id="practiceScreen">
+    <button class="back-btn" onclick="goBackToMain()"><i class="fa-solid fa-arrow-right"></i><span>رجوع للقائمة</span></button>
+    <div class="score-bar">
+        <span class="score-text">✅ <span id="correctCount">0</span>/<span id="totalAnswered">0</span></span>
+        <span style="font-size:13px;color:var(--text-light);" id="questionCounter">1/30</span>
+    </div>
+
+    <!-- شرح إضافي يظهر أعلى كل سؤال حسب نوعه -->
+    <div id="questionTypeTip" style="background:#fff3e0;border:1px solid #ff9800;border-radius:12px;padding:8px 12px;font-size:11px;font-weight:700;color:#e65100;display:none;"></div>
+
+    <div class="audio-player-card">
+        <button class="play-btn" id="playBtn" onclick="toggleAudio()">▶️</button>
+        <p style="font-size:11px;color:var(--text-light);margin-top:4px;">استمع جيداً - يمكنك التكرار مرة واحدة</p>
+        <div class="audio-progress"><div class="audio-progress-fill" id="audioProgress"></div></div>
+        <button class="repeat-btn" onclick="repeatAudio()">🔄 أعد الاستماع</button>
+    </div>
+    <div class="question-card">
+        <p class="question-text" id="questionText">اختر الإجابة الصحيحة</p>
+        <div class="options-grid" id="optionsGrid"></div>
+        <div class="explanation-box" id="explanationBox"></div>
+        <div class="nav-buttons">
+            <button class="btn btn-secondary" id="prevBtn" onclick="prevQuestion()" style="display:none;">⬅️ السابق</button>
+            <button class="btn btn-info" id="showAnswerBtn" onclick="showAnswer()" style="display:none;">🔑 الإجابة والشرح</button>
+            <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">التالي ➡️</button>
+        </div>
+    </div>
+    <div class="completion-screen" id="completionScreen">
+        <div class="completion-emoji" id="completionEmoji">🎉</div>
+        <h2>أحسنت!</h2>
+        <div class="completion-score" id="completionScore"></div>
+        <button class="btn btn-primary" onclick="goBackToMain()">العودة للقائمة</button>
+    </div>
+</div>
+
+<script src="listening-data.js"></script>
+<script src="listening-engine.js"></script>
+</body>
+</html>

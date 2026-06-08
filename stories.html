@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>وقت القصة - Story Time</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-main: linear-gradient(180deg, #ffd3eb 0%, #f4cbff 40%, #e2d2ff 100%);
+            --text-dark: #3a225d;
+            --text-muted: #7d639b;
+            --border-glow: rgba(255, 255, 255, 0.7);
+            --card-bg: rgba(255, 255, 255, 0.25);
+            --heart-bg: #ff65a3;
+            --lesson-bg: #fff5fb;
+            --lesson-border: #ff65a3;
+            --story-container-bg: rgba(255, 255, 255, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background: var(--bg-main);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: clamp(12px, 2vw, 20px) 10px;
+            color: var(--text-dark);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+            background-image:
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M10,10 Q15,5 20,10 Q25,15 20,20 Q15,25 10,20 Q5,15 10,10 Z" fill="%23fff" opacity="0.3"/></svg>'),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><polygon points="5,0 6,3 9,3 7,5 8,8 5,6 2,8 3,5 1,3 4,3" fill="%23ffd3eb" opacity="0.6"/></svg>');
+            background-size: 120px 120px, 80px 80px;
+            background-position: 20px 50px, 80px 150px;
+            opacity: 0.3;
+        }
+
+        /* الحاوية الرئيسية */
+        .screens-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0 5px;
+            padding-bottom: 20px;
+            z-index: 1;
+        }
+
+        /* ========== شاشة قائمة القصص ========== */
+        .stories-main-screen {
+            width: 100%;
+            background: linear-gradient(135deg, #ffd1dc, #ffb6c1, #ffc0cb);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(223, 180, 238, 0.4);
+            border: 3px solid rgba(255, 255, 255, 0.7);
+            min-height: 500px;
+            margin: 5px 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-bar {
+            background: #ff6f9f;
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 18px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .back-to-home-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            color: #ff6f9f;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .back-to-home-btn:hover {
+            background: #ffffff;
+            color: #ff4f86;
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .tabs {
+            display: flex;
+            overflow-x: auto;
+            background: #ff8fb1;
+            padding: 8px;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .tab {
+            flex: 0 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 13px;
+            cursor: pointer;
+            white-space: nowrap;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            transition: 0.2s;
+            color: #333;
+        }
+
+        .tab.active {
+            background: #ff4f86;
+            color: white;
+        }
+
+        .container {
+            padding: 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+            flex: 1;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.9);
+            border-radius: 16px;
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-height: 110px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+        .title {
+            font-weight: bold;
+            color: #333;
+            min-height: 18px;
+        }
+
+        .img-box {
+            width: 70px;
+            height: 85px;
+            background: #ffe4ec;
+            border: 2px dashed #ff6f9f;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            flex-shrink: 0;
+        }
+
+        /* ========== شاشات القصص التفصيلية ========== */
+        .story-view-screen {
+            display: none;
+            width: 100%;
+            max-width: 100%;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 30px;
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            margin: 5px 0;
+        }
+
+        .story-view-screen.active {
+            display: block;
+        }
+
+        .back-btn {
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            color: #ff6f9f;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateX(-5px);
+        }
+
+        .story-container {
+            background: var(--story-container-bg);
+            padding: 20px;
+            border-radius: 30px;
+            line-height: 2.2;
+            font-size: 1.15rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .kr-block {
+            direction: ltr;
+            text-align: left;
+            font-family: 'Fredoka', sans-serif;
+            color: #5c3b87;
+            margin-top: 15px;
+        }
+
+        .ar-block {
+            direction: rtl;
+            text-align: right;
+            color: #2b114d;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .word {
+            display: inline-block;
+            transition: all 0.2s ease;
+            padding: 0 2px;
+        }
+
+        .active-word {
+            transform: translateY(5px) scale(1.2);
+            color: #ff65a3;
+            font-weight: bold;
+            background: rgba(255,255,255,0.7);
+            border-radius: 5px;
+        }
+
+        .listen-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--heart-bg);
+            color: white;
+            padding: 15px;
+            border-radius: 20px;
+            margin: 20px 0;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: 0 6px 0 #cc457b;
+            transition: all 0.1s ease;
+        }
+
+        .listen-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 0 0 #cc457b;
+        }
+
+        .lesson {
+            background: var(--lesson-bg);
+            padding: 20px;
+            border-radius: 25px;
+            margin-top: 25px;
+            border: 2px dashed var(--lesson-border);
+            line-height: 1.8;
+        }
+
+        .action-button-done {
+            width: 100%;
+            background: #ffffff;
+            color: #3a225d;
+            padding: 15px;
+            border-radius: 20px;
+            border: 3px solid #d4b5ff;
+            font-weight: 900;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            box-shadow: 0 6px 0 #d4b5ff;
+            margin-top: 20px;
+        }
+
+        .action-button-done:active {
+            transform: translateY(6px);
+            box-shadow: 0 0 0 #d4b5ff;
+        }
+
+        .tts-status {
+            font-size: 0.75rem;
+            color: #a78bfa;
+            text-align: center;
+            margin-top: -12px;
+            margin-bottom: 8px;
+            min-height: 18px;
+            font-weight: 600;
+        }
+
+        .wave-bars {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            height: 20px;
+        }
+
+        .wave-bars span {
+            display: inline-block;
+            width: 3px;
+            height: 10px;
+            background: white;
+            border-radius: 3px;
+            animation: soundwave 0.6s ease-in-out infinite;
+        }
+
+        .wave-bars span:nth-child(2) { animation-delay: 0.1s; }
+        .wave-bars span:nth-child(3) { animation-delay: 0.2s; }
+        .wave-bars span:nth-child(4) { animation-delay: 0.3s; }
+        .wave-bars span:nth-child(5) { animation-delay: 0.15s; }
+
+        @keyframes soundwave {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(2); }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #4a1528;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            z-index: 1000;
+            font-family: 'Tajawal', sans-serif;
+            animation: xpPop 0.5s ease;
+            pointer-events: none;
+        }
+
+        @keyframes xpPop {
+            0% { opacity: 0; transform: translateX(-50%) scale(0.8); }
+            50% { transform: translateX(-50%) scale(1.05); }
+            100% { opacity: 1; transform: translateX(-50%) scale(1); }
+        }
+
+        @media (max-width: 520px) {
+            .container {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            }
+            .story-view-screen {
+                padding: 20px;
+            }
+        }
+
+        @media (min-width: 600px) {
+            .screens-container {
+                max-width: 520px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="screens-container">
+
+        <!-- ========== شاشة قائمة القصص ========== -->
+        <div class="stories-main-screen" id="storiesListScreen">
+            <div class="top-bar">
+                <button class="back-to-home-btn" onclick="goToHome()">
+                    <i class="fa-solid fa-arrow-right"></i> الرئيسية
+                </button>
+                Story Time
+            </div>
+            <div class="tabs">
+                <div class="tab active" onclick="showTab(0)">قصص اطفال 🐥</div>
+                <div class="tab" onclick="showTab(1)">قصص ممتعة 👀</div>
+                <div class="tab" onclick="showTab(2)">قصص عاطفية 💞</div>
+                <div class="tab" onclick="showTab(3)">قصص رعب 💀</div>
+            </div>
+            <div id="content" class="container"></div>
+        </div>
+
+        <!-- ========== شاشات القصص التفصيلية ========== -->
+        <!-- القصة 0 -->
+        <div class="story-view-screen" id="story-screen-0">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">💨 방귀쟁이 며느리</h1>
+            <div class="listen-btn" id="audioBtn0" onclick="toggleAudio(0)"><span id="btnContent0"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus0"></div>
+            <div class="story-container" id="storyText0"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                الصدق والطبيعة هما أساس الراحة، فكتمان الأمور الطبيعية قد يسبب ضرراً أكبر.<br>
+                الكنة المسكينة عانت طويلاً بسبب خجلها، لكن عندما تحررت من هذا القيد، اكتشف الجميع أن ما كانت تخفيه يمكن أن يكون نعمة ومصدر فخر.<br>
+                المغزى: لا تخجل من طبيعتك، فما تعتبره عيباً قد يكون مصدر قوتك الحقيقية.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+
+        <!-- القصة 1 -->
+        <div class="story-view-screen" id="story-screen-1">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">🐰🐢 토끼와 거북이</h1>
+            <div class="listen-btn" id="audioBtn1" onclick="toggleAudio(1)"><span id="btnContent1"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus1"></div>
+            <div class="story-container" id="storyText1"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                النجاح لا يحتاج سرعة… يحتاج استمرار.<br>
+                السلحفاة ما فازت لأنها خارقة. فازت لأنها كانت تمشي حتى لما ما كان أحد شايفها.<br>
+                المغزى: اللي يكمل للنهاية يفوز… مو اللي يبدأ بسرعة ويغفل في الطريق.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+
+        <!-- القصة 2 -->
+        <div class="story-view-screen" id="story-screen-2">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">🐦 흥부와 놀부</h1>
+            <div class="listen-btn" id="audioBtn2" onclick="toggleAudio(2)"><span id="btnContent2"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus2"></div>
+            <div class="story-container" id="storyText2"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                الطيب والخير يرجعان لصاحبهما دائماً، أما الطمع والجشع فلا يجلبان إلا الخسارة.<br>
+                흥부 (هُنغبو) ساعد عصفوراً صغيراً بقلب نقي فكافأته الحياة بالثراء الكافي والأمان.<br>
+                المغزى: ازرع الخير بنية صادقة ولا تحسد الآخرين، فالقناعة كنز والطمع يفسد كل شيء.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+
+        <!-- القصة 3 -->
+        <div class="story-view-screen" id="story-screen-3">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">🐰🐯 토끼와 호랑이</h1>
+            <div class="listen-btn" id="audioBtn3" onclick="toggleAudio(3)"><span id="btnContent3"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus3"></div>
+            <div class="story-container" id="storyText3"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                القوة البدنية وحدها لا تكفي إذا غاب العقل والتفكير اللماح.<br>
+                الأرنب الصغير استطاع النجاة من النمر المفترس ليس لأنه أقوى، بل لأنه استخدم ذكاءه وهدوءه في وقت الشدة.<br>
+                المغزى: لا تخف من المشاكل الكبيرة، فالحيلة الذكية والهدوء يمكنهما هزيمة أي خطر تواجهه.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+
+        <!-- القصة 4 -->
+        <div class="story-view-screen" id="story-screen-4">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">💧 젊어지는 샘물</h1>
+            <div class="listen-btn" id="audioBtn4" onclick="toggleAudio(4)"><span id="btnContent4"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus4"></div>
+            <div class="story-container" id="storyText4"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                الطمع والجشع دائماً ما يؤديان إلى نتائج عكسية ومضحكة أحياناً!<br>
+                الزوجان الطيبان أخذا من ينبوع الشباب ما يكفيهما فقط ليعيشا بصحة وسعادة، بينما العجوز الطماع أراد أن يأخذ كل شيء فخسر كل شيء حتى عمره وعقله.<br>
+                المغزى: القناعة كنز لا يفنى، وخذ من الدنيا ما يكفيك ولا تبالغ.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+
+        <!-- القصة 5 -->
+        <div class="story-view-screen" id="story-screen-5">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">🍉 당나귀 알</h1>
+            <div class="listen-btn" id="audioBtn5" onclick="toggleAudio(5)"><span id="btnContent5"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus5"></div>
+            <div class="story-container" id="storyText5"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                السذاجة الزائدة قد تجعل الإنسان أضحوكة بين الناس.<br>
+                الشاب القروي دفع مبلغاً كبيراً لشراء بطيخة ظناً أنها بيضة حمار، ثم طارد أرنباً معتقداً أنه صغير الحمار.<br>
+                المغزى: العلم والمعرفة ضروريان قبل اتخاذ أي قرار، واسأل أهل الخبرة قبل أن تنخدع.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+
+        <!-- القصة 6 -->
+        <div class="story-view-screen" id="story-screen-6">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">🧂 요술 맷돌</h1>
+            <div class="listen-btn" id="audioBtn6" onclick="toggleAudio(6)"><span id="btnContent6"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus6"></div>
+            <div class="story-container" id="storyText6"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                الطمع والسرقة لا يجلبان إلا الهلاك، وأن ما تأخذه بغير حق سيغرقك في النهاية.<br>
+                اللص الطماع سرق الطاحونة السحرية وأراد الملح، لكنه لم يعرف كيف يوقفها فغرقت سفينته.<br>
+                المغزى: القناعة راحة، والطمع هلاك، ولا تأخذ شيئاً ليس من حقك.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+
+        <!-- القصة 7 -->
+        <div class="story-view-screen" id="story-screen-7">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">⚖️ 토끼의 재판</h1>
+            <div class="listen-btn" id="audioBtn7" onclick="toggleAudio(7)"><span id="btnContent7"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus7"></div>
+            <div class="story-container" id="storyText7"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                الذكاء ينتصر على القوة الغاشمة، والتروي والحكمة ينقذان من المواقف الصعبة.<br>
+                الأرنب الذكي استخدم حيلة بسيطة لإعادة النمر إلى الحفرة التي خرج منها، وأنقذ المسافر الطيب.<br>
+                المغزى: العقل هو أقوى سلاح، والذكاء في التصرف ينقذك من أصعب المواقف.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+
+        <!-- القصة 8 -->
+        <div class="story-view-screen" id="story-screen-8">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">🐓 수탉과 왕관</h1>
+            <div class="listen-btn" id="audioBtn8" onclick="toggleAudio(8)"><span id="btnContent8"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus8"></div>
+            <div class="story-container" id="storyText8"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                لا تنخدع بكلام المتملقين، وتعلم أن تميز أصدقاءك الحقيقيين من المنافقين.<br>
+                الديك خسر تاجه الجميل لأنه صدق كلام الثعلب المخادع وأعجب بمديحه الكاذب.<br>
+                المغزى: الغرور والثقة العمياء بالغرباء يؤديان إلى الخسارة، فكن حذراً ولا تصدق كل ما يقال.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+
+        <!-- القصة 9 -->
+        <div class="story-view-screen" id="story-screen-9">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">🐭 생쥐들과 방울</h1>
+            <div class="listen-btn" id="audioBtn9" onclick="toggleAudio(9)"><span id="btnContent9"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus9"></div>
+            <div class="story-container" id="storyText9"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                أفضل الخطط لا قيمة لها إن لم توجد الشجاعة لتنفيذها.<br>
+                الفئران اجتمعت ووضعت خطة عبقرية لتعليق جرس في رقبة القط، لكن لم يتطوع أحد للتنفيذ.<br>
+                المغزى: التنظير سهل، لكن التنفيذ يحتاج شجاعة. لا تكتفِ بالكلام الجميل.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script>
+        // ============ ملفات التوقيت ============
+        const storyTimestamps = {
+            0: [{start:0,end:4},{start:4,end:9},{start:9,end:14},{start:14,end:20},{start:20,end:26},{start:26,end:35},{start:35,end:42},{start:42,end:50},{start:50,end:56},{start:56,end:60},{start:60,end:64},{start:64,end:70},{start:70,end:74},{start:74,end:79},{start:79,end:83},{start:83,end:88},{start:88,end:94},{start:94,end:102},{start:102,end:108}],
+            1: [{start:0,end:4},{start:4,end:12},{start:12,end:15},{start:15,end:19},{start:19,end:22},{start:22,end:26},{start:26,end:31},{start:31,end:35},{start:35,end:39},{start:39,end:43},{start:43,end:47},{start:47,end:50},{start:50,end:53},{start:53,end:56},{start:56,end:59},{start:59,end:61},{start:61,end:63},{start:63,end:67},{start:67,end:71},{start:71,end:73},{start:73,end:76},{start:76,end:80},{start:80,end:84},{start:84,end:88},{start:88,end:90},{start:90,end:95},{start:95,end:97},{start:97,end:101},{start:101,end:105},{start:105,end:106},{start:106,end:109},{start:109,end:111},{start:111,end:115},{start:115,end:118},{start:118,end:120},{start:120,end:122},{start:122,end:125},{start:125,end:130}],
+            2: [{start:0,end:3},{start:3,end:8},{start:8,end:11},{start:11,end:15},{start:15,end:18},{start:18,end:22},{start:22,end:26},{start:26,end:30},{start:30,end:33},{start:33,end:36},{start:36,end:40},{start:40,end:44},{start:44,end:47},{start:47,end:50},{start:50,end:54},{start:54,end:58},{start:58,end:62},{start:62,end:65},{start:65,end:68},{start:68,end:72},{start:72,end:75},{start:75,end:79},{start:79,end:82},{start:82,end:85},{start:85,end:88},{start:88,end:91},{start:91,end:94},{start:94,end:97},{start:97,end:101},{start:101,end:104},{start:104,end:106},{start:106,end:110},{start:110,end:113},{start:113,end:116},{start:116,end:119},{start:119,end:123},{start:123,end:125},{start:125,end:128},{start:128,end:132}],
+            3: [{start:0,end:7},{start:7,end:11},{start:11,end:17},{start:17,end:23},{start:23,end:26},{start:26,end:33},{start:33,end:36},{start:36,end:40},{start:40,end:43},{start:43,end:48},{start:48,end:52},{start:52,end:55},{start:55,end:58},{start:58,end:63},{start:63,end:67},{start:67,end:71},{start:71,end:75},{start:75,end:81},{start:81,end:85},{start:85,end:89},{start:89,end:94},{start:94,end:100},{start:100,end:104},{start:104,end:107},{start:107,end:112},{start:112,end:116},{start:116,end:121},{start:121,end:125},{start:125,end:129},{start:129,end:132},{start:132,end:135},{start:135,end:140}],
+            4: [{start:0,end:5},{start:5,end:12},{start:12,end:17},{start:17,end:25},{start:25,end:32},{start:32,end:36},{start:36,end:42},{start:42,end:50},{start:50,end:57},{start:57,end:65},{start:65,end:71},{start:71,end:77},{start:77,end:84}],
+            5: [{start:1,end:6},{start:6,end:14},{start:14,end:21},{start:21,end:28},{start:28,end:34},{start:34,end:41},{start:41,end:51},{start:51,end:56},{start:56,end:62},{start:62,end:67}],
+            6: [{start:0,end:6},{start:6,end:15},{start:15,end:22},{start:22,end:28},{start:28,end:31},{start:31,end:37},{start:37,end:44},{start:44,end:52},{start:52,end:60}],
+            7: [{start:0,end:6},{start:6,end:13},{start:13,end:23},{start:23,end:30},{start:30,end:32},{start:32,end:40},{start:40,end:48},{start:48,end:58},{start:58,end:64},{start:64,end:72},{start:72,end:76}],
+            8: [{start:0,end:5},{start:5,end:10},{start:10,end:15},{start:15,end:21},{start:21,end:25},{start:25,end:33},{start:33,end:38},{start:38,end:43},{start:43,end:49},{start:49,end:54},{start:54,end:61},{start:61,end:66},{start:66,end:71},{start:71,end:76},{start:76,end:82},{start:82,end:87},{start:87,end:93},{start:93,end:98},{start:98,end:103}],
+            9: [{start:0,end:4},{start:4,end:10},{start:10,end:15},{start:15,end:20},{start:20,end:23},{start:23,end:28},{start:28,end:32},{start:32,end:37},{start:37,end:42},{start:42,end:46},{start:46,end:51},{start:51,end:56},{start:56,end:60},{start:60,end:65},{start:65,end:68},{start:68,end:73},{start:73,end:77},{start:77,end:81},{start:81,end:86},{start:86,end:91}]
+        };
+
+        const storyAudioFiles = {
+            0:"https://github.com/sayatchan2-web/story0/raw/main/Generated%20Audio%20June%2001%2C%202026%20-%206_11PM.wav",
+            1:"https://github.com/sayatchan2-web/story1/raw/main/Story1.mp3.wav",
+            2:"https://github.com/sayatchan2-web/story2/raw/main/Story2.mp3.wav",
+            3:"https://github.com/sayatchan2-web/story3/raw/main/Story3.mp3.wav",
+            4:"https://github.com/sayatchan2-web/story4/raw/main/Story4.mp3.wav",
+            5:"https://github.com/sayatchan2-web/story5/raw/main/Story5.mp3.wav",
+            6:"https://github.com/sayatchan2-web/story6/raw/main/Story6.mp3.wav",
+            7:"https://github.com/sayatchan2-web/story7/raw/main/Story7.mp3.wav",
+            8:"https://github.com/sayatchan2-web/story8/raw/main/Story8.mp3.wav",
+            9:"https://github.com/sayatchan2-web/story9/raw/main/Story9.mp3.wav"
+        };
+
+        const stories = [        
+            [        
+                { titleKR: "방귀쟁이 며느리", titleAR: "الكنة المطلقة للريح", id: 0 },
+                { titleKR: "토끼와 거북이", titleAR: "الأرنب والسلحفاة", id: 1 },        
+                { titleKR: "흥부와 놀부", titleAR: "هونغبو ونولبو", id: 2 },        
+                { titleKR: "토끼와 호랑이", titleAR: "الأرنب والنمر", id: 3 },        
+                { titleKR: "젊어지는 샘물", titleAR: "ينبوع الشباب", id: 4 },
+                { titleKR: "당나귀 알", titleAR: "بيضة الحمار", id: 5 },
+                { titleKR: "요술 맷돌", titleAR: "الطاحونة السحرية", id: 6 },
+                { titleKR: "토끼의 재판", titleAR: "محاكمة الأرنب", id: 7 },
+                { titleKR: "수탉과 왕관", titleAR: "الديك والتاج", id: 8 },
+                { titleKR: "생쥐들과 방울", titleAR: "الفئران والجرس", id: 9 }
+            ],        
+            Array(10).fill({ titleKR: "", titleAR: "", id: -1 }),        
+            Array(10).fill({ titleKR: "", titleAR: "", id: -1 }),        
+            Array(10).fill({ titleKR: "", titleAR: "", id: -1 })        
+        ];
+
+        let audioPlayer = new Audio();
+        let isAudioMode = false;
+        let timestampCheckTimer = null;
+        let lastHighlightedSentence = -1;
+        let storySpeech = null;
+        let currentUtterance = null;
+        let activeStoryId = -1;
+        let currentSentenceIdx = 0;
+        let isPlaying = false;
+        let wordTimer = null;
+        let storyPausePosition = {};
+        let currentTab = 0;
+
+        function loadVoices() {
+            if ('speechSynthesis' in window) {
+                storySpeech = window.speechSynthesis;
+                storySpeech.getVoices();
+                return true;
+            }
+            return false;
+        }
+
+        function speakSentence(text, callback) {
+            if (!storySpeech) loadVoices();
+            if (!storySpeech) { if (callback) callback(); return; }
+            storySpeech.cancel();
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = 'ko-KR';
+            u.rate = 0.75;
+            u.pitch = 1.0;
+            u.volume = 1.0;
+            const voices = storySpeech.getVoices();
+            const kv = voices.find(v => v.lang.includes('ko'));
+            if (kv) u.voice = kv;
+            var ended = false;
+            u.onend = function() { if (!ended) { ended = true; if (callback) callback(); } };
+            u.onerror = function() { if (!ended) { ended = true; if (callback) callback(); } };
+            setTimeout(function() { if (!ended) { ended = true; if (callback) callback(); } }, 20000);
+            currentUtterance = u;
+            storySpeech.speak(u);
+        }
+
+        // ============ دوال الصوت والقراءة ============
+        function toggleAudio(storyIdx) {
+            if (storyAudioFiles[storyIdx]) {
+                if (isPlaying && activeStoryId === storyIdx && isAudioMode) {
+                    audioPlayer.pause();
+                    storyPausePosition[storyIdx] = audioPlayer.currentTime;
+                    isPlaying = false;
+                    stopTimestampCheck();
+                    setPausedUI(storyIdx);
+                    showToast('⏸ تم الإيقاف المؤقت - سيتم الاستئناف من نفس المكان');
+                    return;
+                }
+                if (storyPausePosition[storyIdx] && activeStoryId === storyIdx) {
+                    audioPlayer.currentTime = storyPausePosition[storyIdx];
+                }
+                if (isPlaying) {
+                    stopAllAudio();
+                    if (activeStoryId !== storyIdx) resetBtnUI(activeStoryId);
+                }
+                activeStoryId = storyIdx;
+                isPlaying = true;
+                isAudioMode = true;
+                lastHighlightedSentence = -1;
+                currentSentenceIdx = 0;
+                setPlayingUI(storyIdx);
+                if (!audioPlayer.src || audioPlayer.src !== storyAudioFiles[storyIdx]) {
+                    audioPlayer.src = storyAudioFiles[storyIdx];
+                    if (storyPausePosition[storyIdx]) {
+                        audioPlayer.currentTime = storyPausePosition[storyIdx];
+                    }
+                }
+                audioPlayer.play();
+                if (storyTimestamps[storyIdx]) startTimestampCheck(storyIdx);
+                audioPlayer.onended = function() {
+                    stopAllAudio();
+                    stopTimestampCheck();
+                    resetBtnUI(storyIdx);
+                    delete storyPausePosition[storyIdx];
+                    showToast('✅ انتهت القصة!');
+                };
+                audioPlayer.onerror = function() {
+                    stopAllAudio();
+                    stopTimestampCheck();
+                    resetBtnUI(storyIdx);
+                    showToast('⚠️ خطأ في تحميل الصوت');
+                };
+                return;
+            }
+            isAudioMode = false;
+            if (isPlaying && activeStoryId !== storyIdx) { stopAudio(); resetBtnUI(activeStoryId); }
+            if (isPlaying && activeStoryId === storyIdx) { stopAudio(); setPausedUI(storyIdx); showToast('⏸ تم الإيقاف المؤقت'); return; }
+            isPlaying = true;
+            activeStoryId = storyIdx;
+            currentSentenceIdx = storyPausePosition[storyIdx] || 0;
+            setPlayingUI(storyIdx);
+            playNext();
+        }
+
+        function startTimestampCheck(storyIdx) {
+            stopTimestampCheck();
+            lastHighlightedSentence = -1;
+            timestampCheckTimer = setInterval(function() {
+                if (!isPlaying || !isAudioMode) return;
+                const ct = audioPlayer.currentTime;
+                const ts = storyTimestamps[storyIdx];
+                if (!ts) return;
+                let found = -1;
+                for (let i = 0; i < ts.length; i++) {
+                    if (ct >= ts[i].start && ct <= ts[i].end) { found = i; break; }
+                }
+                if (found !== -1 && found !== lastHighlightedSentence) {
+                    lastHighlightedSentence = found;
+                    currentSentenceIdx = found;
+                    highlightSentencePurple(storyIdx, found);
+                }
+            }, 150);
+        }
+
+        function stopTimestampCheck() {
+            if (timestampCheckTimer) { clearInterval(timestampCheckTimer); timestampCheckTimer = null; }
+            lastHighlightedSentence = -1;
+        }
+
+        function highlightSentencePurple(storyIdx, sentIdx) {
+            const container = document.getElementById('storyText' + storyIdx);
+            if (!container) return;
+            const allKr = container.querySelectorAll('.kr-block');
+            const allAr = container.querySelectorAll('.ar-block');
+            allKr.forEach(kr => { kr.style.background = 'transparent'; kr.style.borderRadius = '0'; kr.style.padding = '0'; });
+            allAr.forEach(ar => { ar.style.opacity = '0.4'; ar.style.fontWeight = '500'; });
+            if (allKr[sentIdx]) {
+                allKr[sentIdx].style.background = 'rgba(147,112,219,0.25)';
+                allKr[sentIdx].style.borderRadius = '10px';
+                allKr[sentIdx].style.padding = '6px 10px';
+            }
+            if (allAr[sentIdx]) {
+                allAr[sentIdx].style.opacity = '1';
+                allAr[sentIdx].style.fontWeight = '900';
+                allAr[sentIdx].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function stopAllAudio() {
+            isPlaying = false;
+            isAudioMode = false;
+            stopTimestampCheck();
+            if (audioPlayer) { audioPlayer.pause(); audioPlayer.currentTime = 0; }
+            if (storySpeech) try { storySpeech.cancel(); } catch(e) {}
+            if (wordTimer !== null) { clearInterval(wordTimer); wordTimer = null; }
+        }
+
+        function playNext() {
+            if (!isPlaying) return;
+            if (wordTimer !== null) { clearInterval(wordTimer); wordTimer = null; }
+            const data = allStories[activeStoryId];
+            if (!data || currentSentenceIdx >= data.length) { stopAudio(); resetBtnUI(activeStoryId); return; }
+            const container = document.getElementById('storyText' + activeStoryId);
+            if (container) container.querySelectorAll('.word').forEach(w => w.classList.remove('active-word'));
+            highlightCurrentSentence(activeStoryId, currentSentenceIdx);
+            trackWords(activeStoryId, currentSentenceIdx, data[currentSentenceIdx].kr);
+            speakSentence(data[currentSentenceIdx].kr, function() {
+                if (wordTimer !== null) { clearInterval(wordTimer); wordTimer = null; }
+                if (container) container.querySelectorAll('.word').forEach(w => w.classList.remove('active-word'));
+                currentSentenceIdx++;
+                if (isPlaying && currentSentenceIdx < data.length) setTimeout(function() { playNext(); }, 500);
+                else if (currentSentenceIdx >= data.length) { stopAudio(); resetBtnUI(activeStoryId); }
+            });
+        }
+
+        function trackWords(storyIdx, sentIdx, text) {
+            if (wordTimer !== null) { clearInterval(wordTimer); wordTimer = null; }
+            const words = text.split(' ');
+            const container = document.getElementById('storyText' + storyIdx);
+            if (!container) return;
+            container.querySelectorAll('.word').forEach(w => w.classList.remove('active-word'));
+            const arBlocks = container.querySelectorAll('.ar-block');
+            arBlocks.forEach((a, i) => { a.style.opacity = i === sentIdx ? '1' : '0.4'; a.style.fontWeight = i === sentIdx ? '900' : '500'; });
+            const wordSpans = [];
+            container.querySelectorAll('.word').forEach(w => { if (w.getAttribute('data-sent-idx') === String(sentIdx)) wordSpans.push(w); });
+            if (wordSpans.length === 0) return;
+            const totalTime = Math.max(1500, text.length * 85);
+            const delay = totalTime / words.length;
+            wordSpans[0].classList.add('active-word');
+            var idx = 1;
+            wordTimer = setInterval(function() {
+                if (!isPlaying) { clearInterval(wordTimer); wordTimer = null; return; }
+                wordSpans.forEach(w => w.classList.remove('active-word'));
+                if (idx < wordSpans.length) { wordSpans[idx].classList.add('active-word'); idx++; }
+                else { clearInterval(wordTimer); wordTimer = null; }
+            }, delay);
+        }
+
+        function highlightCurrentSentence(storyIdx, sentIdx) {
+            const container = document.getElementById('storyText' + storyIdx);
+            if (!container) return;
+            const arBlocks = container.querySelectorAll('.ar-block');
+            if (arBlocks[sentIdx]) arBlocks[sentIdx].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function stopAudio() {
+            isPlaying = false;
+            isAudioMode = false;
+            stopTimestampCheck();
+            if (wordTimer !== null) { clearInterval(wordTimer); wordTimer = null; }
+            if (audioPlayer) { audioPlayer.pause(); audioPlayer.currentTime = 0; }
+            if (storySpeech) try { storySpeech.cancel(); } catch(e) {}
+            currentUtterance = null;
+        }
+
+        function resetBtnUI(idx) {
+            const btn = document.getElementById('btnContent' + idx);
+            const status = document.getElementById('ttsStatus' + idx);
+            if (btn) btn.innerHTML = '<i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span>';
+            if (status) status.innerText = '';
+        }
+
+        function setPlayingUI(idx) {
+            const btn = document.getElementById('btnContent' + idx);
+            const status = document.getElementById('ttsStatus' + idx);
+            if (btn) btn.innerHTML = '<div class="wave-bars"><span></span><span></span><span></span><span></span><span></span></div><span>إيقاف مؤقت</span>';
+            if (status) status.innerText = '🎵 جارٍ التشغيل...';
+        }
+
+        function setPausedUI(idx) {
+            const btn = document.getElementById('btnContent' + idx);
+            const status = document.getElementById('ttsStatus' + idx);
+            if (btn) btn.innerHTML = '<i class="fa-solid fa-play"></i> <span>متابعة التشغيل</span>';
+            if (status) status.innerText = '⏸ متوقف مؤقتاً';
+        }
+
+        function cancelTTS() { stopAudio(); }
+
+        // ============ التنقل ============
+        function goToHome() {
+            cancelTTS();
+            window.location.href = 'index.html';
+        }
+
+        function switchToStoriesList() {
+            cancelTTS();
+            document.querySelectorAll('.story-view-screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('storiesListScreen').style.display = '';
+            const activeTab = document.querySelector('.tab.active');
+            if (activeTab) {
+                const tabIndex = Array.from(activeTab.parentNode.children).indexOf(activeTab);
+                renderTab(tabIndex);
+            }
+        }
+
+        function openStoryDetails(index) {
+            cancelTTS();
+            document.getElementById('storiesListScreen').style.display = 'none';
+            document.querySelectorAll('.story-view-screen').forEach(s => s.classList.remove('active'));
+            const storyScreen = document.getElementById('story-screen-' + index);
+            if (storyScreen) {
+                storyScreen.classList.add('active');
+            }
+        }
+
+        function completeStoryAndGoBack() {
+            const data = JSON.parse(localStorage.getItem('korean_app_achievements') || '{"storiesCompleted":0,"listeningCompleted":0,"writingCompleted":0,"xp":0,"badges":[]}');
+            data.storiesCompleted += 1;
+            data.xp += 20;
+            if (data.storiesCompleted >= 1 && !data.badges.includes('first-story')) data.badges.push('first-story');
+            if (data.storiesCompleted >= 5 && !data.badges.includes('five-stories')) data.badges.push('five-stories');
+            if (data.storiesCompleted >= 10 && !data.badges.includes('all-stories')) data.badges.push('all-stories');
+            localStorage.setItem('korean_app_achievements', JSON.stringify(data));
+            showToast('🎉 أكملت القصة! +20 XP');
+            switchToStoriesList();
+        }
+
+        // ============ عرض القصص ============
+        function initStories() {
+            if (typeof allStories === 'undefined') { console.warn('allStories غير معرف'); return; }
+            const allStoryIds = ['storyText0','storyText1','storyText2','storyText3','storyText4','storyText5','storyText6','storyText7','storyText8','storyText9'];
+            allStoryIds.forEach((id, i) => { if (allStories[i]) setupStoryDOM(allStories[i], id); });
+        }
+
+        function renderTab(index) {
+            const container = document.getElementById("content");
+            if (!container) return;
+            container.innerHTML = "";
+            const emojis = {0:'💨',1:'🐢',2:'🐦',3:'🐯',4:'💧',5:'🍉',6:'🧂',7:'⚖️',8:'🐓',9:'🐭'};
+            stories[index].forEach(story => {
+                const card = document.createElement("div");
+                card.className = "card";
+                if (story.id !== -1) card.onclick = function() { cancelTTS(); openStoryDetails(story.id); };
+                const tKR = story.titleKR || story.title || '';
+                const tAR = story.titleAR || '';
+                const em = emojis[story.id] || '📖';
+                card.innerHTML = '<div style="flex:1"><div class="title" style="font-family:Fredoka,sans-serif;font-size:13px;direction:ltr;text-align:left;">' + tKR + '</div><div style="font-size:10px;color:#634785;margin-top:3px;font-weight:700;">' + tAR + '</div></div><div class="img-box" style="font-size:40px;">' + em + '</div>';
+                container.appendChild(card);
+            });
+        }
+
+        function showTab(index) {
+            document.querySelectorAll(".tab").forEach((t, i) => t.classList.toggle("active", i === index));
+            currentTab = index;
+            renderTab(index);
+        }
+
+        function setupStoryDOM(storyData, targetContainerId) {
+            const container = document.getElementById(targetContainerId);
+            if (!container) return;
+            container.innerHTML = "";
+            storyData.forEach((item, sentIdx) => {
+                const krDiv = document.createElement('div');
+                krDiv.className = 'kr-block';
+                krDiv.dataset.sentIdx = sentIdx;
+                item.kr.split(' ').forEach((w, wIdx) => {
+                    const span = document.createElement('span');
+                    span.className = 'word';
+                    span.dataset.sentIdx = sentIdx;
+                    span.dataset.wordIdx = wIdx;
+                    span.innerText = w + ' ';
+                    krDiv.appendChild(span);
+                });
+                container.appendChild(krDiv);
+                const arDiv = document.createElement('div');
+                arDiv.className = 'ar-block';
+                arDiv.innerText = item.ar;
+                container.appendChild(arDiv);
+            });
+        }
+
+        function showToast(msg) {
+            const existing = document.querySelector('.toast');
+            if (existing) existing.remove();
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2500);
+        }
+
+        // ============ بدء التشغيل ============
+        window.addEventListener('load', function() {
+            initStories();
+            loadVoices();
+            renderTab(0);
+            console.log('✅ صفحة القصص جاهزة للعمل');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مركز التعلم | Learn Center</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Fredoka:wght@400;600;700&display=swap');
+
+        :root {
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --text: #3b0764;
+            --text-light: #6b21a8;
+            --accent: #9333ea;
+            --card-bg: rgba(255,255,255,0.45);
+            --shadow: 0 10px 30px rgba(147, 51, 234, 0.15);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(160deg, #e0d5ff 0%, #c4b5fd 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: clamp(12px, 2vw, 20px) 10px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .bubble {
+            position: fixed;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            z-index: 0;
+            animation: floatBubble 8s ease-in-out infinite;
+        }
+        .bubble:nth-child(1) { width: 100px; height: 100px; top: 5%; left: 5%; }
+        .bubble:nth-child(2) { width: 150px; height: 150px; bottom: 10%; right: 5%; animation-delay: 2s; }
+        .bubble:nth-child(3) { width: 80px; height: 80px; top: 30%; left: 15%; animation-delay: 4s; }
+        @keyframes floatBubble {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-15px) scale(1.05); }
+        }
+
+        .screen {
+            width: 100%;
+            max-width: 500px;
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 40px;
+            border: 2px solid var(--glass-border);
+            box-shadow: 0 20px 50px rgba(147, 51, 234, 0.2);
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .back-btn {
+            background: rgba(255,255,255,0.7);
+            border: 1px solid var(--glass-border);
+            padding: 8px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+        .back-btn:hover { background: white; transform: translateX(3px); }
+        .title-area { flex: 1; text-align: center; }
+        .title-area h1 { font-weight: 900; font-size: 24px; color: var(--text); }
+        .title-area p { font-size: 12px; color: var(--text-light); }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            border-radius: 28px;
+            padding: 18px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        .card:hover { transform: translateY(-3px); }
+        .card-icon {
+            font-size: 28px;
+            background: rgba(255,255,255,0.5);
+            width: 50px; height: 50px;
+            border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .card-content { flex: 1; }
+        .card-title { font-weight: 900; font-size: 15px; color: var(--text); margin-bottom: 6px; }
+        .card-text { font-size: 13px; color: var(--text-light); line-height: 1.6; }
+
+        .refresh-btn {
+            background: rgba(255,255,255,0.8);
+            border: 1px solid var(--glass-border);
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.2s;
+            margin-top: 8px;
+        }
+        .refresh-btn:hover { background: white; }
+
+        .topik-tip {
+            background: linear-gradient(135deg, #fce4ec, #f3e5f5);
+            border-right: 4px solid #ec4899;
+        }
+
+        .motivation {
+            background: linear-gradient(135deg, #ede9fe, #e0d5ff);
+            border-right: 4px solid #9333ea;
+        }
+
+        @media (max-width: 520px) {
+            .screen {
+                max-width: 100%;
+                border-radius: 30px;
+                padding: 20px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+
+    <div class="screen">
+        <div class="header">
+            <button class="back-btn" onclick="goBack()"><i class="fa-solid fa-arrow-right"></i> رجوع</button>
+            <div class="title-area">
+                <h1>📚 مركز التعلم</h1>
+                <p>نصائح، تحفيز، ومعلومات توبيك</p>
+            </div>
+        </div>
+
+        <!-- نصيحة يومية لتعلم الكورية -->
+        <div class="card" id="tipCard">
+            <div class="card-icon">💡</div>
+            <div class="card-content">
+                <div class="card-title" id="tipTitle">نصيحة اليوم</div>
+                <div class="card-text" id="tipText">حاول أن تتعلم 5 كلمات جديدة يوميًا واستخدمها في جمل.</div>
+                <button class="refresh-btn" onclick="refreshTip()"><i class="fa-solid fa-rotate"></i> نصيحة أخرى</button>
+            </div>
+        </div>
+
+        <!-- معلومة توبيك -->
+        <div class="card topik-tip" id="topikCard">
+            <div class="card-icon">📝</div>
+            <div class="card-content">
+                <div class="card-title" id="topikTitle">🎯 هل تعلم عن TOPIK؟</div>
+                <div class="card-text" id="topikText">امتحان TOPIK I يتكون من 30 سؤال استماع و 30 سؤال قراءة، ومدة الاختبار 100 دقيقة.</div>
+                <button class="refresh-btn" onclick="refreshTopik()"><i class="fa-solid fa-rotate"></i> معلومة أخرى</button>
+            </div>
+        </div>
+
+        <!-- رسالة تحفيزية -->
+        <div class="card motivation" id="motivationCard">
+            <div class="card-icon">💪</div>
+            <div class="card-content">
+                <div class="card-title" id="motivationTitle">🌟 تحفيز</div>
+                <div class="card-text" id="motivationText">كل حرف تتعلمه يقرّبك من حلمك. لا تتوقف!</div>
+                <button class="refresh-btn" onclick="refreshMotivation()"><i class="fa-solid fa-rotate"></i> تحفيز آخر</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== البيانات (موسعة) ==========
+        const tips = [
+            "حاول أن تتعلم 5 كلمات جديدة يوميًا واستخدمها في جمل.",
+            "شاهد مسلسلات كورية بترجمة كورية لتحسين مهاراتك.",
+            "استخدم تطبيق المذكرات لكتابة يومياتك باللغة الكورية.",
+            "كرر الكلمات بصوت عالٍ لتثبيت النطق الصحيح.",
+            "خصص 10 دقائق يوميًا لمراجعة المفردات القديمة.",
+            "حاول التفكير باللغة الكورية بدلاً من الترجمة الحرفية.",
+            "اقرأ قصص الأطفال بالكورية، فمفرداتها بسيطة ومفيدة.",
+            "استمع إلى الأغاني الكورية وحاول كتابة الكلمات التي تسمعها.",
+            "شارك في مجموعات تعلم اللغة الكورية على الإنترنت للممارسة.",
+            "لا تخف من الأخطاء، فكل خطأ هو خطوة نحو الإتقان.",
+            "ضع أهدافًا أسبوعية صغيرة، مثل حفظ 30 كلمة جديدة.",
+            "حاول أن تقرأ مقالاً إخباريًا بالكورية مرة في الأسبوع.",
+            "اكتب منشورات قصيرة بالكورية على وسائل التواصل الاجتماعي.",
+            "شاهد مقاطع يوتيوب تعليمية عن القواعد الكورية.",
+            "استخدم خاصية الترجمة في هاتفك لممارسة النطق.",
+            "حاول التحدث مع متحدثين أصليين عبر تطبيقات التبادل اللغوي.",
+            "خصص دفترًا للمفردات الصعبة وراجعها بانتظام.",
+            "تعلم جملة كورية كاملة بدلاً من كلمة واحدة في كل مرة.",
+            "استمع إلى البودكاست الكوري أثناء المشي أو القيادة.",
+            "جرب كتابة تعليقات بالكورية على منشورات أصدقائك الكوريين."
+        ];
+
+        const topikFacts = [
+            "امتحان TOPIK I يتكون من 30 سؤال استماع و 30 سؤال قراءة، ومدة الاختبار 100 دقيقة.",
+            "امتحان TOPIK II يتكون من 50 سؤال استماع، 4 أسئلة كتابة، و 50 سؤال قراءة. مدته 180 دقيقة.",
+            "للحصول على المستوى 3 في TOPIK II، يجب أن تحصل على 120 نقطة على الأقل من 300.",
+            "المستوى 6 (الأعلى) يتطلب 230 نقطة في TOPIK II.",
+            "تقام امتحانات TOPIK 6 مرات في السنة داخل كوريا، و 4 مرات خارجها.",
+            "نتائج الامتحان تبقى صالحة لمدة سنتين من تاريخ الإعلان.",
+            "يمكنك استخدام قاموس ورقي في قسم الكتابة فقط (TOPIK II).",
+            "السرعة مهمة جدًا في قسم القراءة؛ حاول أن لا تتجاوز دقيقة واحدة لكل سؤال.",
+            "الأسئلة 51-52 في الكتابة هي أسئلة إكمال فراغات، وهي أسهل جزء للحصول على نقاط.",
+            "الأسئلة 53-54 في الكتابة تتطلب كتابة نصوص طويلة (رسم بياني + مقال)، فتدرب عليها كثيرًا.",
+            "TOPIK I يمنح مستويين فقط: المستوى 1 (80 نقطة) والمستوى 2 (140 نقطة).",
+            "القسم الأصعب في TOPIK II هو الاستماع المتقدم (الأسئلة 21-50) حيث المحادثات طويلة ومعقدة.",
+            "يمكن استخدام اللغة الإنجليزية أو الكورية فقط في التعليمات داخل قاعة الامتحان.",
+            "يُسمح بدخول الامتحان بقلم رصاص فقط، ولا يُسمح بالأقلام الجافة أو الحبر.",
+            "نتيجة الامتحان تُعلن عادة بعد حوالي شهر من تاريخ الاختبار.",
+            "لا يوجد نجاح أو رسوب في TOPIK، بل تحصل على مستوى حسب درجتك.",
+            "في كوريا، يستخدم TOPIK للقبول الجامعي والتوظيف وطلب الإقامة الدائمة.",
+            "هناك كتب تحضيرية رسمية من المعهد الكوري للتعليم (NIIED) يمكنك تحميلها مجانًا.",
+            "الاستماع في TOPIK II يحتوي على مقاطع من نشرات الأخبار والبرامج الحوارية.",
+            "سؤال الكتابة 53 يعرض رسمًا بيانيًا ويطلب منك وصفه في 200-300 كلمة كورية."
+        ];
+
+        const motivations = [
+            "كل حرف تتعلمه يقرّبك من حلمك. لا تتوقف!",
+            "أنت اليوم أفضل من الأمس، وغدًا ستكون أفضل.",
+            "تذكر دائمًا لماذا بدأت، ولتكن هذه قوتك.",
+            "لا تقارن رحلتك برحلة الآخرين، فلكلٍ طريقه الخاص.",
+            "النجاح ليس نهاية، والفشل ليس قاتلًا، الشجاعة للاستمرار هي ما يهم.",
+            "الأشياء العظيمة تستغرق وقتًا، كن صبورًا مع نفسك.",
+            "كل دقيقة تقضيها في التعلم هي استثمار في مستقبلك.",
+            "أنت تتعلم واحدة من أصعب اللغات في العالم، وهذا إنجاز بحد ذاته!",
+            "تخيل نفسك تتحدث الكورية بطلاقة، هذا الحلم قريب جدًا.",
+            "العقبة الوحيدة بينك وبين هدفك هي القصة التي ترويها لنفسك.",
+            "لا تيأس، كل متحدث طليق بدأ من الصفر مثلك تمامًا.",
+            "فخور بك لأنك مستمر رغم الصعوبات.",
+            "قوة الإرادة تصنع المستحيل. ثق بنفسك.",
+            "ما تتعلمه اليوم سيصبح سلاحك غدًا.",
+            "رحلة تعلم اللغة ممتعة بقدر ما هي مفيدة، استمتع بها!",
+            "أنت لست وحدك، ملايين يتعلمون الكورية حول العالم.",
+            "لا يوجد وقت متأخر للبدء، كل لحظة هي فرصة جديدة.",
+            "ضع صورة لهدفك أمامك دائمًا لتذكرك لماذا تتعلم.",
+            "كلما شعرت بالإحباط، تذكر كم قطعت من طريق.",
+            "الاستسلام هو الهزيمة الوحيدة، أما التأخر في التقدم فهو طبيعي."
+        ];
+
+        // ========== آلية عدم التكرار ==========
+        function getNonRepeatingItem(arr, storageKey) {
+            let used = JSON.parse(localStorage.getItem(storageKey) || '[]');
+            // تصفية العناصر غير المستخدمة
+            let available = arr.filter((_, i) => !used.includes(i));
+            if (available.length === 0) {
+                // إذا تم استخدام الكل، نعيد التعيين
+                used = [];
+                available = [...arr];
+            }
+            const randomAvailableIndex = Math.floor(Math.random() * available.length);
+            const selectedItem = available[randomAvailableIndex];
+            const originalIndex = arr.indexOf(selectedItem);
+            used.push(originalIndex);
+            localStorage.setItem(storageKey, JSON.stringify(used));
+            return selectedItem;
+        }
+
+        function refreshTip() {
+            const tip = getNonRepeatingItem(tips, 'used_tips');
+            document.getElementById('tipText').textContent = tip;
+        }
+
+        function refreshTopik() {
+            const fact = getNonRepeatingItem(topikFacts, 'used_topik');
+            document.getElementById('topikText').textContent = fact;
+        }
+
+        function refreshMotivation() {
+            const msg = getNonRepeatingItem(motivations, 'used_motivations');
+            document.getElementById('motivationText').textContent = msg;
+        }
+
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        // ========== عرض عشوائي عند التحميل ==========
+        window.addEventListener('DOMContentLoaded', () => {
+            refreshTip();
+            refreshTopik();
+            refreshMotivation();
+        });
+    </script>
+</body>
+</html>

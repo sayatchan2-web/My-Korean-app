@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قاموس الاختصارات الكورية | K-slang</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+
+        :root {
+            --pink-deep: #d63384;
+            --pink-dark: #c2185b;
+            --pink-medium: #e91e63;
+            --pink-surface: #fce4ec;
+            --text: #4a0e2e;
+            --accent: #d63384;
+            --green: #4caf50;
+            --orange: #ff9800;
+            --blue: #2196F3;
+            --glass-white: rgba(255, 255, 255, 0.75);
+            --glass-pink: rgba(245, 210, 220, 0.5);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #f8bbd0 0%, #f48fb1 30%, #f06292 60%, #ec407a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: clamp(12px, 2vw, 20px) 10px;
+            overflow-x: hidden;
+        }
+
+        .app-screen {
+            width: 100%;
+            max-width: 500px;
+            min-height: 92vh;
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 15px 40px rgba(200, 50, 80, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @media (max-width: 520px) {
+            .app-screen {
+                max-width: 100%;
+                min-height: 100vh;
+                border-radius: 0;
+            }
+        }
+
+        /* الهيدر */
+        .app-header {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(236, 64, 122, 0.25);
+            flex-shrink: 0;
+            gap: 8px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(236, 64, 122, 0.3);
+            color: var(--text);
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 8px rgba(200, 50, 80, 0.1);
+        }
+
+        .app-title {
+            flex: 1;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 900;
+            color: var(--text);
+        }
+
+        .header-btns {
+            display: flex;
+            gap: 6px;
+        }
+
+        .icon-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(236, 64, 122, 0.3);
+            cursor: pointer;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            position: relative;
+            color: var(--text);
+        }
+
+        .icon-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 8px rgba(200, 50, 80, 0.15);
+        }
+
+        .icon-btn .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--pink-dark);
+            color: #fff;
+            border-radius: 10px;
+            padding: 1px 6px;
+            font-size: 9px;
+            font-weight: 700;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        /* شريط البحث */
+        .search-overlay {
+            display: none;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(236, 64, 122, 0.25);
+            flex-shrink: 0;
+            animation: slideDown 0.2s ease;
+        }
+
+        .search-overlay.active {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .search-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 8px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(236, 64, 122, 0.3);
+            background: rgba(255, 255, 255, 0.8);
+            font-family: 'Tajawal', sans-serif;
+            font-size: 13px;
+            color: var(--text);
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--pink-deep);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .search-input::placeholder {
+            color: #c48095;
+        }
+
+        .search-close-btn {
+            background: rgba(236, 64, 122, 0.15);
+            border: 1px solid rgba(236, 64, 122, 0.3);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--text);
+        }
+
+        .search-results-count {
+            text-align: center;
+            font-size: 10px;
+            color: #a06070;
+            margin-top: 4px;
+        }
+
+        /* شريط التنقل */
+        .top-nav {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(236, 64, 122, 0.25);
+            flex-shrink: 0;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+            padding: 8px 0;
+        }
+
+        .top-nav::-webkit-scrollbar { display: none; }
+
+        .nav-track {
+            display: flex;
+            gap: 8px;
+            padding: 0 16px;
+            width: max-content;
+        }
+
+        .nav-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 7px 14px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            color: #7a4a5a;
+            font-weight: 700;
+            font-size: 12px;
+            border: 1px solid rgba(236, 64, 122, 0.2);
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--pink-dark);
+            border-color: var(--pink-deep);
+            font-weight: 900;
+            box-shadow: 0 2px 10px rgba(200, 50, 80, 0.15);
+        }
+
+        .nav-badge {
+            background: rgba(236, 64, 122, 0.2);
+            color: var(--pink-dark);
+            border-radius: 10px;
+            padding: 2px 7px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .nav-item.active .nav-badge {
+            background: var(--pink-deep);
+            color: #fff;
+        }
+
+        /* المحتوى */
+        .content-area {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 12px 14px 20px;
+            scroll-behavior: smooth;
+        }
+
+        .content-area::-webkit-scrollbar { width: 4px; }
+        .content-area::-webkit-scrollbar-thumb {
+            background: rgba(236, 64, 122, 0.3);
+            border-radius: 10px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 15px;
+            font-weight: 900;
+            color: var(--text);
+            margin: 6px 0 14px;
+        }
+
+        .section-title::before,
+        .section-title::after {
+            content: '✦';
+            margin: 0 6px;
+            color: var(--pink-deep);
+            font-size: 10px;
+        }
+
+        .level-section {
+            display: none;
+        }
+
+        .level-section.active {
+            display: block;
+        }
+
+        /* شاشة المحفوظات والمتعلمة */
+        .saved-screen {
+            display: none;
+        }
+
+        .saved-screen.active {
+            display: block;
+        }
+
+        .saved-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .saved-header h3 {
+            font-size: 16px;
+            color: var(--text);
+        }
+
+        .close-saved-btn {
+            background: rgba(236, 64, 122, 0.15);
+            border: 1px solid rgba(236, 64, 122, 0.3);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            transition: all 0.2s;
+        }
+
+        .close-saved-btn:hover {
+            background: rgba(236, 64, 122, 0.25);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #a06070;
+            font-size: 15px;
+        }
+
+        .empty-state .emoji {
+            font-size: 50px;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        /* عنصر الكلمة */
+        .word-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 18px;
+            border: 1px solid rgba(236, 64, 122, 0.2);
+            transition: all 0.2s;
+        }
+
+        .word-item:hover {
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 2px 12px rgba(200, 50, 80, 0.08);
+        }
+
+        .word-item.learned {
+            border-right: 3px solid var(--green);
+            background: rgba(232, 245, 233, 0.7);
+        }
+
+        .word-item.saved {
+            border-right: 3px solid var(--orange);
+            background: rgba(255, 243, 224, 0.7);
+        }
+
+        .word-main {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .word-num {
+            min-width: 24px;
+            height: 24px;
+            background: rgba(236, 64, 122, 0.15);
+            color: var(--pink-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 900;
+            flex-shrink: 0;
+        }
+
+        .cloud-wrap {
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .cloud-shape {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 30px;
+            padding: 8px 14px;
+            min-width: 80px;
+            text-align: center;
+            border: 1px solid rgba(236, 64, 122, 0.2);
+            transition: all 0.2s;
+        }
+
+        .cloud-shape:active {
+            transform: scale(0.96);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .cloud-kr {
+            font-size: 14px;
+            font-weight: 900;
+            color: var(--pink-dark);
+            direction: ltr;
+            display: block;
+        }
+
+        .cloud-sub {
+            font-size: 9px;
+            color: #a06070;
+            font-weight: 600;
+            display: block;
+            margin-top: 1px;
+            direction: ltr;
+        }
+
+        .word-ar {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .example-box {
+            background: rgba(252, 228, 236, 0.5);
+            border-radius: 12px;
+            padding: 10px 12px;
+            border: 1px dashed rgba(236, 64, 122, 0.25);
+        }
+
+        .example-label {
+            font-size: 9px;
+            color: #a06070;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .example-kr {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--pink-dark);
+            direction: ltr;
+            text-align: right;
+            margin-bottom: 2px;
+        }
+
+        .example-ar {
+            font-size: 11px;
+            color: #7a4a5a;
+            font-weight: 500;
+        }
+
+        /* أزرار التفاعل */
+        .word-actions {
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            padding: 6px 12px;
+            border-radius: 15px;
+            border: 1px solid rgba(236, 64, 122, 0.25);
+            background: rgba(255, 255, 255, 0.75);
+            font-size: 10px;
+            font-weight: 700;
+            color: #7a4a5a;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Tajawal', sans-serif;
+            white-space: nowrap;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 1px 6px rgba(200, 50, 80, 0.1);
+        }
+
+        .action-btn:active {
+            transform: scale(0.95);
+        }
+
+        .action-btn.save-btn.active {
+            background: var(--orange);
+            color: #fff;
+            border-color: var(--orange);
+        }
+
+        .action-btn.learned-btn.active {
+            background: var(--green);
+            color: #fff;
+            border-color: var(--green);
+        }
+
+        .action-btn.pronounce-btn {
+            color: var(--blue);
+        }
+
+        .action-btn.pronounce-btn.playing {
+            background: var(--blue);
+            color: #fff;
+            animation: pulse 0.8s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* رسائل */
+        .no-results {
+            text-align: center;
+            padding: 30px;
+            color: #a06070;
+            font-size: 13px;
+            font-weight: 700;
+            display: none;
+        }
+
+        .no-results.show {
+            display: block;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(74, 14, 46, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 12px;
+            font-weight: 700;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<div class="app-screen">
+
+    <!-- الهيدر -->
+    <div class="app-header">
+        <button class="back-btn" onclick="goBack()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+            رجوع
+        </button>
+        <div class="app-title">🐰 K-Slang</div>
+        <div class="header-btns">
+            <button class="icon-btn" onclick="toggleSearch()" title="بحث">🔍</button>
+            <button class="icon-btn" onclick="showSavedScreen('saved')" title="المحفوظات">
+                ⭐
+                <span class="badge" id="savedBadge" style="display:none">0</span>
+            </button>
+            <button class="icon-btn" onclick="showSavedScreen('learned')" title="المتعلمة">
+                ✅
+                <span class="badge" id="learnedBadge" style="display:none">0</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- شريط البحث -->
+    <div class="search-overlay" id="searchOverlay">
+        <div class="search-input-wrapper">
+            <input type="text" class="search-input" id="searchInput" placeholder="ابحث عن كلمة أو اختصار..." autocomplete="off">
+            <button class="search-close-btn" onclick="toggleSearch()">✕</button>
+        </div>
+        <div class="search-results-count" id="resultsCount"></div>
+    </div>
+
+    <!-- شريط التنقل -->
+    <nav class="top-nav" id="mainNav">
+        <div class="nav-track">
+            <div class="nav-item active" data-level="all" onclick="switchLevel('all', this)">
+                الكل <span class="nav-badge">134</span>
+            </div>
+            <div class="nav-item" data-level="1" onclick="switchLevel('1', this)">
+                🟢 مبتدئ <span class="nav-badge">18</span>
+            </div>
+            <div class="nav-item" data-level="2" onclick="switchLevel('2', this)">
+                🟡 متوسط <span class="nav-badge">20</span>
+            </div>
+            <div class="nav-item" data-level="3" onclick="switchLevel('3', this)">
+                🔴 متقدم <span class="nav-badge">96</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- المحتوى الرئيسي -->
+    <div class="content-area" id="mainContent">
+        <div class="no-results" id="noResults">
+            🐰💭<br>لم يتم العثور على نتائج
+        </div>
+
+        <div class="level-section active" id="levelSection1">
+            <h2 class="section-title">المستوى الأول: الاختصارات الأساسية</h2>
+            <div id="level1Content"></div>
+        </div>
+        <div class="level-section active" id="levelSection2">
+            <h2 class="section-title">المستوى الثاني: عامية الإنترنت</h2>
+            <div id="level2Content"></div>
+        </div>
+        <div class="level-section active" id="levelSection3">
+            <h2 class="section-title">المستوى الثالث: مصطلحات اجتماعية وعاطفية</h2>
+            <div id="level3Content"></div>
+        </div>
+    </div>
+
+    <!-- شاشة المحفوظات / المتعلمة -->
+    <div class="content-area saved-screen" id="savedScreen">
+        <div class="saved-header">
+            <h3 id="savedScreenTitle">⭐ الكلمات المحفوظة</h3>
+            <button class="close-saved-btn" onclick="hideSavedScreen()">✕</button>
+        </div>
+        <div id="savedContent"></div>
+    </div>
+</div>
+
+<script>
+// ============ قاعدة البيانات الكاملة 134 كلمة ============
+const wordsData = [
+    { id: 1, level: 1, kr: 'ㅋㅋ', sub: '크크', ar: 'ضحك عادي (قهقهة).', exKr: '아, 진짜 웃겨 ㅋㅋ', exAr: 'آه، هذا مضحك حقاً هههه.' },
+    { id: 2, level: 1, kr: 'ㅎㅎ', sub: '흐흐', ar: 'ضحك خفيف ولطيف.', exKr: '고마워 ㅎㅎ', exAr: 'شكراً لك (بضحكة لطيفة).' },
+    { id: 3, level: 1, kr: '헐', sub: '', ar: 'صدمة أو تعجب شديد.', exKr: '헐! 이게 뭐야?', exAr: 'يا للهول! ما هذا؟' },
+    { id: 4, level: 1, kr: '헉', sub: '', ar: 'شهقة فزع أو تفاجؤ مفاجئ.', exKr: '헉! 깜짝이야', exAr: 'آه! لقد أذهلتني.' },
+    { id: 5, level: 1, kr: '어머', sub: '', ar: 'يا إلهي! / يا للدهشة!', exKr: '어머! 너무 예뻐', exAr: 'يا إلهي! هذا جميل جداً.' },
+    { id: 6, level: 1, kr: '아이고', sub: '', ar: 'يا حسرتي / يا إلهي (تعب أو تعجب).', exKr: '아이고, 힘들어', exAr: 'يا حسرتي، أنا متعب.' },
+    { id: 7, level: 1, kr: '소름', sub: '', ar: 'قشعريرة (من الخوف أو الاندهاش).', exKr: '소름 돋았어!', exAr: 'أصابتني قشعريرة!' },
+    { id: 8, level: 1, kr: '닭살', sub: '', ar: 'قشعريرة (من الإحراج أو الكلام المعسول).', exKr: '닭살 돋는 말이야', exAr: 'هذا كلام يسبب القشعريرة.' },
+    { id: 9, level: 1, kr: 'ㅜㅜ', sub: '우우', ar: 'تعبير عن الحزن أو الإحباط.', exKr: '비 와서 우울해 ㅜㅜ', exAr: 'المطر يجعلني مكتئباً.' },
+    { id: 10, level: 1, kr: 'ㅠㅠ', sub: '유유', ar: 'بكاء شديد ودموع.', exKr: '보고 싶어 ㅠㅠ', exAr: 'أشتاق إليك (مع دموع).' },
+    { id: 11, level: 1, kr: 'ㅇㅇ', sub: '응', ar: 'نعم / إيجاب.', exKr: 'ㅇㅇ 알겠어', exAr: 'نعم، فهمت.' },
+    { id: 12, level: 1, kr: 'ㄴㄴ', sub: '노노', ar: 'لا / مستحيل (No No).', exKr: 'ㄴㄴ 안 돼', exAr: 'لا، هذا غير ممكن.' },
+    { id: 13, level: 1, kr: 'ㅇㅋ', sub: '오케이', ar: 'أوكي / حسناً.', exKr: 'ㅇㅋ 내일 보자', exAr: 'أوكي، لنلتقِ غداً.' },
+    { id: 14, level: 1, kr: 'ㄱㄱ', sub: '고고', ar: 'انطلق / هيا بنا (Go Go).', exKr: 'ㄱㄱ 빨리!', exAr: 'هيا بسرعة!' },
+    { id: 15, level: 1, kr: 'ㅈㅅ', sub: '죄송', ar: 'آسف.', exKr: 'ㅈㅅ 늦었어', exAr: 'آسف، لقد تأخرت.' },
+    { id: 16, level: 1, kr: 'ㅂㅂ', sub: '바이바이', ar: 'مع السلامة (Bye Bye).', exKr: '잘 가 ㅂㅂ!', exAr: 'وداعاً، باي باي!' },
+    { id: 17, level: 1, kr: 'ㄱㅅ', sub: '감사', ar: 'شكراً.', exKr: 'ㄱㅅ 진짜 고마워', exAr: 'شكراً، أنا ممتن جداً.' },
+    { id: 18, level: 1, kr: 'ㅊㅋ', sub: '축하', ar: 'مبروك / تهانينا.', exKr: '생일 ㅊㅋ!', exAr: 'عيد ميلاد سعيد، مبروك!' },
+    { id: 19, level: 2, kr: 'ㅇㅈ', sub: '인정', ar: 'أوافقك الرأي / اعتراف.', exKr: 'ㅇㅈ 그 말 맞아', exAr: 'أوافق، كلامك صحيح.' },
+    { id: 20, level: 2, kr: 'ㄹㅇ', sub: '리얼', ar: 'حقيقي / بجد؟ (Real).', exKr: 'ㄹㅇ? 진짜야?', exAr: 'بجد؟ هل هذا حقيقي؟' },
+    { id: 21, level: 2, kr: 'ㄷㄷ', sub: '덜덜', ar: 'أرتجف من الخوف أو الصدمة.', exKr: '와 이거 ㄷㄷ', exAr: 'واو، هذا يرعبني.' },
+    { id: 22, level: 2, kr: 'ㅁㅊ', sub: '미친', ar: 'مجنون (تُقال عند التعجب الشديد).', exKr: 'ㅁㅊ 이거 진짜 맛있어', exAr: 'مجنون! هذا لذيذ حقاً.' },
+    { id: 23, level: 2, kr: '심쿵', sub: '심장이 쿵', ar: 'خفقان القلب من شدة الإعجاب.', exKr: '아 너무 잘생겼어 심쿵', exAr: 'آه، إنه وسيم جداً، قلبي يدق.' },
+    { id: 24, level: 2, kr: '두근두근', sub: '', ar: 'نبضات قلب متسارعة.', exKr: '면접 앞두고 두근두근', exAr: 'قلبي يدق بسرعة قبل المقابلة.' },
+    { id: 25, level: 2, kr: '인정', sub: '', ar: 'أتفق معك / صحيح.', exKr: '인정! 완전 공감', exAr: 'أتفق! أوافقك تماماً.' },
+    { id: 26, level: 2, kr: '팩트', sub: '', ar: 'حقيقة (Fact).', exKr: '이건 팩트야', exAr: 'هذه حقيقة.' },
+    { id: 27, level: 2, kr: 'ㅂㅇ', sub: '바이', ar: 'وداعاً.', exKr: 'ㅂㅇ 다음에 봐', exAr: 'باي، أراك لاحقاً.' },
+    { id: 28, level: 2, kr: 'ㄱㄷ', sub: '기다려', ar: 'انتظر دقيقة.', exKr: 'ㄱㄷ 나 지금 가고 있어', exAr: 'انتظر، أنا في الطريق.' },
+    { id: 29, level: 2, kr: 'ㅇㄷ', sub: '어디', ar: 'أين؟', exKr: 'ㅇㄷ야?', exAr: 'أين أنت؟' },
+    { id: 30, level: 2, kr: 'ㅅㄱ', sub: '수고', ar: 'أحسنت عملاً / تعبتم.', exKr: '오늘도 ㅅㄱ!', exAr: 'أحسنت عملاً اليوم أيضاً!' },
+    { id: 31, level: 2, kr: 'ㅁㄹ', sub: '몰라', ar: 'لا أعرف.', exKr: '그건 나도 ㅁㄹ', exAr: 'هذا أيضاً لا أعرفه.' },
+    { id: 32, level: 2, kr: 'ㄱㅊ', sub: '괜찮아', ar: 'لا بأس / كل شيء بخير.', exKr: 'ㄱㅊ 걱정 마', exAr: 'لا بأس، لا تقلق.' },
+    { id: 33, level: 2, kr: 'ㄴㄷ', sub: '나도', ar: 'أنا أيضاً.', exKr: 'ㄴㄷ 가고 싶어', exAr: 'أنا أيضاً أريد الذهاب.' },
+    { id: 34, level: 2, kr: 'ㅎㅇㅌ', sub: '화이팅', ar: 'بالتوفيق / تشجيع (Fighting).', exKr: '시험 ㅎㅇㅌ!', exAr: 'بالتوفيق في الامتحان!' },
+    { id: 35, level: 2, kr: 'ㅈㅂ', sub: '제발', ar: 'أرجوك.', exKr: 'ㅈㅂ 한 번만 봐줘', exAr: 'أرجوك، سامحني هذه المرة.' },
+    { id: 36, level: 2, kr: 'ㅁㅎ', sub: '뭐해', ar: 'ماذا تفعل؟', exKr: '지금 ㅁㅎ?', exAr: 'ماذا تفعل الآن؟' },
+    { id: 37, level: 2, kr: 'ㄱㅇㅇ', sub: '귀여워', ar: 'لطيف جداً (Cute).', exKr: '강아지가 ㄱㅇㅇ', exAr: 'الجرو لطيف جداً.' },
+    { id: 38, level: 2, kr: 'ㅂㅁ', sub: '병맛', ar: 'محتوى غريب وتافه لكنه مضحك.', exKr: '이 영상 완전 ㅂㅁ', exAr: 'هذا الفيديو سخيف ومضحك.' },
+    { id: 39, level: 3, kr: 'ㅡㅡ', sub: '', ar: 'ملل أو انزعاج أو نظرة باردة.', exKr: 'ㅡㅡ 그만해', exAr: 'توقف عن هذا (بنظرة باردة).' },
+    { id: 40, level: 3, kr: 'ㅎㅇ', sub: '하이', ar: 'مرحباً (Hi).', exKr: 'ㅎㅇ 오랜만이야', exAr: 'هاي، لم أرك منذ فترة.' },
+    { id: 41, level: 3, kr: 'ㄴㅇㄱ', sub: '놀라운 광경', ar: 'مشهد صادم.', exKr: '이건 ㄴㅇㄱ이야', exAr: 'هذا مشهد صادم.' },
+    { id: 42, level: 3, kr: 'ㅊㅊ', sub: '추천', ar: 'أُوصي بذلك.', exKr: '이 노래 ㅊㅊ', exAr: 'أنصح بهذه الأغنية.' },
+    { id: 43, level: 3, kr: 'ㅇㄴ', sub: '아니', ar: 'مهلاً / يا للهول.', exKr: 'ㅇㄴ 그게 아니야', exAr: 'لا، ليس هذا ما قصدته.' },
+    { id: 44, level: 3, kr: 'ㅅㄹㅎ', sub: '사랑해', ar: 'أحبك.', exKr: '너를 ㅅㄹㅎ', exAr: 'أنا أحبك.' },
+    { id: 45, level: 3, kr: 'ㅈㄴ', sub: '존나', ar: 'جداً / لدرجة كبيرة (عامية قوية).', exKr: 'ㅈㄴ 맛있어!', exAr: 'لذيذ جداً!' },
+    { id: 46, level: 3, kr: 'ㅎㄷㄷ', sub: '덜덜덜', ar: 'خوف أو قلق شديد.', exKr: '그 이야기 ㅎㄷㄷ', exAr: 'تلك القصة مرعبة.' },
+    { id: 47, level: 3, kr: 'ㄱㅁ', sub: '그만', ar: 'توقف / يكفي.', exKr: 'ㄱㅁ 그만해!', exAr: 'كفى! توقف!' },
+    { id: 48, level: 3, kr: 'ㅈㄱㄴ', sub: '제목이 곧 내용', ar: 'الموضوع واضح من العنوان.', exKr: 'ㅈㄱㄴ이니까 제목만 봐', exAr: 'الموضوع واضح، اقرأ العنوان فقط.' },
+    { id: 49, level: 3, kr: 'ㅂㄷㅂㄷ', sub: '바들바들', ar: 'يرتجف من شدة الغضب.', exKr: '열 받아서 ㅂㄷㅂㄷ', exAr: 'أنا غاضب لدرجة أني أرتجف.' },
+    { id: 50, level: 3, kr: 'ㅁㅊㄴ', sub: '미친놈', ar: 'شخص مجنون / معتوه.', exKr: '저 사람 ㅁㅊㄴ이야', exAr: 'ذلك الشخص مجنون.' },
+    { id: 51, level: 3, kr: 'ㅈㅇ', sub: '좋아', ar: 'جيد / يعجبني.', exKr: '이 노래 ㅈㅇ!', exAr: 'هذه الأغنية رائعة!' },
+    { id: 52, level: 3, kr: 'ㄱㄱㄱ', sub: '깔깔깔', ar: 'ضحك بصوت عالٍ.', exKr: '아 진짜 웃겨 ㄱㄱㄱ', exAr: 'آه، هذا مضحك جداً هاهاها.' },
+    { id: 53, level: 3, kr: 'ㄱㄹ', sub: '그래', ar: 'نعم / حسناً.', exKr: 'ㄱㄹ 알았어', exAr: 'حسناً، فهمت.' },
+    { id: 54, level: 3, kr: 'ㅎㅂ', sub: '후방주의', ar: 'تنبيه محتوى للبالغين.', exKr: '이 사진 ㅎㅂ', exAr: 'هذه الصورة للبالغين فقط.' },
+    { id: 55, level: 3, kr: 'ㅅㅂ', sub: '씨발', ar: '(كلمة بذيئة) تباً.', exKr: '아 ㅅㅂ 깜짝이야', exAr: 'آه، تباً! لقد أذهلتني.' },
+    { id: 56, level: 3, kr: '별다줄', sub: '별걸 다 줄인다', ar: 'يختصرون كل شيء.', exKr: '별다줄 진짜 다 줄이네', exAr: 'يختصرون كل شيء.' },
+    { id: 57, level: 3, kr: '복세편살', sub: '복잡한 세상 편하게 살자', ar: 'لِنعش براحة.', exKr: '복세편살 하자!', exAr: 'لنعش براحة!' },
+    { id: 58, level: 3, kr: '소확행', sub: '소소하지만 확실한 행복', ar: 'السعادة الصغيرة المضمونة.', exKr: '이게 바로 소확행이야', exAr: 'هذه هي السعادة الصغيرة.' },
+    { id: 59, level: 3, kr: '워라밸', sub: 'Work-Life Balance', ar: 'التوازن بين العمل والحياة.', exKr: '워라밸 챙기세요', exAr: 'حافظ على التوازن بين العمل والحياة.' },
+    { id: 60, level: 3, kr: '낄끼빠빠', sub: '낄 때 끼고 빠질 때 빠져라', ar: 'اعرف متى تتدخل ومتى تنسحب.', exKr: '낄끼빠빠가 중요해', exAr: 'معرفة وقت التدخل والانسحاب مهمة.' },
+    { id: 61, level: 3, kr: '갑분싸', sub: '갑자기 분위기 싸해짐', ar: 'صمت مفاجئ وإحراج.', exKr: '갑분싸 됐어', exAr: 'أصبح الجو محرجاً فجأة.' },
+    { id: 62, level: 3, kr: '꾸안꾸', sub: '꾸민 듯 안 꾸민 듯', ar: 'أناقة طبيعية.', exKr: '오늘 꾸안꾸 스타일', exAr: 'ستايلي اليوم طبيعي وأنيق.' },
+    { id: 63, level: 3, kr: '만반잘부', sub: '만나서 반가워 잘 부탁해', ar: 'سعدت بلقائك.', exKr: '만반잘부!', exAr: 'سعدت بلقائك!' },
+    { id: 64, level: 3, kr: '삼귀다', sub: '사귀기 전 단계', ar: 'مرحلة التعارف.', exKr: '우리 삼귀는 중', exAr: 'نحن في مرحلة التعارف.' },
+    { id: 65, level: 3, kr: '좋댓구알', sub: '좋아요 댓글 구독 알림', ar: 'إعجاب، تعليق، اشتراك.', exKr: '좋댓구알 해주세요', exAr: 'أرجو الإعجاب والتعليق والاشتراك.' },
+    { id: 66, level: 3, kr: '얼죽아', sub: '얼어 죽어도 아이스', ar: 'سأشرب المثلج حتى لو مت.', exKr: '나는 얼죽아!', exAr: 'أنا أشرب المثلج حتى لو تجمدت!' },
+    { id: 67, level: 3, kr: '반모', sub: '반말 모드', ar: 'التحدث غير الرسمي.', exKr: '반모 하실래요?', exAr: 'هل نتحدث بشكل غير رسمي؟' },
+    { id: 68, level: 3, kr: '팬아저', sub: '팬 아니어도 저장', ar: 'صورة تستحق الحفظ.', exKr: '이거 팬아저 인정', exAr: 'هذه تستحق الحفظ.' },
+    { id: 69, level: 3, kr: '알잘딱깔센', sub: '알아서 잘 딱 깔끔', ar: 'القيام بالعمل بذكاء.', exKr: '알잘딱깔센 하자', exAr: 'لنعمل بذكاء ودقة.' },
+    { id: 70, level: 3, kr: '무물', sub: '무엇이든 물어보세요', ar: 'اسألني عن أي شيء.', exKr: '무물 시간!', exAr: 'وقت الأسئلة!' },
+    { id: 71, level: 3, kr: '자만추', sub: '자연스러운 만남 추구', ar: 'تفضيل التعارف الطبيعي.', exKr: '나는 자만추야', exAr: 'أفضل التعارف الطبيعي.' },
+    { id: 72, level: 3, kr: '인만추', sub: '인위적인 만남 추구', ar: 'تفضيل التعارف المدبر.', exKr: '요즘 인만추 유행', exAr: 'التعارف المدبر رائج.' },
+    { id: 73, level: 3, kr: '할많하않', sub: '할 말은 많지만', ar: 'لدي ما أقوله لكني سأصمت.', exKr: '할많하않...', exAr: 'لدي الكثير لأقوله لكني سأصمت.' },
+    { id: 74, level: 3, kr: '법블레스유', sub: '법 + Bless you', ar: 'لولا القانون.', exKr: '법블레스유다', exAr: 'لولا القانون لقلت لك شيئاً.' },
+    { id: 75, level: 3, kr: '남사친', sub: '남자 사람 친구', ar: 'صديق ذكر.', exKr: '내 남사친이야', exAr: 'هذا صديقي.' },
+    { id: 76, level: 3, kr: '여사친', sub: '여자 사람 친구', ar: 'صديقة أنثى.', exKr: '내 여사친이야', exAr: 'هذه صديقتي.' },
+    { id: 77, level: 3, kr: '점메추', sub: '점심 메뉴 추천', ar: 'اقتراحات للغداء.', exKr: '점메추 좀', exAr: 'اقترح لي غداء.' },
+    { id: 78, level: 3, kr: '저메추', sub: '저녁 메뉴 추천', ar: 'اقتراحات للعشاء.', exKr: '저메추 해줘', exAr: 'اقترح لي عشاء.' },
+    { id: 79, level: 3, kr: '안물안궁', sub: '안 물어봤고 안 궁금해', ar: 'لم أسأل ولا أهتم.', exKr: '안물안궁', exAr: 'لم أسأل ولا يهمني.' },
+    { id: 80, level: 3, kr: '뇌피셜', sub: '뇌 + Official', ar: 'رأي شخصي.', exKr: '그건 뇌피셜이야', exAr: 'هذا رأيه الشخصي.' },
+    { id: 81, level: 3, kr: '팩폭', sub: '팩트 폭행', ar: 'قصف بالحقائق.', exKr: '팩폭 당했어', exAr: 'تم قصفه بالحقيقة.' },
+    { id: 82, level: 3, kr: '혼영', sub: '혼자 영화', ar: 'مشاهدة فيلم بمفردي.', exKr: '혼영 했어', exAr: 'شاهدت فيلماً بمفردي.' },
+    { id: 83, level: 3, kr: '티엠아이', sub: 'Too Much Information', ar: 'تفاصيل زائدة.', exKr: '그건 티엠아이야', exAr: 'هذه تفاصيل زائدة.' },
+    { id: 84, level: 3, kr: '비담', sub: '비주얼 담당', ar: 'مسؤول الجمال في الفرقة.', exKr: '비담 맞아?', exAr: 'هل هو مسؤول الجمال؟' },
+    { id: 85, level: 3, kr: '핑프', sub: '핑거 프린세스', ar: 'شخص كسول يطلب دون بحث.', exKr: '핑프 그만해', exAr: 'توقف عن الكسل.' },
+    { id: 86, level: 3, kr: '덕질', sub: '덕후질', ar: 'متابعة الفنان المفضل.', exKr: '덕질 중이야', exAr: 'أتابع فناناي المفضل.' },
+    { id: 87, level: 3, kr: '입덕', sub: '입문 + 덕질', ar: 'بدء الإعجاب بفنان.', exKr: '입덕했어', exAr: 'أصبحت معجباً.' },
+    { id: 88, level: 3, kr: '탈덕', sub: '탈출 + 덕질', ar: 'الخروج من قاعدة المعجبين.', exKr: '탈덕 선언', exAr: 'أعلنت انسحابي.' },
+    { id: 89, level: 3, kr: '성덕', sub: '성공한 덕후', ar: 'معجب محظوظ.', exKr: '나 성덕 됐어!', exAr: 'أنا معجب محظوظ!' },
+    { id: 90, level: 3, kr: '갓생', sub: 'God + 인생', ar: 'حياة مثالية.', exKr: '갓생 살자', exAr: 'لنعش حياة مثالية.' },
+    { id: 91, level: 3, kr: '내돈내산', sub: '내 돈 내고 산', ar: 'اشتريته بمالي.', exKr: '내돈내산 리뷰', exAr: 'تقييم لمنتج اشتريته.' },
+    { id: 92, level: 3, kr: '갑툭튀', sub: '갑자기 툭 튀어나옴', ar: 'ظهور مفاجئ.', exKr: '갑툭튀 하지 마', exAr: 'لا تظهر فجأة.' },
+    { id: 93, level: 3, kr: '주접', sub: '주접 떨다', ar: 'مبالغة في المدح.', exKr: '주접 그만해', exAr: 'كف عن المبالغة.' },
+    { id: 94, level: 3, kr: '사이다', sub: '', ar: 'رد حاسم ومريح.', exKr: '사이다 발언', exAr: 'كلام حاسم ومنعش.' },
+    { id: 95, level: 3, kr: '고답', sub: '고구마 답답', ar: 'شخص بطيء الفهم.', exKr: '고답이야', exAr: 'إنه بطيء الفهم.' },
+    { id: 96, level: 3, kr: '직캠', sub: '직접 찍은 카메라', ar: 'فيديو مباشر (Fancam).', exKr: '직캠 올라왔어', exAr: 'تم رفع فيديو مباشر.' },
+    { id: 97, level: 3, kr: '광탈', sub: '광속 탈락', ar: 'إقصاء سريع.', exKr: '광탈했어', exAr: 'تم إقصائي بسرعة.' },
+    { id: 98, level: 3, kr: '움짤', sub: '움직이는 짤', ar: 'صورة متحركة (GIF).', exKr: '이 움짤 봐', exAr: 'انظر لهذه الصورة المتحركة.' },
+    { id: 99, level: 3, kr: '마기꾼', sub: '마스크 + 사기꾼', ar: 'مخادع الكمامة.', exKr: '마기꾼 조심', exAr: 'احذر من مخادع الكمامة.' },
+    { id: 100, level: 3, kr: '썸', sub: 'Something', ar: 'مشاعر متبادلة.', exKr: '썸 타는 중', exAr: 'نحن في مرحلة ما قبل الارتباط.' },
+    { id: 101, level: 3, kr: '썸남', sub: '썸 + 남자', ar: 'شاب في مرحلة ما قبل الارتباط.', exKr: '썸남 있어', exAr: 'هناك شاب أعجب به.' },
+    { id: 102, level: 3, kr: '썸녀', sub: '썸 + 여자', ar: 'فتاة في مرحلة ما قبل الارتباط.', exKr: '썸녀 생겼어', exAr: 'ظهرت فتاة في حياتي.' },
+    { id: 103, level: 3, kr: '어장관리', sub: '어장 + 관리', ar: 'التلاعب العاطفي.', exKr: '어장관리 하지 마', exAr: 'لا تتلاعب بالمشاعر.' },
+    { id: 104, level: 3, kr: '첫눈', sub: '첫눈에 반하다', ar: 'الحب من أول نظرة.', exKr: '첫눈에 반했어', exAr: 'أحببتها من أول نظرة.' },
+    { id: 105, level: 3, kr: '심쿵사', sub: '심쿵 + 사망', ar: 'الموت من الخفقان.', exKr: '심쿵사 할 것 같아', exAr: 'سأموت من شدة الخفقان.' },
+    { id: 106, level: 3, kr: '남친/여친', sub: '남자/여자친구', ar: 'حبيب/حبيبة.', exKr: '남친 생겼어', exAr: 'أصبح لدي حبيب.' },
+    { id: 107, level: 3, kr: '짝사랑', sub: '', ar: 'حب من طرف واحد.', exKr: '짝사랑 중이야', exAr: 'أعيش حباً من طرف واحد.' },
+    { id: 108, level: 3, kr: '밀당', sub: '밀고 당기기', ar: 'سياسة الدفع والجذب.', exKr: '밀당 하지 마', exAr: 'لا تلعب لعبة الدفع والجذب.' },
+    { id: 109, level: 3, kr: '읽씹', sub: '읽고 씹다', ar: 'قراءة وتجاهل.', exKr: '읽씹 당했어', exAr: 'قرأ وتجاهل.' },
+    { id: 110, level: 3, kr: '안읽씹', sub: '안 읽고 씹다', ar: 'تجاهل دون قراءة.', exKr: '안읽씹이야?', exAr: 'هل يتجاهل دون قراءة؟' },
+    { id: 111, level: 3, kr: '선톡', sub: '먼저 보내는 톡', ar: 'المبادرة بالرسالة.', exKr: '선톡 왔어', exAr: 'جاءتني رسالة.' },
+    { id: 112, level: 3, kr: '모태솔로', sub: '모태 + 솔로', ar: 'أعزب منذ الولادة.', exKr: '나 모태솔로야', exAr: 'أنا أعزب منذ الولادة.' },
+    { id: 113, level: 3, kr: '훈남/훈녀', sub: '훈훈한 남/녀', ar: 'شخص دافئ وجذاب.', exKr: '완전 훈남', exAr: 'إنه جذاب جداً.' },
+    { id: 114, level: 3, kr: '얼평', sub: '얼굴 평가', ar: 'تقييم الوجه.', exKr: '얼평 해줘', exAr: 'قيم وجهي.' },
+    { id: 115, level: 3, kr: '안구정화', sub: '안구 + 정화', ar: 'تنقية العين.', exKr: '안구정화 되는 풍경', exAr: 'منظر ينقي العين.' },
+    { id: 116, level: 3, kr: '먹방', sub: '먹는 방송', ar: 'بث أكل (Mukbang).', exKr: '먹방 보는 중', exAr: 'أشاهد بث أكل.' },
+    { id: 117, level: 3, kr: '눈팅', sub: '눈으로 채팅', ar: 'متابعة بصمت.', exKr: '눈팅만 해', exAr: 'أتابع بصمت.' },
+    { id: 118, level: 3, kr: '어그로', sub: '', ar: 'استفزاز لجذب الانتباه.', exKr: '어그로 끌지 마', exAr: 'لا تستفز.' },
+    { id: 119, level: 3, kr: '관종', sub: '관심 종자', ar: 'مهووس بجذب الانتباه.', exKr: '완전 관종', exAr: 'مهووس بالانتباه.' },
+    { id: 120, level: 3, kr: '국룰', sub: '국민 룰', ar: 'قاعدة شعبية.', exKr: '이건 국룰', exAr: 'هذه قاعدة متعارف عليها.' },
+    { id: 121, level: 3, kr: '핵인싸', sub: '핵 인사이드', ar: 'شخصية اجتماعية.', exKr: '핵인싸 되고 싶어', exAr: 'أريد أن أصبح اجتماعياً.' },
+    { id: 122, level: 3, kr: '아싸', sub: '아웃사이더', ar: 'شخص منعزل.', exKr: '나는 아싸야', exAr: 'أنا شخص منعزل.' },
+    { id: 123, level: 3, kr: '꼰대', sub: '', ar: 'شخص قديم الطراز.', exKr: '꼰대 같아', exAr: 'يبدو قديم الطراز.' },
+    { id: 124, level: 3, kr: '집순이', sub: '', ar: 'فتاة بيتوتية.', exKr: '완전 집순이', exAr: 'فتاة بيتوتية.' },
+    { id: 125, level: 3, kr: '집돌이', sub: '', ar: 'شاب بيتوتي.', exKr: '집돌이 스타일', exAr: 'شاب بيتوتي.' },
+    { id: 126, level: 3, kr: '노잼', sub: '노 재미', ar: 'ممل جداً.', exKr: '노잼이야', exAr: 'هذا ممل.' },
+    { id: 127, level: 3, kr: '꿀잼', sub: '꿀 재미', ar: 'ممتع جداً.', exKr: '꿀잼 보장', exAr: 'ممتع جداً.' },
+    { id: 128, level: 3, kr: '존맛', sub: '존나 맛있다', ar: 'لذيذ جداً.', exKr: '존맛 인정', exAr: 'لذيذ جداً.' },
+    { id: 129, level: 3, kr: '혼밥', sub: '혼자 밥', ar: 'تناول الطعام وحيداً.', exKr: '혼밥 중', exAr: 'أتناول الطعام وحدي.' },
+    { id: 130, level: 3, kr: '치맥', sub: '치킨 맥주', ar: 'دجاج مع بيرة.', exKr: '치맥 먹자', exAr: 'لنأكل دجاج وبيرة.' },
+    { id: 131, level: 3, kr: '셀카', sub: '셀프 카메라', ar: 'صورة سيلفي.', exKr: '셀카 찍자', exAr: 'لنلتقط سيلفي.' },
+    { id: 132, level: 3, kr: '허세', sub: '', ar: 'تباهٍ وغرور.', exKr: '허세 부리지 마', exAr: 'لا تتباهى.' },
+    { id: 133, level: 3, kr: '품절남', sub: '품절된 남자', ar: 'رجل متزوج.', exKr: '품절남 됐어', exAr: 'أصبح متزوجاً.' },
+    { id: 134, level: 3, kr: '품절녀', sub: '품절된 여자', ar: 'امرأة متزوجة.', exKr: '품절녀 소식', exAr: 'خبر زواجها.' }
+];
+
+// ============ حالة التطبيق ============
+let appState = {
+    learned: JSON.parse(localStorage.getItem('kslang_learned') || '[]'),
+    saved: JSON.parse(localStorage.getItem('kslang_saved') || '[]'),
+    currentLevel: 'all',
+    currentPlayingId: null
+};
+
+// ============ بناء المحتوى ============
+function buildContent() {
+    ['level1Content', 'level2Content', 'level3Content'].forEach((containerId, i) => {
+        const container = document.getElementById(containerId);
+        if (container) {
+            const level = i + 1;
+            container.innerHTML = wordsData.filter(w => w.level === level).map(w => createWordHTML(w)).join('');
+        }
+    });
+    updateAllBadges();
+}
+
+function createWordHTML(w) {
+    const isLearned = appState.learned.includes(w.id);
+    const isSaved = appState.saved.includes(w.id);
+    const itemClass = isLearned ? 'learned' : (isSaved ? 'saved' : '');
+
+    return `
+        <div class="word-item ${itemClass}" id="word-${w.id}">
+            <div class="word-main">
+                <div class="word-num">${w.id}</div>
+                <div class="cloud-wrap">
+                    <div class="cloud-shape" onclick="playPronunciation(${w.id}, '${w.kr.replace(/'/g, "\\'")}')">
+                        <span class="cloud-kr">${w.kr}</span>
+                        ${w.sub ? `<span class="cloud-sub">${w.sub}</span>` : ''}
+                    </div>
+                </div>
+                <div class="word-ar">${w.ar}</div>
+            </div>
+            <div class="example-box">
+                <div class="example-label">💬 مثال</div>
+                <div class="example-kr">${w.exKr}</div>
+                <div class="example-ar">${w.exAr}</div>
+            </div>
+            <div class="word-actions">
+                <button class="action-btn save-btn ${isSaved ? 'active' : ''}" onclick="toggleSave(${w.id})">
+                    ⭐ ${isSaved ? 'محفوظ' : 'حفظ'}
+                </button>
+                <button class="action-btn pronounce-btn" id="pronounceBtn${w.id}" onclick="playPronunciation(${w.id}, '${w.kr.replace(/'/g, "\\'")}')">
+                    🔊 نطق
+                </button>
+                <button class="action-btn learned-btn ${isLearned ? 'active' : ''}" onclick="toggleLearned(${w.id})">
+                    ✅ ${isLearned ? 'تمت' : 'تعلمت'}
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+// ============ التبديل بين المستويات ============
+function switchLevel(level, navItem) {
+    appState.currentLevel = level;
+    
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    if (navItem) navItem.classList.add('active');
+    
+    document.querySelectorAll('.level-section').forEach(section => section.classList.remove('active'));
+    
+    if (level === 'all') {
+        document.querySelectorAll('.level-section').forEach(section => section.classList.add('active'));
+    } else {
+        const section = document.getElementById(`levelSection${level}`);
+        if (section) section.classList.add('active');
+    }
+}
+
+// ============ البحث ============
+function toggleSearch() {
+    const overlay = document.getElementById('searchOverlay');
+    const input = document.getElementById('searchInput');
+    overlay.classList.toggle('active');
+    if (overlay.classList.contains('active')) {
+        setTimeout(() => input.focus(), 100);
+    } else {
+        input.value = '';
+        showAllWords();
+        updateResultsCount(134);
+    }
+}
+
+document.getElementById('searchInput').addEventListener('input', function() {
+    const term = this.value.trim();
+    if (term) {
+        applySearch(term);
+    } else {
+        showAllWords();
+        updateResultsCount(134);
+    }
+});
+
+function applySearch(term) {
+    const lowerTerm = term.toLowerCase();
+    let visibleCount = 0;
+    
+    wordsData.forEach(w => {
+        const item = document.getElementById(`word-${w.id}`);
+        if (!item) return;
+        
+        const searchText = (w.kr + ' ' + w.sub + ' ' + w.ar + ' ' + w.exKr + ' ' + w.exAr).toLowerCase();
+        if (searchText.includes(lowerTerm)) {
+            item.style.display = '';
+            visibleCount++;
+        } else {
+            item.style.display = 'none';
+        }
+    });
+    
+    updateResultsCount(visibleCount);
+    document.getElementById('noResults').classList.toggle('show', visibleCount === 0);
+}
+
+function showAllWords() {
+    wordsData.forEach(w => {
+        const item = document.getElementById(`word-${w.id}`);
+        if (item) item.style.display = '';
+    });
+    document.getElementById('noResults').classList.remove('show');
+}
+
+function updateResultsCount(count) {
+    const el = document.getElementById('resultsCount');
+    el.textContent = count === 134 ? '' : `تم العثور على ${count} من 134 كلمة`;
+}
+
+// ============ الحفظ والتعلم (الكلمة تبقى في مكانها) ============
+function toggleSave(id) {
+    const idx = appState.saved.indexOf(id);
+    if (idx > -1) {
+        appState.saved.splice(idx, 1);
+        showToast('🗑️ تمت إزالة الكلمة من المحفوظات');
+    } else {
+        appState.saved.push(id);
+        showToast('⭐ تم حفظ الكلمة - يمكنك مشاهدتها في المحفوظات');
+    }
+    saveState();
+    updateWordUIOnly(id);
+    updateAllBadges();
+}
+
+function toggleLearned(id) {
+    const idx = appState.learned.indexOf(id);
+    if (idx > -1) {
+        appState.learned.splice(idx, 1);
+        showToast('🔄 تمت إعادة الكلمة للدراسة');
+    } else {
+        appState.learned.push(id);
+        showToast('✅ أحسنت! تم نقلها إلى المتعلمة');
+    }
+    saveState();
+    updateWordUIOnly(id);
+    updateAllBadges();
+}
+
+// تحديث واجهة الكلمة فقط دون حذفها
+function updateWordUIOnly(id) {
+    const item = document.getElementById(`word-${id}`);
+    if (!item) return;
+    
+    const isLearned = appState.learned.includes(id);
+    const isSaved = appState.saved.includes(id);
+    const itemClass = isLearned ? 'learned' : (isSaved ? 'saved' : '');
+    
+    item.className = `word-item ${itemClass}`;
+    
+    const saveBtn = item.querySelector('.save-btn');
+    const learnedBtn = item.querySelector('.learned-btn');
+    
+    if (saveBtn) {
+        saveBtn.className = `action-btn save-btn ${isSaved ? 'active' : ''}`;
+        saveBtn.innerHTML = `⭐ ${isSaved ? 'محفوظ' : 'حفظ'}`;
+    }
+    if (learnedBtn) {
+        learnedBtn.className = `action-btn learned-btn ${isLearned ? 'active' : ''}`;
+        learnedBtn.innerHTML = `✅ ${isLearned ? 'تمت' : 'تعلمت'}`;
+    }
+}
+
+function saveState() {
+    localStorage.setItem('kslang_learned', JSON.stringify(appState.learned));
+    localStorage.setItem('kslang_saved', JSON.stringify(appState.saved));
+}
+
+function updateAllBadges() {
+    const savedBadge = document.getElementById('savedBadge');
+    const learnedBadge = document.getElementById('learnedBadge');
+    
+    if (appState.saved.length > 0) {
+        savedBadge.style.display = 'flex';
+        savedBadge.textContent = appState.saved.length;
+    } else {
+        savedBadge.style.display = 'none';
+    }
+    
+    if (appState.learned.length > 0) {
+        learnedBadge.style.display = 'flex';
+        learnedBadge.textContent = appState.learned.length;
+    } else {
+        learnedBadge.style.display = 'none';
+    }
+}
+
+function resetAll() {
+    if (confirm('مسح كل التقدم؟')) {
+        appState.learned = [];
+        appState.saved = [];
+        saveState();
+        buildContent();
+        updateAllBadges();
+        showToast('🔄 تم إعادة ضبط كل التقدم');
+    }
+}
+
+// ============ شاشة المحفوظات والمتعلمة ============
+function showSavedScreen(type) {
+    const words = type === 'saved' ? 
+        wordsData.filter(w => appState.saved.includes(w.id)) :
+        wordsData.filter(w => appState.learned.includes(w.id));
+    
+    if (words.length === 0) {
+        showToast(type === 'saved' ? '⚠️ لا توجد كلمات محفوظة' : '⚠️ لا توجد كلمات متعلمة');
+        return;
+    }
+    
+    document.getElementById('mainContent').style.display = 'none';
+    document.getElementById('mainNav').style.display = 'none';
+    document.getElementById('savedScreen').classList.add('active');
+    
+    document.getElementById('savedScreenTitle').innerHTML = type === 'saved' ? 
+        '⭐ الكلمات المحفوظة' : '✅ الكلمات المتعلمة';
+    
+    document.getElementById('savedContent').innerHTML = words.map(w => createWordHTML(w)).join('');
+}
+
+function hideSavedScreen() {
+    document.getElementById('mainContent').style.display = '';
+    document.getElementById('mainNav').style.display = '';
+    document.getElementById('savedScreen').classList.remove('active');
+}
+
+// ============ نظام الصوت ============
+function playPronunciation(id, text) {
+    stopAllAudio();
+    
+    const btn = document.getElementById(`pronounceBtn${id}`);
+    if (btn) btn.classList.add('playing');
+    appState.currentPlayingId = id;
+    
+    if ('speechSynthesis' in window) {
+        try {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'ko-KR';
+            utterance.rate = 0.75;
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+            
+            const voices = speechSynthesis.getVoices();
+            const koreanVoice = voices.find(v => v.lang.startsWith('ko'));
+            if (koreanVoice) utterance.voice = koreanVoice;
+            
+            utterance.onend = function() {
+                if (btn) btn.classList.remove('playing');
+                appState.currentPlayingId = null;
+            };
+            
+            utterance.onerror = function(e) {
+                if (btn) btn.classList.remove('playing');
+                appState.currentPlayingId = null;
+                if (e.error === 'not-allowed') {
+                    showToast('⚠️ اضغط على الشاشة لتفعيل الصوت');
+                }
+            };
+            
+            setTimeout(() => speechSynthesis.speak(utterance), 50);
+        } catch(e) {
+            if (btn) btn.classList.remove('playing');
+            appState.currentPlayingId = null;
+        }
+    } else {
+        if (btn) btn.classList.remove('playing');
+        appState.currentPlayingId = null;
+        showToast('⚠️ المتصفح لا يدعم النطق');
+    }
+}
+
+function stopAllAudio() {
+    if ('speechSynthesis' in window) {
+        try { window.speechSynthesis.cancel(); } catch(e) {}
+    }
+    const prevBtn = document.getElementById(`pronounceBtn${appState.currentPlayingId}`);
+    if (prevBtn) prevBtn.classList.remove('playing');
+    appState.currentPlayingId = null;
+}
+
+// تفعيل الصوت عند أول نقرة
+document.addEventListener('click', function() {
+    if ('speechSynthesis' in window) {
+        speechSynthesis.getVoices();
+    }
+}, { once: true });
+
+// ============ الإشعارات ============
+let toastTimer;
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+// ============ الرجوع ============
+function goBack() {
+    stopAllAudio();
+    if (document.referrer && document.referrer.includes(window.location.host)) {
+        history.back();
+    } else {
+        window.location.href = 'index.html';
+    }
+}
+
+// ============ بدء التشغيل ============
+buildContent();
+
+// تحميل الأصوات
+if ('speechSynthesis' in window) {
+    speechSynthesis.onvoiceschanged = function() {
+        speechSynthesis.getVoices();
+    };
+}
+</script>
+</body>
+</html>

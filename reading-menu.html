@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>القراءة - اختر النوع</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+        :root {
+            --surface: rgba(255,255,255,0.75);
+            --border: rgba(236,64,122,0.3);
+            --text: #4a1528;
+            --accent: #e91e63;
+            --accent-dark: #c2185b;
+            --accent-light: #fce4ec;
+            --shadow: 0 4px 20px rgba(180,30,60,0.08);
+        }
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body {
+            font-family:'Tajawal',sans-serif;
+            background:linear-gradient(160deg,#fce4ec 0%,#f8bbd0 35%,#f48fb1 70%,#ec407a 100%);
+            background-attachment:fixed; min-height:100vh; color:var(--text);
+            display:flex; justify-content:center; align-items:flex-start;
+            padding: clamp(12px, 2vw, 20px) 10px;
+        }
+        .main-screen { width:100%; max-width:500px; padding:20px; display:flex; flex-direction:column; gap:16px; }
+        .back-btn {
+            display:flex; align-items:center; gap:6px; padding:8px 16px; border-radius:25px;
+            background:var(--surface); border:1px solid var(--border); color:var(--text);
+            cursor:pointer; font-size:13px; font-weight:700; transition:all .2s;
+        }
+        .back-btn:hover { background:#fff; transform:translateX(3px); box-shadow:var(--shadow); }
+        .main-header { text-align:center; margin-bottom:8px; }
+        .main-header .icon-big { font-size:56px; display:block; animation:float 3s ease-in-out infinite; }
+        @keyframes float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-10px); } }
+        .main-header h1 { font-weight:900; font-size:24px; }
+        .sections-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+        .section-card {
+            background:var(--surface); backdrop-filter:blur(15px); border-radius:24px; padding:24px 18px;
+            text-align:center; cursor:pointer; border:2px solid rgba(255,255,255,0.6); box-shadow:var(--shadow);
+            transition:all .35s; display:flex; flex-direction:column; align-items:center; gap:8px;
+        }
+        .section-card:hover { transform:translateY(-6px); border-color:var(--accent); background:rgba(255,255,255,.9); }
+        .section-card .card-icon { font-size:48px; }
+        .section-card .card-title { font-weight:900; font-size:15px; }
+        .section-card .card-badge { padding:4px 12px; border-radius:12px; font-size:10px; font-weight:700; background:var(--accent-light); color:var(--accent-dark); }
+    </style>
+</head>
+<body>
+<div class="main-screen">
+    <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-right"></i><span>رجوع</span></button>
+    <div class="main-header">
+        <span class="icon-big">📖</span>
+        <h1>القراءة</h1>
+        <p style="color:#7a4a5a; margin-top:4px;">اختر نوع التدريب الذي تريده</p>
+    </div>
+    <div class="sections-grid">
+        <!-- 👇 تم تعديل هذا الزر فقط -->
+        <div class="section-card" onclick="goToStories()">
+            <div class="card-icon">📚</div>
+            <div class="card-title">القصص</div>
+            <span class="card-badge">قصص ممتعة للتدرب</span>
+        </div>
+        <div class="section-card" onclick="location.href='reading-system.html'">
+            <div class="card-icon">📝</div>
+            <div class="card-title">تدريب للامتحان</div>
+            <span class="card-badge">TOPIK I & II</span>
+        </div>
+    </div>
+</div>
+
+<!-- السكربت المضاف -->
+<script>
+function goToStories() {
+    // تخزين إشارة في sessionStorage لتخبر الصفحة الرئيسية بالانتقال الفوري للقصص
+    sessionStorage.setItem('openStories', 'true');
+    // الانتقال للصفحة الرئيسية بدون أي بارامترات مرئية
+    window.location.href = 'index.html';
+}
+</script>
+</body>
+</html>
