@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <title>تعلم الكورية | K-Learn</title>
+    <title>تعلم الكورية</title>
     <meta name="theme-color" content="#1a1a2e">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -12,66 +12,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
+    <!-- ✅ يمنع ظهور أي شيء حتى يقرر السكربت أي شاشة يعرض -->
     <style>
-        :root {
-            --bg-primary: #faf9f7;
-            --bg-card: #ffffff;
-            --text-primary: #1a1a2e;
-            --text-secondary: #5a5a7a;
-            --text-muted: #8e8ea0;
-            --accent-coral: #ff6b6b;
-            --accent-coral-soft: #fff0f0;
-            --accent-blue: #4a90d9;
-            --accent-blue-soft: #edf4fc;
-            --accent-green: #4caf84;
-            --accent-green-soft: #edf8f2;
-            --accent-purple: #7c5ce7;
-            --accent-purple-soft: #f3f0ff;
-            --accent-orange: #f59e4b;
-            --accent-orange-soft: #fff7f0;
-            --accent-teal: #38b2ac;
-            --accent-teal-soft: #effaf9;
-            --shadow-xs: 0 1px 2px rgba(0,0,0,0.04);
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
-            --shadow-md: 0 6px 20px rgba(0,0,0,0.08);
-            --shadow-lg: 0 16px 40px rgba(0,0,0,0.12);
-            --radius-xs: 10px;
-            --radius-sm: 14px;
-            --radius-md: 20px;
-            --radius-lg: 26px;
-            --radius-full: 999px;
-            --font-display: 'Fredoka', 'Tajawal', sans-serif;
-            --font-body: 'Tajawal', sans-serif;
-            --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-smooth: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            --nav-height: 72px;
-            --safe-bottom: env(safe-area-inset-bottom, 12px);
-        }
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        body {
-            visibility: visible;
-            font-family: var(--font-body);
-            background: linear-gradient(180deg, #faf9f7 0%, #f3f1ed 30%, #faf9f7 100%);
-            background-attachment: fixed;
-            margin: 0;
-            padding: 0;
-            padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 16px);
-            color: var(--text-primary);
-            direction: rtl;
-            overflow-x: hidden;
-            min-height: 100vh;
-            min-height: 100dvh;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-        /* INSTALL BANNER */
+        body{visibility:hidden;}
+        
+        /* ✅ أنماط PWA الإضافية */
         .install-banner {
             position: fixed;
             top: 0;
@@ -86,9 +33,9 @@
             padding: 14px 16px;
             padding-top: max(14px, env(safe-area-inset-top, 14px));
             transform: translateY(-120%);
-            transition: transform var(--transition-bounce);
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
             box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-            border-radius: 0 0 var(--radius-md) var(--radius-md);
+            border-radius: 0 0 20px 20px;
         }
         .install-banner.visible {
             transform: translateY(0);
@@ -96,7 +43,7 @@
         .install-banner-icon {
             width: 44px;
             height: 44px;
-            border-radius: var(--radius-xs);
+            border-radius: 10px;
             background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
             display: flex;
             align-items: center;
@@ -123,13 +70,13 @@
             color: #1a1a2e;
             border: none;
             padding: 10px 18px;
-            border-radius: var(--radius-full);
+            border-radius: 999px;
             font-weight: 700;
             font-size: 13px;
             cursor: pointer;
             white-space: nowrap;
-            font-family: var(--font-body);
-            transition: all var(--transition-fast);
+            font-family: 'Tajawal', sans-serif;
+            transition: all 0.2s ease;
             box-shadow: 0 4px 14px rgba(255,255,255,0.2);
         }
         .install-banner-btn:active {
@@ -144,15 +91,14 @@
             cursor: pointer;
             padding: 6px;
             flex-shrink: 0;
-            transition: color var(--transition-fast);
+            transition: color 0.2s ease;
         }
         .install-banner-close:active {
             color: #fff;
         }
-        /* FLOATING INSTALL BUTTON */
         .floating-install-btn {
             position: fixed;
-            bottom: calc(var(--nav-height) + var(--safe-bottom) + 80px);
+            bottom: calc(72px + env(safe-area-inset-bottom, 12px) + 80px);
             left: 50%;
             transform: translateX(-50%) translateY(120px);
             z-index: 999;
@@ -160,16 +106,16 @@
             color: #fff;
             border: none;
             padding: 12px 24px;
-            border-radius: var(--radius-full);
+            border-radius: 999px;
             font-weight: 700;
             font-size: 14px;
             cursor: pointer;
-            font-family: var(--font-body);
+            font-family: 'Tajawal', sans-serif;
             display: flex;
             align-items: center;
             gap: 8px;
             box-shadow: 0 8px 28px rgba(255,71,87,0.4);
-            transition: transform var(--transition-bounce), box-shadow var(--transition-fast);
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
             white-space: nowrap;
             animation: floatPulse 3s ease-in-out infinite;
         }
@@ -184,658 +130,10 @@
             0%,100% { box-shadow: 0 8px 28px rgba(255,71,87,0.4); }
             50% { box-shadow: 0 14px 38px rgba(255,71,87,0.6), 0 0 0 12px rgba(255,107,107,0.08); }
         }
-        /* NAVIGATION BAR */
-        .app-navigation-bar {
-            position: fixed;
-            bottom: 12px;
-            bottom: calc(12px + var(--safe-bottom));
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 6px;
-            background: #ffffff;
-            border-radius: var(--radius-full);
-            padding: 8px 10px;
-            z-index: 1000;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.04);
-            width: fit-content;
-            border: 1px solid rgba(0,0,0,0.05);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-        .navigation-tab {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 3px;
-            padding: 10px 18px;
-            border-radius: var(--radius-full);
-            cursor: pointer;
-            transition: all var(--transition-smooth);
-            color: var(--text-muted);
-            font-size: 10px;
-            font-weight: 500;
-            position: relative;
-            white-space: nowrap;
-            min-width: 52px;
-        }
-        .navigation-tab i {
-            font-size: 20px;
-            transition: all var(--transition-smooth);
-        }
-        .navigation-tab.active-tab {
-            color: #fff;
-            background: linear-gradient(135deg, #1a1a2e 0%, #3a3a5c 100%);
-            box-shadow: 0 6px 20px rgba(26,26,46,0.3);
-            font-weight: 700;
-        }
-        .navigation-tab.active-tab i {
-            transform: translateY(-2px);
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-        }
-        .navigation-tab:not(.active-tab):active {
-            background: rgba(0,0,0,0.04);
-            transform: scale(0.94);
-        }
-        /* SCREENS CONTAINER */
-        .screens-container {
-            padding: 16px;
-            padding-bottom: 20px;
-            max-width: 520px;
-            margin: 0 auto;
-        }
-        .app-screen {
-            display: none;
-            animation: screenFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .app-screen.active-screen {
-            display: block;
-        }
-        @keyframes screenFadeIn {
-            from { opacity: 0; transform: translateY(16px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        /* TOP BADGE */
-        .top-badge-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 14px;
-        }
-        .top-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            background: #fff;
-            border-radius: var(--radius-full);
-            padding: 8px 18px;
-            font-weight: 700;
-            font-size: 13px;
-            color: var(--text-primary);
-            box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(0,0,0,0.04);
-        }
-        .top-badge i {
-            color: var(--accent-coral);
-        }
-        /* WELCOME HEADER */
-        .welcome-header {
-            background: linear-gradient(160deg, #ffffff 0%, #fefefe 60%, #fff5f5 100%);
-            border-radius: var(--radius-lg);
-            padding: 24px 20px;
-            margin-bottom: 18px;
-            text-align: center;
-            box-shadow: var(--shadow-md);
-            border: 1px solid rgba(0,0,0,0.03);
-            position: relative;
-            overflow: hidden;
-        }
-        .welcome-header::before {
-            content: '';
-            position: absolute;
-            top: -40px;
-            right: -40px;
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle, rgba(255,107,107,0.08) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-        .welcome-header::after {
-            content: '';
-            position: absolute;
-            bottom: -30px;
-            left: -30px;
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle, rgba(74,144,217,0.06) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-        .welcome-header h1 {
-            font-family: var(--font-display);
-            font-size: 26px;
-            font-weight: 800;
-            margin: 0 0 6px;
-            position: relative;
-            z-index: 1;
-        }
-        .welcome-header p {
-            color: var(--text-secondary);
-            margin: 0 0 14px;
-            font-size: 14px;
-            position: relative;
-            z-index: 1;
-        }
-        .mascot-area {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            position: relative;
-            z-index: 1;
-        }
-        .korean-bubble {
-            background: #1a1a2e;
-            color: #fff;
-            padding: 6px 14px;
-            border-radius: var(--radius-full);
-            font-weight: 700;
-            font-size: 13px;
-            box-shadow: var(--shadow-sm);
-            animation: bubbleBob 3s ease-in-out infinite;
-        }
-        @keyframes bubbleBob {
-            0%,100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-        }
-        .rabbit-mascot {
-            font-size: 44px;
-            animation: rabbitHop 2s ease-in-out infinite;
-        }
-        @keyframes rabbitHop {
-            0%,100% { transform: translateY(0) rotate(0deg); }
-            30% { transform: translateY(-14px) rotate(-3deg); }
-            60% { transform: translateY(0) rotate(2deg); }
-            80% { transform: translateY(-4px) rotate(-1deg); }
-        }
-        .heart-icon-wrapper {
-            animation: heartBeat 1.2s ease-in-out infinite;
-            color: #ff6b6b;
-            font-size: 18px;
-        }
-        @keyframes heartBeat {
-            0%,100% { transform: scale(1); }
-            15% { transform: scale(1.25); }
-            30% { transform: scale(1); }
-            45% { transform: scale(1.18); }
-            60% { transform: scale(1); }
-        }
-        .section-heading {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 800;
-            font-size: 17px;
-            margin-bottom: 12px;
-            color: var(--text-primary);
-        }
-        .section-heading i {
-            color: var(--accent-coral);
-            font-size: 18px;
-        }
-        .cards-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .custom-card {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 18px;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: all var(--transition-smooth);
-            border: 1px solid transparent;
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--shadow-xs);
-            background: #fff;
-        }
-        .custom-card:active {
-            transform: scale(0.97);
-            box-shadow: var(--shadow-md);
-        }
-        .card-main-body {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            flex: 1;
-            min-width: 0;
-        }
-        .media-badge {
-            width: 48px;
-            height: 48px;
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            flex-shrink: 0;
-        }
-        .bg-chat .media-badge {
-            background: var(--accent-purple-soft);
-            color: var(--accent-purple);
-        }
-        .bg-read .media-badge {
-            background: var(--accent-blue-soft);
-            color: var(--accent-blue);
-        }
-        .bg-listen .media-badge {
-            background: var(--accent-green-soft);
-            color: var(--accent-green);
-        }
-        .bg-write .media-badge {
-            background: var(--accent-orange-soft);
-            color: var(--accent-orange);
-        }
-        .card-text-details h3 {
-            margin: 0;
-            font-size: 15px;
-            font-weight: 700;
-        }
-        .card-text-details p {
-            margin: 3px 0 0;
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-        .action-button {
-            background: #1a1a2e;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: var(--radius-full);
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-            font-family: var(--font-body);
-            transition: all var(--transition-fast);
-            white-space: nowrap;
-            flex-shrink: 0;
-            box-shadow: 0 4px 14px rgba(26,26,46,0.2);
-        }
-        .action-button:active {
-            transform: scale(0.92);
-            box-shadow: 0 2px 8px rgba(26,26,46,0.3);
-        }
-        /* LEARN SCREEN */
-        .learn-card {
-            background: #fff;
-            border-radius: var(--radius-md);
-            padding: 18px;
-            margin-bottom: 12px;
-            box-shadow: var(--shadow-sm);
-            display: flex;
-            gap: 14px;
-            align-items: flex-start;
-            border: 1px solid rgba(0,0,0,0.03);
-        }
-        .learn-icon {
-            font-size: 32px;
-            flex-shrink: 0;
-            width: 50px;
-            height: 50px;
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #f9f9fb;
-        }
-        .learn-title {
-            font-weight: 700;
-            font-size: 14px;
-            margin-bottom: 6px;
-        }
-        .learn-text {
-            font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 10px;
-        }
-        .learn-refresh {
-            background: #f5f5f8;
-            border: none;
-            padding: 8px 16px;
-            border-radius: var(--radius-full);
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: var(--font-body);
-            color: var(--text-secondary);
-        }
-        .learn-refresh:active {
-            background: #e8e8ef;
-            transform: scale(0.95);
-        }
-        .topik-style {
-            border-right: 3px solid var(--accent-blue);
-        }
-        .motivation-style {
-            border-right: 3px solid var(--accent-coral);
-        }
-        /* ACHIEVEMENTS */
-        .progress-section {
-            background: #fff;
-            border-radius: var(--radius-md);
-            padding: 18px;
-            margin-bottom: 14px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(0,0,0,0.03);
-        }
-        .progress-label {
-            display: flex;
-            justify-content: space-between;
-            font-weight: 700;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        .progress-bar {
-            height: 14px;
-            background: #f0f0f5;
-            border-radius: var(--radius-full);
-            position: relative;
-            overflow: visible;
-            margin-bottom: 10px;
-        }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #ff6b6b, #ff8e8e, #ff6b6b);
-            background-size: 200% 100%;
-            border-radius: var(--radius-full);
-            transition: width var(--transition-bounce);
-            animation: shimmer 2s ease-in-out infinite;
-        }
-        @keyframes shimmer {
-            0%,100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        .progress-character {
-            position: absolute;
-            top: -22px;
-            font-size: 22px;
-            transition: left var(--transition-bounce);
-            transform: translateX(-50%);
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
-        }
-        .stars-row {
-            display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 14px;
-        }
-        .stat-card {
-            background: #fff;
-            border-radius: var(--radius-md);
-            padding: 16px;
-            text-align: center;
-            box-shadow: var(--shadow-xs);
-            border: 1px solid rgba(0,0,0,0.03);
-        }
-        .stat-emoji { font-size: 28px; }
-        .stat-value { font-family: var(--font-display); font-size: 26px; font-weight: 800; }
-        .stat-label { font-size: 11px; color: var(--text-muted); }
-        .badges-title { font-weight: 800; font-size: 16px; margin-bottom: 10px; }
-        .badges-grid { display: flex; gap: 8px; flex-wrap: wrap; }
-        .badge-item {
-            width: 48px;
-            height: 48px;
-            border-radius: var(--radius-sm);
-            background: #f5f5f8;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            border: 2px solid transparent;
-        }
-        .badge-item.earned {
-            background: #fff;
-            border-color: #ffd700;
-            box-shadow: 0 0 16px rgba(255,215,0,0.25);
-            animation: badgeGlow 2s ease-in-out infinite;
-        }
-        @keyframes badgeGlow {
-            0%,100% { box-shadow: 0 0 12px rgba(255,215,0,0.2); }
-            50% { box-shadow: 0 0 24px rgba(255,215,0,0.4); }
-        }
-        /* PROFILE */
-        .profile-info-card {
-            background: #fff;
-            border-radius: var(--radius-lg);
-            padding: 22px;
-            text-align: center;
-            box-shadow: var(--shadow-md);
-            margin-bottom: 14px;
-        }
-        .avatar-circle {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #f9f9fb, #f0f0f5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 42px;
-            margin: 0 auto 12px;
-            border: 3px solid #fff;
-        }
-        .profile-details h1 {
-            font-family: var(--font-display);
-            font-size: 22px;
-            font-weight: 800;
-            margin: 0 0 4px;
-        }
-        .profile-details p {
-            color: var(--text-muted);
-            font-size: 13px;
-            margin: 0 0 12px;
-        }
-        .edit-profile-btn {
-            background: #f5f5f8;
-            border: none;
-            padding: 10px 20px;
-            border-radius: var(--radius-full);
-            font-weight: 600;
-            cursor: pointer;
-            font-family: var(--font-body);
-            font-size: 13px;
-        }
-        .streak-card {
-            background: linear-gradient(135deg, #fff8f0, #fff3e6);
-            border-radius: var(--radius-md);
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 14px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(245,158,75,0.15);
-        }
-        .streak-icon { font-size: 36px; }
-        .streak-number { font-family: var(--font-display); font-size: 28px; font-weight: 800; color: var(--accent-orange); }
-        .streak-label { font-size: 12px; color: var(--text-muted); }
-        .stats-detailed {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 14px;
-        }
-        .stat-item {
-            flex: 1;
-            background: #fff;
-            border-radius: var(--radius-md);
-            padding: 14px;
-            text-align: center;
-            box-shadow: var(--shadow-xs);
-        }
-        .stat-item i { font-size: 18px; color: var(--accent-coral); display: block; margin-bottom: 4px; }
-        .stat-detail-value { font-family: var(--font-display); font-size: 20px; font-weight: 800; display: block; }
-        .stat-detail-label { font-size: 10px; color: var(--text-muted); }
-        .logout-btn {
-            width: 100%;
-            background: #fff;
-            border: 2px solid #ff6b6b;
-            color: #ff6b6b;
-            padding: 14px;
-            border-radius: var(--radius-full);
-            font-weight: 700;
-            cursor: pointer;
-            font-family: var(--font-body);
-            font-size: 14px;
-        }
-        /* STORY SCREENS */
-        .story-view-screen {
-            padding: 16px;
-            max-width: 520px;
-            margin: 0 auto;
-            animation: screenFadeIn 0.35s ease-out;
-        }
-        .back-btn, .back-to-home-btn {
-            background: #fff;
-            border: 1px solid rgba(0,0,0,0.06);
-            padding: 10px 16px;
-            border-radius: var(--radius-full);
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            font-family: var(--font-body);
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: var(--shadow-xs);
-            color: var(--text-primary);
-        }
-        .listen-btn {
-            background: linear-gradient(135deg, #1a1a2e, #3a3a5c);
-            color: #fff;
-            padding: 14px 24px;
-            border-radius: var(--radius-full);
-            text-align: center;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 14px;
-            margin: 14px 0;
-            transition: all var(--transition-fast);
-            box-shadow: 0 6px 20px rgba(26,26,46,0.3);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            justify-content: center;
-        }
-        .listen-btn:active {
-            transform: scale(0.94);
-            box-shadow: 0 4px 14px rgba(26,26,46,0.4);
-        }
-        .listen-btn.playing {
-            background: linear-gradient(135deg, #ff6b6b, #ff4757);
-            animation: pulseBtn 1.5s ease-in-out infinite;
-        }
-        @keyframes pulseBtn {
-            0%,100% { box-shadow: 0 6px 20px rgba(255,71,87,0.3); }
-            50% { box-shadow: 0 10px 30px rgba(255,71,87,0.5); }
-        }
-        .story-container {
-            background: #fff;
-            border-radius: var(--radius-md);
-            padding: 18px;
-            line-height: 2;
-            font-size: 15px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(0,0,0,0.03);
-        }
-        .lesson {
-            background: #fffdf5;
-            border-radius: var(--radius-md);
-            padding: 16px;
-            margin: 14px 0;
-            border-right: 3px solid #ffd700;
-            font-size: 13px;
-            line-height: 1.7;
-        }
-        .action-button-done {
-            background: linear-gradient(135deg, #4caf84, #38b2ac);
-            color: #fff;
-            padding: 16px 24px;
-            border-radius: var(--radius-full);
-            text-align: center;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 15px;
-            margin-top: 14px;
-            box-shadow: 0 6px 22px rgba(76,175,132,0.35);
-        }
-        .action-button-done:active {
-            transform: scale(0.94);
-            box-shadow: 0 4px 14px rgba(76,175,132,0.45);
-        }
-        .top-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 14px;
-            font-weight: 800;
-            font-size: 18px;
-        }
-        .tabs {
-            display: flex;
-            gap: 6px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-            margin-bottom: 12px;
-            scrollbar-width: none;
-        }
-        .tabs::-webkit-scrollbar { display: none; }
-        .tab {
-            padding: 10px 18px;
-            border-radius: var(--radius-full);
-            font-weight: 600;
-            font-size: 12px;
-            cursor: pointer;
-            white-space: nowrap;
-            background: #fff;
-            border: 1px solid rgba(0,0,0,0.05);
-            transition: all var(--transition-fast);
-            box-shadow: var(--shadow-xs);
-        }
-        .tab.active {
-            background: #1a1a2e;
-            color: #fff;
-            border-color: #1a1a2e;
-            box-shadow: 0 4px 14px rgba(26,26,46,0.25);
-        }
-        .avatar-picker { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 10px 0; }
-        .avatar-option {
-            width: 48px; height: 48px; border-radius: 50%; background: #f5f5f8; display: flex; align-items: center; justify-content: center; font-size: 26px; cursor: pointer; border: 3px solid transparent;
-        }
-        .avatar-option.selected { border-color: #1a1a2e; box-shadow: 0 0 0 4px rgba(26,26,46,0.1); }
-        .login-input {
-            width: 100%; padding: 14px 16px; border-radius: var(--radius-md); border: 2px solid #e8e8ef; font-family: var(--font-body); font-size: 14px; background: #fafafc; margin: 8px 0; text-align: center;
-        }
-        .login-btn {
-            width: 100%; padding: 14px; border-radius: var(--radius-full); font-weight: 700; font-size: 14px; cursor: pointer; font-family: var(--font-body); border: none; margin: 6px 0;
-        }
-        .email-btn { background: #1a1a2e; color: #fff; box-shadow: 0 6px 20px rgba(26,26,46,0.3); }
-        .secondary-btn { background: #f5f5f8; color: var(--text-primary); }
-        .profile-customize { background: #fff; border-radius: var(--radius-md); padding: 18px; box-shadow: var(--shadow-sm); text-align: center; }
-        .tts-status { font-size: 12px; color: var(--text-muted); margin: -6px 0 8px; text-align: center; min-height: 18px; }
     </style>
 </head>
 <body>
+    <!-- ========== شريط تثبيت PWA العلوي ========== -->
     <div class="install-banner" id="installBanner">
         <div class="install-banner-icon">📱</div>
         <div class="install-banner-info">
@@ -845,17 +143,29 @@
         <button class="install-banner-btn" id="installBannerBtn" onclick="triggerInstall()">تثبيت</button>
         <button class="install-banner-close" onclick="dismissInstallBanner()">✕</button>
     </div>
+    
+    <!-- ========== زر تثبيت PWA العائم ========== -->
     <button class="floating-install-btn" id="floatingInstallBtn" onclick="triggerInstall()">⬇️ تثبيت التطبيق</button>
 
+    <!-- ========== الشريط السفلي الثابت ========== -->
     <nav class="app-navigation-bar" id="bottomNav">
-        <div class="navigation-tab active-tab" data-target="home"><i class="fa-solid fa-house"></i><span>الرئيسية</span></div>
-        <div class="navigation-tab" data-target="learn"><i class="fa-solid fa-graduation-cap"></i><span>التعلم</span></div>
-        <div class="navigation-tab" data-target="achievements"><i class="fa-solid fa-fire"></i><span>الإنجاز</span></div>
-        <div class="navigation-tab" data-target="profile"><i class="fa-regular fa-user"></i><span>حسابي</span></div>
+        <div class="navigation-tab active-tab" data-target="home">
+            <i class="fa-solid fa-house"></i><span>الرئيسية</span>
+        </div>
+        <div class="navigation-tab" data-target="learn">
+            <i class="fa-solid fa-graduation-cap"></i><span>التعلم</span>
+        </div>
+        <div class="navigation-tab" data-target="achievements">
+            <i class="fa-solid fa-fire"></i><span>الإنجاز</span>
+        </div>
+        <div class="navigation-tab" data-target="profile">
+            <i class="fa-regular fa-user"></i><span>حسابي</span>
+        </div>
     </nav>
 
+    <!-- ========== حاوية الشاشات ========== -->
     <div class="screens-container">
-        <!-- HOME SCREEN -->
+        <!-- ========== الشاشة الرئيسية ========== -->
         <div class="app-screen active-screen" id="home-screen">
             <div class="top-badge-container"><div class="top-badge"><i class="fa-solid fa-earth-asia"></i><span>تعلم الكورية</span></div></div>
             <div class="welcome-header">
@@ -873,8 +183,12 @@
                     <div class="card-main-body"><div class="media-badge"><i class="fa-regular fa-comments"></i></div><div class="card-text-details"><h3>الدردشة الكورية</h3><p>تعبيرات الشباب في الدردشة</p></div></div>
                     <button class="action-button">ابدأ</button>
                 </div>
+                <!-- بطاقة القراءة بعد التعديل -->
                 <div class="custom-card bg-read" onclick="openReading()">
-                    <div class="card-main-body"><div class="media-badge"><i class="fa-solid fa-book-bookmark"></i></div><div class="card-text-details"><h3>القراءة</h3><p>اختر نوع التدريب</p></div></div>
+                    <div class="card-main-body">
+                        <div class="media-badge"><i class="fa-solid fa-book-bookmark"></i></div>
+                        <div class="card-text-details"><h3>القراءة</h3><p>اختر نوع التدريب</p></div>
+                    </div>
                     <button class="action-button">ابدأ</button>
                 </div>
                 <div class="custom-card bg-listen" onclick="openListening()">
@@ -888,7 +202,7 @@
             </div>
         </div>
 
-        <!-- LEARN SCREEN -->
+        <!-- ========== شاشة التعلم ========== -->
         <div class="app-screen" id="learn-screen">
             <div class="top-badge-container"><div class="top-badge"><i class="fa-solid fa-graduation-cap"></i><span>مركز التعلم</span></div></div>
             <div class="learn-card">
@@ -917,7 +231,7 @@
             </div>
         </div>
 
-        <!-- ACHIEVEMENTS SCREEN -->
+        <!-- ========== شاشة الإنجازات ========== -->
         <div class="app-screen" id="achievements-screen">
             <div class="top-badge-container"><div class="top-badge"><i class="fa-solid fa-fire"></i><span>الإنجازات</span></div></div>
             <div class="progress-section">
@@ -935,7 +249,7 @@
             <div class="encouragement" id="encouragementMsg">🐰 كل قصة تقرّبك من القمة!</div>
         </div>
 
-        <!-- PROFILE SCREEN -->
+        <!-- ========== شاشة الحساب ========== -->
         <div class="app-screen" id="profile-screen">
             <div class="top-badge-container"><div class="top-badge"><i class="fa-regular fa-user"></i><span>حسابي</span></div></div>
             <div id="profileSection">
@@ -971,7 +285,7 @@
             </div>
         </div>
 
-        <!-- STORIES LIST SCREEN -->
+        <!-- ========== شاشة قائمة القصص ========== -->
         <div class="app-screen" id="stories-screen">
             <div class="top-bar">
                 <button class="back-to-home-btn" onclick="switchToMainScreen()"><i class="fa-solid fa-arrow-right"></i> الرئيسية</button>
@@ -985,256 +299,324 @@
             </div>
             <div id="content" class="container"></div>
         </div>
+
+        <!-- ========== شاشات القصص التفصيلية (0-9) ========== -->
+        <!-- القصة 0: الكنة المطلقة للريح -->
+        <div class="story-view-screen" id="story-screen-0" style="display:none;">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">💨 방귀쟁이 며느리</h1>
+            <div class="listen-btn" id="audioBtn0" onclick="toggleAudio(0)"><span id="btnContent0"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus0"></div>
+            <div class="story-container" id="storyText0"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                الصدق والطبيعة هما أساس الراحة، فكتمان الأمور الطبيعية قد يسبب ضرراً أكبر.<br>
+                الكنة المسكينة عانت طويلاً بسبب خجلها، لكن عندما تحررت من هذا القيد، اكتشف الجميع أن ما كانت تخفيه يمكن أن يكون نعمة ومصدر فخر.<br>
+                المغزى: لا تخجل من طبيعتك، فما تعتبره عيباً قد يكون مصدر قوتك الحقيقية.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+        <!-- القصة 1: الأرنب والسلحفاة -->
+        <div class="story-view-screen" id="story-screen-1" style="display:none;">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">🐰🐢 토끼와 거북이</h1>
+            <div class="listen-btn" id="audioBtn1" onclick="toggleAudio(1)"><span id="btnContent1"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus1"></div>
+            <div class="story-container" id="storyText1"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                النجاح لا يحتاج سرعة… يحتاج استمرار.<br>
+                السلحفاة ما فازت لأنها خارقة. فازت لأنها كانت تمشي حتى لما ما كان أحد شايفها.<br>
+                المغزى: اللي يكمل للنهاية يفوز… مو اللي يبدأ بسرعة ويغفل في الطريق.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+        <!-- القصة 2: هونغبو ونولبو -->
+        <div class="story-view-screen" id="story-screen-2" style="display:none;">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">🐦 흥부와 놀부</h1>
+            <div class="listen-btn" id="audioBtn2" onclick="toggleAudio(2)"><span id="btnContent2"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus2"></div>
+            <div class="story-container" id="storyText2"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                الطيب والخير يرجعان لصاحبهما دائماً، أما الطمع والجشع فلا يجلبان إلا الخسارة.<br>
+                흥부 (هُنغبو) ساعد عصفوراً صغيراً بقلب نقي فكافأته الحياة بالثراء الكافي والأمان.<br>
+                المغزى: ازرع الخير بنية صادقة ولا تحسد الآخرين، فالقناعة كنز والطمع يفسد كل شيء.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+        <!-- القصة 3: الأرنب والنمر -->
+        <div class="story-view-screen" id="story-screen-3" style="display:none;">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">🐰🐯 토끼와 호랑이</h1>
+            <div class="listen-btn" id="audioBtn3" onclick="toggleAudio(3)"><span id="btnContent3"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus3"></div>
+            <div class="story-container" id="storyText3"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                القوة البدنية وحدها لا تكفي إذا غاب العقل والتفكير اللماح.<br>
+                الأرنب الصغير استطاع النجاة من النمر المفترس ليس لأنه أقوى، بل لأنه استخدم ذكاءه وهدوءه في وقت الشدة.<br>
+                المغزى: لا تخف من المشاكل الكبيرة، فالحيلة الذكية والهدوء يمكنهما هزيمة أي خطر تواجهه.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+        <!-- القصة 4: ينبوع الشباب السحري -->
+        <div class="story-view-screen" id="story-screen-4" style="display:none;">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">💧 젊어지는 샘물</h1>
+            <div class="listen-btn" id="audioBtn4" onclick="toggleAudio(4)"><span id="btnContent4"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus4"></div>
+            <div class="story-container" id="storyText4"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                الطمع والجشع دائماً ما يؤديان إلى نتائج عكسية ومضحكة أحياناً!<br>
+                الزوجان الطيبان أخذا من ينبوع الشباب ما يكفيهما فقط ليعيشا بصحة وسعادة، بينما العجوز الطماع أراد أن يأخذ كل شيء فخسر كل شيء حتى عمره وعقله.<br>
+                المغزى: القناعة كنز لا يفنى، وخذ من الدنيا ما يكفيك ولا تبالغ.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+        <!-- القصة 5: بيضة الحمار -->
+        <div class="story-view-screen" id="story-screen-5" style="display:none;">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">🍉 당나귀 알</h1>
+            <div class="listen-btn" id="audioBtn5" onclick="toggleAudio(5)"><span id="btnContent5"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus5"></div>
+            <div class="story-container" id="storyText5"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                السذاجة الزائدة قد تجعل الإنسان أضحوكة بين الناس.<br>
+                الشاب القروي دفع مبلغاً كبيراً لشراء بطيخة ظناً أنها بيضة حمار، ثم طارد أرنباً معتقداً أنه صغير الحمار.<br>
+                المغزى: العلم والمعرفة ضروريان قبل اتخاذ أي قرار، واسأل أهل الخبرة قبل أن تنخدع.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+        <!-- القصة 6: الطاحونة السحرية -->
+        <div class="story-view-screen" id="story-screen-6" style="display:none;">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">🧂 요술 맷돌</h1>
+            <div class="listen-btn" id="audioBtn6" onclick="toggleAudio(6)"><span id="btnContent6"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus6"></div>
+            <div class="story-container" id="storyText6"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                الطمع والسرقة لا يجلبان إلا الهلاك، وأن ما تأخذه بغير حق سيغرقك في النهاية.<br>
+                اللص الطماع سرق الطاحونة السحرية وأراد الملح، لكنه لم يعرف كيف يوقفها فغرقت سفينته.<br>
+                المغزى: القناعة راحة، والطمع هلاك، ولا تأخذ شيئاً ليس من حقك.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+        <!-- القصة 7: محاكمة الأرنب -->
+        <div class="story-view-screen" id="story-screen-7" style="display:none;">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">⚖️ 토끼의 재판</h1>
+            <div class="listen-btn" id="audioBtn7" onclick="toggleAudio(7)"><span id="btnContent7"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus7"></div>
+            <div class="story-container" id="storyText7"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                الذكاء ينتصر على القوة الغاشمة، والتروي والحكمة ينقذان من المواقف الصعبة.<br>
+                الأرنب الذكي استخدم حيلة بسيطة لإعادة النمر إلى الحفرة التي خرج منها، وأنقذ المسافر الطيب.<br>
+                المغزى: العقل هو أقوى سلاح، والذكاء في التصرف ينقذك من أصعب المواقف.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+        <!-- القصة 8: الديك والتاج -->
+        <div class="story-view-screen" id="story-screen-8" style="display:none;">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">🐓 수탉과 왕관</h1>
+            <div class="listen-btn" id="audioBtn8" onclick="toggleAudio(8)"><span id="btnContent8"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus8"></div>
+            <div class="story-container" id="storyText8"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                لا تنخدع بكلام المتملقين، وتعلم أن تميز أصدقاءك الحقيقيين من المنافقين.<br>
+                الديك خسر تاجه الجميل لأنه صدق كلام الثعلب المخادع وأعجب بمديحه الكاذب.<br>
+                المغزى: الغرور والثقة العمياء بالغرباء يؤديان إلى الخسارة، فكن حذراً ولا تصدق كل ما يقال.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+        <!-- القصة 9: الفئران والجرس -->
+        <div class="story-view-screen" id="story-screen-9" style="display:none;">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">🐭 생쥐들과 방울</h1>
+            <div class="listen-btn" id="audioBtn9" onclick="toggleAudio(9)"><span id="btnContent9"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus9"></div>
+            <div class="story-container" id="storyText9"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                أفضل الخطط لا قيمة لها إن لم توجد الشجاعة لتنفيذها.<br>
+                الفئران اجتمعت ووضعت خطة عبقرية لتعليق جرس في رقبة القط، لكن لم يتطوع أحد للتنفيذ.<br>
+                المغزى: التنظير سهل، لكن التنفيذ يحتاج شجاعة. لا تكتفِ بالكلام الجميل.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+
+        <!-- ========== شاشات قصص الرعب (10-19) ========== -->
+        <!-- القصة 10 -->
+        <div class="story-view-screen" id="story-screen-10" style="display:none;">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">👁️ 사각지대</h1>
+            <div class="listen-btn" id="audioBtn10" onclick="toggleAudio(10)"><span id="btnContent10"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus10"></div>
+            <div class="story-container" id="storyText10"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                الرعب الحقيقي لا يأتي من الخارج، بل من أعماق النفس البشرية حين تفقد السيطرة على جسدها وعقلها.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+        <!-- القصة 11 -->
+        <div class="story-view-screen" id="story-screen-11" style="display:none;">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">🛏️ 7번 병상</h1>
+            <div class="listen-btn" id="audioBtn11" onclick="toggleAudio(11)"><span id="btnContent11"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus11"></div>
+            <div class="story-container" id="storyText11"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                أحياناً يكون العقل البشري أعظم سجّان لنفسه، نبني أوهاماً كاملة لنحمي أنفسنا من حقيقة لا نستطيع مواجهتها.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+        <!-- القصة 12 -->
+        <div class="story-view-screen" id="story-screen-12" style="display:none;">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">📞 집 안에서 걸려 온 전화</h1>
+            <div class="listen-btn" id="audioBtn12" onclick="toggleAudio(12)"><span id="btnContent12"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus12"></div>
+            <div class="story-container" id="storyText12"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                الخطر الحقيقي قد لا يكون خلف باب موصد، بل قد يكون أقرب إلينا مما نتصور... مختبئاً في الظلال داخل منازلنا.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+        <!-- القصة 13 -->
+        <div class="story-view-screen" id="story-screen-13" style="display:none;">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">👂 이식된 목소리</h1>
+            <div class="listen-btn" id="audioBtn13" onclick="toggleAudio(13)"><span id="btnContent13"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus13"></div>
+            <div class="story-container" id="storyText13"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                نعمة السمع قد تتحول إلى نقمة عندما تسمح لنا التكنولوجيا بسماع ما لم يُخلق لنا أن نسمعه.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+        <!-- القصة 14 -->
+        <div class="story-view-screen" id="story-screen-14" style="display:none;">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">📄 하얀 페이지</h1>
+            <div class="listen-btn" id="audioBtn14" onclick="toggleAudio(14)"><span id="btnContent14"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus14"></div>
+            <div class="story-container" id="storyText14"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                أكثر الأسئلة رعباً هو ذلك الذي يشكك في حقيقة وجودنا... هل نحن بشر حقيقيون أم مجرد سطور برمجية في محاكاة؟
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+        <!-- القصة 15 -->
+        <div class="story-view-screen" id="story-screen-15" style="display:none;">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">🛗 잃어버린 층</h1>
+            <div class="listen-btn" id="audioBtn15" onclick="toggleAudio(15)"><span id="btnContent15"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus15"></div>
+            <div class="story-container" id="storyText15"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                هناك عوالم وأبعاد تعيش بين طيات واقعنا، وقد نعبرها دون أن ندري... لكن الأهم ألا ننزل أبداً في المحطة الخطأ.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+        <!-- القصة 16 -->
+        <div class="story-view-screen" id="story-screen-16" style="display:none;">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">🧱 벽 속의 손님</h1>
+            <div class="listen-btn" id="audioBtn16" onclick="toggleAudio(16)"><span id="btnContent16"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus16"></div>
+            <div class="story-container" id="storyText16"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                العقل المنعزل قد يخلق حقيقة بديلة كاملة ليهرب من ألم الوحدة، حتى يصبح الغريب الذي يخافه الآخرون.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+        <!-- القصة 17 -->
+        <div class="story-view-screen" id="story-screen-17" style="display:none;">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">📻 한밤의 라디오 방송</h1>
+            <div class="listen-btn" id="audioBtn17" onclick="toggleAudio(17)"><span id="btnContent17"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus17"></div>
+            <div class="story-container" id="storyText17"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                كم من الأصوات التي نسمعها يومياً هي حقيقية حقاً؟ وأي من العوالم التي نصدقها هي مجرد انعكاس لجدران عقولنا المريضة؟
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+        <!-- القصة 18 -->
+        <div class="story-view-screen" id="story-screen-18" style="display:none;">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">⚖️ 과도한 무게</h1>
+            <div class="listen-btn" id="audioBtn18" onclick="toggleAudio(18)"><span id="btnContent18"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus18"></div>
+            <div class="story-container" id="storyText18"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                نخاف من الظلام مع أن أكثر الكوابيس رعباً لا تأتي من العتمة، بل من المساحات الفارغة التي نعتقد أنها آمنة.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
+        <!-- القصة 19 -->
+        <div class="story-view-screen" id="story-screen-19" style="display:none;">
+            <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
+            <h1 style="text-align:center;font-weight:900;">🖼️ 움직이는 그림</h1>
+            <div class="listen-btn" id="audioBtn19" onclick="toggleAudio(19)"><span id="btnContent19"><i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span></span></div>
+            <div class="tts-status" id="ttsStatus19"></div>
+            <div class="story-container" id="storyText19"></div>
+            <div class="lesson">
+                <strong>📌 الدرس المستفاد من القصة</strong><br>
+                بعض النظرات تبقى محفورة في الذاكرة للأبد... خاصة تلك التي تشعر أنها تراك أنت أيضاً.
+            </div>
+            <div class="action-button-done" onclick="completeStoryAndGoBack()">لقد أنهيت القصة بنجاح! 🎉</div>
+        </div>
     </div>
 
     <script>
-        // ========== جميع الوظائف الأساسية ==========
-        const storiesData = [
-            { title: '💨 방귀쟁이 며느리', text: '옛날 옛적에, 방귀를 너무 많이 뀌는 며느리가 살았습니다...<br><br>كان يا مكان، كانت هناك كنّة تطلق الريح كثيراً. كانت تخجل جداً من هذا الأمر لدرجة أنها كانت تحبس نفسها طوال اليوم. في أحد الأيام، قررت أن تتحرر من خجلها وأطلقت ريحاً قوياً جداً في الغابة. فجأة، تطايرت أوراق الشجر وهربت الحيوانات. لكن المفاجأة أن الريح حركت طاحونة القرية التي كانت متوقفة منذ سنوات! فرح أهل القرية وقالوا: "أنتِ بطلة قريتنا!" ومنذ ذلك اليوم، لم تعد تشعر بالخجل أبداً.', lesson: 'الصدق والطبيعة هما أساس الراحة. لا تخجل من طبيعتك، فما تعتبره عيباً قد يكون مصدر قوتك الحقيقية.' },
-            { title: '🐰🐢 토끼와 거북이', text: '옛날에 토끼와 거북이가 달리기 시합을 했습니다...<br><br>في قديم الزمان، تحدى الأرنب السلحفاة في سباق. ضحك الأرنب قائلاً: "أنتِ بطيئة جداً!" ووافقت السلحفاة على التحدي. بدأ السباق وانطلق الأرنب كالسهم، بينما سارت السلحفاة بهدوء. في منتصف الطريق، قال الأرنب: "سأنام قليلاً، فالسلحفاة لن تصل قبل ساعات." نام الأرنب بعمق، بينما استمرت السلحفاة في السير دون توقف. استيقظ الأرنب مذعوراً ليجد السلحفاة على خط النهاية! فازت السلحفاة لأنها استمرت حتى النهاية.', lesson: 'النجاح لا يحتاج سرعة… يحتاج استمرار. الذي يكمل للنهاية يفوز، ليس من يبدأ بسرعة ويغفل في الطريق.' },
-            { title: '🐦 흥부와 놀부', text: '옛날에 흥부와 놀부 두 형제가 살았습니다...<br><br>كان هناك أخوان: هُنغبو الطيب القلب، ونولبو الشرير. طرد نولبو أخاه من المنزل. في أحد الأيام، وجد هُنغبو عصفوراً صغيراً مصاباً، فعالجه واعتنى به. كافأه العصفور ببذرة سحرية نمت شجرة ضخمة مليئة بالذهب. سمع نولبو القصة فذهب وكسر جناح عصفور متعمداً، ثم عالجه طمعاً في المكافأة. لكن البذرة التي حصل عليها نمت شجرة مليئة بالوحوش دمرت منزله. ندم نولبو وذهب ليعيش مع أخيه الذي سامحه.', lesson: 'الخير يرجع لصاحبه، والطمع لا يجلب إلا الخسارة. ازرع الخير بنية صادقة فالقناعة كنز.' }
+        const quotes = [
+            "الألف ميل يبدأ بخطوة ~ لا تستصغر جهدك",
+            "كل كلمة كورية تتعلمها تقربك من حلمك",
+            "작은 노력이 모여 큰 꿈이 된다 ~ الجهود الصغيرة تبني حلماً كبيراً",
+            "لا تقارن نفسك بالآخرين.. رحلتك مختلفة وجميلة",
+            "힘내세요! أنت أقوى مما تتصوّر",
+            "التكرار يصنع المعجزات.. تدرب ولو 5 دقائق يومياً",
+            "실수해도 괜찮아요! الأخطاء دليل أنك تحاول",
+            "كل خبير كان مبتدئاً في يوم من الأيام",
+            "اليوم أفضل من الأمس.. وغداً سيكون أجمل",
+            "파이팅! النجاح ينتظر من يستمر"
         ];
-
-        // التنقل بين الشاشات
-        function showScreen(id) {
-            document.querySelectorAll('.app-screen, .story-view-screen').forEach(s => {
-                s.style.display = 'none';
-                s.classList.remove('active-screen');
-            });
-            const el = document.getElementById(id);
-            if (el) {
-                el.style.display = '';
-                el.classList.add('active-screen');
-                if (id === 'stories-screen') loadStoriesList();
-                if (id === 'achievements-screen') updateAchievements();
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function switchToMainScreen() { showScreen('home-screen'); }
-        function openReading() { showScreen('stories-screen'); }
-        function openListening() { alert('🎧 قسم الاستماع قيد التطوير'); }
-        function openWriting() { alert('✍️ قسم الكتابة قيد التطوير'); }
-        function goToChatWithDelay() { alert('💬 الدردشة الكورية قيد التطوير'); }
-
-        // الشريط السفلي
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.navigation-tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const target = this.dataset.target;
-                    const map = {
-                        home: 'home-screen',
-                        learn: 'learn-screen',
-                        achievements: 'achievements-screen',
-                        profile: 'profile-screen'
-                    };
-                    if (map[target]) showScreen(map[target]);
-                    document.querySelectorAll('.navigation-tab').forEach(t => t.classList.remove('active-tab'));
-                    this.classList.add('active-tab');
-                });
-            });
-
-            // تحميل الاقتباس اليومي
-            const quotes = [
-                "الألف ميل يبدأ بخطوة ~ لا تستصغر جهدك",
-                "كل كلمة كورية تتعلمها تقربك من حلمك",
-                "작은 노력이 모여 큰 꿈이 된다 ~ الجهود الصغيرة تبني حلماً كبيراً",
-                "لا تقارن نفسك بالآخرين.. رحلتك مختلفة وجميلة",
-                "힘내세요! أنت أقوى مما تتصوّر",
-                "التكرار يصنع المعجزات.. تدرب ولو 5 دقائق يومياً",
-                "실수해도 괜찮아요! الأخطاء دليل أنك تحاول",
-                "كل خبير كان مبتدئاً في يوم من الأيام"
-            ];
+        document.addEventListener('DOMContentLoaded', function() {
             const quoteEl = document.getElementById('dailyQuote');
             if (quoteEl) quoteEl.textContent = quotes[Math.floor(Math.random() * quotes.length)];
-
-            // تحميل بيانات المستخدم
-            const savedName = localStorage.getItem('userName');
-            if (savedName) document.getElementById('userName').textContent = savedName;
-            const savedAvatar = localStorage.getItem('userAvatar');
-            if (savedAvatar) document.getElementById('userAvatar').textContent = savedAvatar;
-
-            updateAchievements();
         });
+    </script>
 
-        // قائمة القصص
-        function loadStoriesList() {
-            const container = document.getElementById('content');
-            if (!container) return;
-            container.innerHTML = storiesData.map((story, i) => `
-                <div style="background:#fff;border-radius:20px;padding:16px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,0.06);cursor:pointer;display:flex;align-items:center;gap:12px;" onclick="openStory(${i})">
-                    <div style="font-size:28px;width:50px;height:50px;background:#f5f5f8;border-radius:14px;display:flex;align-items:center;justify-content:center;">📖</div>
-                    <div style="font-weight:700;font-size:14px;">${story.title}</div>
-                </div>
-            `).join('');
-        }
-
-        function showTab(index) { loadStoriesList(); }
-
-        let currentPlayingIndex = null;
-        let currentUtterance = null;
-
-        function openStory(index) {
-            const story = storiesData[index];
-            if (!story) return;
-            const screenId = 'story-screen-' + index;
-            let screen = document.getElementById(screenId);
-            if (!screen) {
-                screen = document.createElement('div');
-                screen.className = 'story-view-screen';
-                screen.id = screenId;
-                screen.style.display = 'none';
-                document.querySelector('.screens-container').appendChild(screen);
-            }
-            screen.innerHTML = `
-                <div class="back-btn" onclick="switchToStoriesList()"><i class="fa-solid fa-arrow-right"></i> رجوع</div>
-                <h1 style="text-align:center;font-weight:900;">${story.title}</h1>
-                <div class="listen-btn" id="audioBtn${index}" onclick="toggleAudio(${index})">
-                    <i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span>
-                </div>
-                <div class="tts-status" id="ttsStatus${index}"></div>
-                <div class="story-container">${story.text}</div>
-                <div class="lesson"><strong>📌 الدرس المستفاد</strong><br>${story.lesson}</div>
-                <div class="action-button-done" onclick="completeStoryAndGoBack()">🎉 أنهيت القصة بنجاح!</div>
-            `;
-            showScreen(screenId);
-        }
-
-        function switchToStoriesList() {
-            if (currentUtterance) {
-                window.speechSynthesis.cancel();
-                currentUtterance = null;
-                currentPlayingIndex = null;
-            }
-            showScreen('stories-screen');
-        }
-
-        function toggleAudio(index) {
-            const story = storiesData[index];
-            if (!story) return;
-            const btn = document.getElementById('audioBtn' + index);
-            const status = document.getElementById('ttsStatus' + index);
-
-            if (currentPlayingIndex === index && window.speechSynthesis.speaking) {
-                window.speechSynthesis.cancel();
-                currentPlayingIndex = null;
-                currentUtterance = null;
-                if (btn) { btn.classList.remove('playing'); btn.innerHTML = '<i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span>'; }
-                if (status) status.textContent = '';
-                return;
-            }
-
-            window.speechSynthesis.cancel();
-            const cleanText = story.text.replace(/<[^>]*>/g, ' ').replace(/<br\s*\/?>/g, ' ');
-            const utterance = new SpeechSynthesisUtterance(cleanText);
-            utterance.lang = 'ko-KR';
-            utterance.rate = 0.85;
-            utterance.pitch = 1;
-            utterance.onstart = () => {
-                currentPlayingIndex = index;
-                currentUtterance = utterance;
-                if (btn) { btn.classList.add('playing'); btn.innerHTML = '<i class="fa-solid fa-pause"></i> <span>إيقاف مؤقت</span>'; }
-                if (status) status.textContent = '🔊 جاري التشغيل...';
-            };
-            utterance.onend = () => {
-                currentPlayingIndex = null;
-                currentUtterance = null;
-                if (btn) { btn.classList.remove('playing'); btn.innerHTML = '<i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span>'; }
-                if (status) status.textContent = '✅ انتهى التشغيل';
-            };
-            utterance.onerror = () => {
-                currentPlayingIndex = null;
-                currentUtterance = null;
-                if (btn) { btn.classList.remove('playing'); btn.innerHTML = '<i class="fa-solid fa-play"></i> <span>تشغيل الصوت</span>'; }
-                if (status) status.textContent = '❌ خطأ في التشغيل';
-            };
-            window.speechSynthesis.speak(utterance);
-        }
-
-        function completeStoryAndGoBack() {
-            let count = parseInt(localStorage.getItem('storiesCount') || '0');
-            count += 1;
-            localStorage.setItem('storiesCount', count);
-            updateAchievements();
-            switchToStoriesList();
-        }
-
-        // الإنجازات
-        function updateAchievements() {
-            const storiesCount = parseInt(localStorage.getItem('storiesCount') || '0');
-            const elStories = document.getElementById('statStories');
-            if (elStories) elStories.textContent = storiesCount;
-
-            const progressEl = document.getElementById('progressFill');
-            if (progressEl) progressEl.style.width = Math.min((storiesCount / 40) * 100, 100) + '%';
-            const progressText = document.getElementById('progressText');
-            if (progressText) progressText.textContent = storiesCount + ' / 40';
-
-            const starsRow = document.getElementById('starsRow');
-            if (starsRow) starsRow.innerHTML = Array.from({length: 5}, (_, i) => `<span style="font-size:22px;">${i < Math.min(storiesCount, 5) ? '⭐' : '☆'}</span>`).join('');
-
-            const badgesGrid = document.getElementById('badgesGrid');
-            if (badgesGrid) {
-                const badges = [
-                    { icon: '📖', earned: storiesCount >= 1 },
-                    { icon: '📚', earned: storiesCount >= 5 },
-                    { icon: '🏅', earned: storiesCount >= 10 },
-                    { icon: '👑', earned: storiesCount >= 20 }
-                ];
-                badgesGrid.innerHTML = badges.map(b => `<div class="badge-item ${b.earned ? 'earned' : ''}">${b.icon}</div>`).join('');
-            }
-        }
-
-        // نصائح التعلم
-        const tips = [
-            'حاول أن تتعلم 5 كلمات جديدة يوميًا واستخدمها في جمل.',
-            'شاهد دراما كورية مع ترجمة عربية، ثم أعد المشاهدة بدون ترجمة.',
-            'اكتب يومياتك باللغة الكورية حتى لو كانت جمل بسيطة.',
-            'استمع إلى البودكاست الكوري أثناء المشي أو التمرين.',
-            'تعلم 10 كلمات جديدة كل يوم بدلاً من 5.'
-        ];
-        const topikFacts = [
-            'امتحان TOPIK I يتكون من 30 سؤال استماع و 30 سؤال قراءة.',
-            'امتحان TOPIK II يضيف قسم الكتابة مع 4 أسئلة مقالية.',
-            'يمكنك دخول امتحان TOPIK 6 مرات في السنة في كوريا.',
-            'المستوى 6 في TOPIK يعادل إتقان اللغة بطلاقة أكاديمية.'
-        ];
-        const motivations = [
-            'كل حرف تتعلمه يقرّبك من حلمك. لا تتوقف!',
-            'تخيل نفسك تتحدث الكورية بطلاقة مع أصدقاء جدد.',
-            'الأخطاء دليل أنك تحاول. استمر ولا تخف!',
-            'كل دقيقة تتعلم فيها هي استثمار في مستقبلك.'
-        ];
-        function refreshTip() { document.getElementById('tipText').textContent = tips[Math.floor(Math.random() * tips.length)]; }
-        function refreshTopik() { document.getElementById('topikText').textContent = topikFacts[Math.floor(Math.random() * topikFacts.length)]; }
-        function refreshMotivation() { document.getElementById('motivationText').textContent = motivations[Math.floor(Math.random() * motivations.length)]; }
-
-        // الملف الشخصي
-        function openEditProfile() { document.getElementById('editProfileSection').style.display = 'block'; }
-        function closeEditProfile() { document.getElementById('editProfileSection').style.display = 'none'; }
-        function saveCustomProfile() {
-            const name = document.getElementById('customName').value.trim();
-            if (name) { document.getElementById('userName').textContent = name; localStorage.setItem('userName', name); }
-            const selected = document.querySelector('.avatar-option.selected');
-            if (selected) { const avatar = selected.dataset.avatar; document.getElementById('userAvatar').textContent = avatar; localStorage.setItem('userAvatar', avatar); }
-            closeEditProfile();
-        }
-        function handleLogout() { if (confirm('إعادة تعيين كل التقدم؟')) { localStorage.clear(); location.reload(); } }
-
-        // اختيار الصورة الرمزية
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('avatar-option')) {
-                document.querySelectorAll('.avatar-option').forEach(a => a.classList.remove('selected'));
-                e.target.classList.add('selected');
-            }
-        });
-
-        // ========== نظام تثبيت PWA ==========
+    <script src="data.js"></script>
+    <script src="data2.js"></script>
+    <script src="data3.js"></script>
+    <script src="data4.js"></script>
+    <script src="script.js"></script>
+    
+    <!-- ✅ نظام PWA للتثبيت -->
+    <script>
         let deferredPrompt;
         const installBanner = document.getElementById('installBanner');
         const floatingInstallBtn = document.getElementById('floatingInstallBtn');
         const DISMISS_KEY = 'installBannerDismissedAt';
-        const COOLDOWN = 7 * 24 * 60 * 60 * 1000;
+        const COOLDOWN = 7 * 24 * 60 * 60 * 1000; // 7 أيام
 
         function isDismissed() {
             const d = localStorage.getItem(DISMISS_KEY);
@@ -1243,13 +625,13 @@
         function showPrompts() {
             if (isDismissed()) return;
             setTimeout(() => {
-                installBanner?.classList.add('visible');
-                floatingInstallBtn?.classList.add('visible');
+                if (installBanner) installBanner.classList.add('visible');
+                if (floatingInstallBtn) floatingInstallBtn.classList.add('visible');
             }, 1800);
         }
         function hidePrompts() {
-            installBanner?.classList.remove('visible');
-            floatingInstallBtn?.classList.remove('visible');
+            if (installBanner) installBanner.classList.remove('visible');
+            if (floatingInstallBtn) floatingInstallBtn.classList.remove('visible');
         }
         function dismissInstallBanner() {
             hidePrompts();
@@ -1258,16 +640,19 @@
         function triggerInstall() {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                deferredPrompt.userChoice.then(r => {
-                    if (r.outcome === 'accepted') { hidePrompts(); localStorage.setItem(DISMISS_KEY, Date.now().toString()); }
+                deferredPrompt.userChoice.then(function(choiceResult) {
+                    if (choiceResult.outcome === 'accepted') {
+                        hidePrompts();
+                        localStorage.setItem(DISMISS_KEY, Date.now().toString());
+                    }
                     deferredPrompt = null;
                 });
             } else {
-                alert('📱 لتثبيت التطبيق:\n• iPhone/iPad: زر المشاركة > "إضافة إلى الشاشة الرئيسية"\n• Android/Chrome: ⁝ > "تثبيت التطبيق"');
+                alert('📱 لتثبيت التطبيق:\n• iPhone/iPad: اضغط زر المشاركة ثم "إضافة إلى الشاشة الرئيسية"\n• Android: اضغط ⁝ ثم "تثبيت التطبيق" أو "إضافة إلى الشاشة الرئيسية"');
                 dismissInstallBanner();
             }
         }
-        window.addEventListener('beforeinstallprompt', e => {
+        window.addEventListener('beforeinstallprompt', function(e) {
             e.preventDefault();
             deferredPrompt = e;
             showPrompts();
@@ -1279,22 +664,28 @@
             }
             return false;
         }
-        window.addEventListener('load', () => {
+        window.addEventListener('load', function() {
             if (!checkInstalled() && !deferredPrompt && !isDismissed()) {
-                setTimeout(() => { if (!deferredPrompt && !checkInstalled()) showPrompts(); }, 2500);
+                setTimeout(function() {
+                    if (!deferredPrompt && !checkInstalled()) showPrompts();
+                }, 2500);
             }
         });
-        document.addEventListener('click', e => {
-            if (e.target.closest('.navigation-tab') && installBanner?.classList.contains('visible')) {
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.navigation-tab') && installBanner && installBanner.classList.contains('visible')) {
                 installBanner.classList.remove('visible');
             }
         });
-        console.log('✅ جميع الأنظمة تعمل بنجاح');
+        console.log('✅ نظام PWA جاهز');
     </script>
+    
+    <!-- تسجيل Service Worker -->
     <script>
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('service-worker.js').then(reg => console.log('✅ SW مسجل')).catch(err => console.log('❌ SW خطأ:', err));
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(function(reg) { console.log('✅ Service Worker مسجل بنجاح'); })
+                    .catch(function(err) { console.log('❌ خطأ في التسجيل:', err); });
             });
         }
     </script>
