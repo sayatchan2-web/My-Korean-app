@@ -1,23 +1,40 @@
 {
   "name": "تعلم الكورية واستعد للتوبيك",
   "short_name": "تعلم الكورية",
-  "start_url": "/",
+  "description": "تطبيق تفاعلي لتعلم اللغة الكورية والاستعداد لامتحان TOPIK عبر القصص والاستماع والكتابة والقراءة",
+  "id": "/",
+  "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#fce4ec",
-  "theme_color": "#d946ef",
+  "theme_color": "#1a1a2e",
+  "lang": "ar",
+  "dir": "rtl",
   "icons": [
     {
       "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
