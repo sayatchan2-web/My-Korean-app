@@ -1061,48 +1061,56 @@ function hideSavedScreen() {
 // ============ نظام الصوت ============
 function playPronunciation(id, text) {
     stopAllAudio();
-    
+
     const btn = document.getElementById(`pronounceBtn${id}`);
     if (btn) btn.classList.add('playing');
     appState.currentPlayingId = id;
+
     
-    if ('speechSynthesis' in window) {
-        try {
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'ko-KR';
-            utterance.rate = 0.75;
-            utterance.pitch = 1.0;
-            utterance.volume = 1.0;
-            
-            const voices = speechSynthesis.getVoices();
-            const koreanVoice = voices.find(v => v.lang.startsWith('ko'));
-            if (koreanVoice) utterance.voice = koreanVoice;
-            
-            utterance.onend = function() {
-                if (btn) btn.classList.remove('playing');
-                appState.currentPlayingId = null;
-            };
-            
-            utterance.onerror = function(e) {
-                if (btn) btn.classList.remove('playing');
-                appState.currentPlayingId = null;
-                if (e.error === 'not-allowed') {
-                    showToast('⚠️ اضغط على الشاشة لتفعيل الصوت');
-                }
-            };
-            
-            setTimeout(() => speechSynthesis.speak(utterance), 50);
-        } catch(e) {
-            if (btn) btn.classList.remove('playing');
-            appState.currentPlayingId = null;
-        }
-    } else {
+    if (window.Android && typeof window.Android.speak === "function") {
+
+        window.Android.speak(text);
+
         if (btn) btn.classList.remove('playing');
         appState.currentPlayingId = null;
-        showToast('⚠️ المتصفح لا يدعم النطق');
+        return;
     }
-}
+
+    
+    if (window.speechSynthesis) {
+
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "ko-KR";
+        utterance.rate = 0.75;
+        utterance.pitch = 1;
+        utterance.volume = 1;
+
+        const voices = speechSynthesis.getVoices();
+        const voice = voices.find(v => v.lang.indexOf("ko") === 0);
+        if (voice) utterance.voice = voice;
+
+        utterance.onend = function () {
+            if (btn) btn.classList.remove('playing');
+            appState.currentPlayingId = null;
+        };
+
+        utterance.onerror = function () {
+            if (btn) btn.classList.remove('playing');
+            appState.currentPlayingId = null;
+        };
+
+        speechSynthesis.speak(utterance);
+
+    } else {
+
+        if (btn) btn.classList.remove('playing');
+        appState.currentPlayingId = null;
+        showToast("⚠️ النطق غير مدعوم");
+
+    }
+    }
 
 function stopAllAudio() {
     if ('speechSynthesis' in window) {
