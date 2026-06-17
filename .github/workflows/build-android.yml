@@ -25,23 +25,6 @@ jobs:
           yes | sdkmanager --licenses || true
           sdkmanager "build-tools;34.0.0" "platforms;android-34"
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Install Bubblewrap
-        run: npm install -g @bubblewrap/cli
-
-      - name: Configure Bubblewrap paths (skip interactive setup)
-        run: |
-          mkdir -p ~/.bubblewrap
-          echo '{
-            "jdkPath": "'"$JAVA_HOME"'",
-            "androidSdkPath": "'"$ANDROID_SDK_ROOT"'"
-          }' > ~/.bubblewrap/config.json
-          cat ~/.bubblewrap/config.json
-
       - name: Generate signing keystore
         run: |
           keytool -genkeypair \
@@ -55,28 +38,174 @@ jobs:
             -dname "CN=Korean App Admin, OU=Engineering, O=Korean App, L=City, ST=State, C=US" \
             -noprompt
 
-      - name: Init Bubblewrap project
+      - name: Clone TWA Quickstart template
         run: |
-          mkdir -p twa-build
+          git clone https://github.com/GoogleChromeLabs/svgomg-twa.git twa-build
           cd twa-build
-          bubblewrap init \
-            --manifest="https://sayatchan2-web.github.io/My-Korean-app/manifest.json" \
-            --directory=.
+          # حذف ملفات الإعداد القديمة
+          rm -f app/build.gradle
+
+      - name: Configure TWA app
+        run: |
+          cd twa-build
+
+          # إعداد ملف build.gradle الرئيسي للتطبيق
+          cat > app/build.gradle << 'GRADLE'
+          plugins {
+              id 'com.android.application'
+          }
+
+          android {
+              compileSdk 34
+              namespace 'com.korean.learn'
+
+              defaultConfig {
+                  applicationId 'com.korean.learn'
+                  minSdk 21
+                  targetSdk 34
+                  versionCode 1
+                  versionName '1.0.0'
+              }
+
+              signingConfigs {
+                  release {
+                      storeFile file('../../signing.keystore')
+                      storePassword System.getenv('KEY_STORE_PASSWORD')
+                      keyAlias 'my-key-alias'
+                      keyPassword System.getenv('KEY_PASSWORD')
+                  }
+              }
+
+              buildTypes {
+                  release {
+                      signingConfig signingConfigs.release
+                      minifyEnabled false
+                  }
+              }
+          }
+
+          dependencies {
+              implementation 'com.google.androidbrowserhelper:androidbrowserhelper:2.5.0'
+          }
+          GRADLE
+
+          # إعداد strings.xml
+          mkdir -p app/src/main/res/values
+          cat > app/src/main/res/values/strings.xml << 'XML'
+          <?xml version="1.0" encoding="utf-8"?>
+          <resources>
+              <string name="app_name">تعلم الكورية</string>
+              <string name="asset_statements">
+                  [{
+                    \"relation\": [\"delegate_permission/common.handle_all_urls\"],
+                    \"target\": {
+                      \"namespace\": \"web\",
+                      \"site\": \"https://sayatchan2-web.github.io\"
+                    }
+                  }]
+              </string>
+          </resources>
+          XML
+
+          # إعداد AndroidManifest.xml
+          mkdir -p app/src/main
+          cat > app/src/main/AndroidManifest.xml << 'MANIFEST'
+          <?xml version="1.0" encoding="utf-8"?>
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+              <uses-permission android:name="android.permission.INTERNET" />
+
+              <application
+                  android:allowBackup="true"
+                  android:icon="@mipmap/ic_launcher"
+                  android:label="@string/app_name"
+                  android:theme="@android:style/Theme.NoTitleBar">
+
+                  <meta-data
+                      android:name="asset_statements"
+                      android:resource="@string/asset_statements" />
+
+                  <activity
+                      android:name="com.google.androidbrowserhelper.trusted.LauncherActivity"
+                      android:exported="true">
+
+                      <meta-data
+                          android:name="android.support.customtabs.trusted.DEFAULT_URL"
+                          android:value="https://sayatchan2-web.github.io/My-Korean-app/" />
+
+                      <meta-data
+                          android:name="android.support.customtabs.trusted.STATUS_BAR_COLOR"
+                          android:value="#1a1a2e" />
+
+                      <meta-data
+                          android:name="android.support.customtabs.trusted.NAVIGATION_BAR_COLOR"
+                          android:value="#1a1a2e" />
+
+                      <meta-data
+                          android:name="android.support.customtabs.trusted.SPLASH_IMAGE_DRAWABLE"
+                          android:value="@color/colorPrimary" />
+
+                      <meta-data
+                          android:name="android.support.customtabs.trusted.SPLASH_SCREEN_BACKGROUND_COLOR"
+                          android:value="#fce4ec" />
+
+                      <meta-data
+                          android:name="android.support.customtabs.trusted.SPLASH_SCREEN_FADE_OUT_DURATION"
+                          android:value="300" />
+
+                      <meta-data
+                          android:name="android.support.customtabs.trusted.FILE_PROVIDER_AUTHORITY"
+                          android:value="com.korean.learn.fileprovider" />
+
+                      <intent-filter>
+                          <action android:name="android.intent.action.MAIN" />
+                          <category android:name="android.intent.category.LAUNCHER" />
+                      </intent-filter>
+
+                      <intent-filter android:autoVerify="true">
+                          <action android:name="android.intent.action.VIEW"/>
+                          <category android:name="android.intent.category.DEFAULT" />
+                          <category android:name="android.intent.category.BROWSABLE"/>
+                          <data android:scheme="https"
+                              android:host="sayatchan2-web.github.io"
+                              android:pathPrefix="/My-Korean-app/" />
+                      </intent-filter>
+                  </activity>
+              </application>
+          </manifest>
+          MANIFEST
+
+          # إعداد colors.xml
+          cat > app/src/main/res/values/colors.xml << 'XML'
+          <?xml version="1.0" encoding="utf-8"?>
+          <resources>
+              <color name="colorPrimary">#1a1a2e</color>
+              <color name="colorPrimaryDark">#1a1a2e</color>
+              <color name="colorAccent">#d946ef</color>
+          </resources>
+          XML
+
+      - name: Download app icon and create mipmaps
+        run: |
+          cd twa-build
+          for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
+            mkdir -p app/src/main/res/mipmap-${density}
+            curl -s "https://sayatchan2-web.github.io/My-Korean-app/icon-192.png" \
+              -o app/src/main/res/mipmap-${density}/ic_launcher.png
+          done
 
       - name: Build AAB
+        env:
+          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
           cd twa-build
-          bubblewrap build \
-            --signingKeyPath="../signing.keystore" \
-            --signingKeyAlias="my-key-alias" \
-            --keystorePassword="${{ secrets.KEY_STORE_PASSWORD }}" \
-            --keyPassword="${{ secrets.KEY_PASSWORD }}"
+          chmod +x gradlew
+          ./gradlew bundleRelease
 
-      - name: Upload artifacts
+      - name: Upload AAB
         uses: actions/upload-artifact@v4
         with:
           name: korean-app-release
-          path: |
-            twa-build/app-release-bundle.aab
-            twa-build/app-release.apk
+          path: twa-build/app/build/outputs/bundle/release/app-release.aab
           retention-days: 7
