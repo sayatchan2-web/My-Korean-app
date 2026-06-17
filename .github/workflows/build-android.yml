@@ -28,7 +28,7 @@ jobs:
       - name: Generate signing keystore
         run: |
           keytool -genkeypair \
-            -keystore ${{ github.workspace }}/signing.keystore \
+            -keystore signing.keystore \
             -alias my-key-alias \
             -keyalg RSA \
             -keysize 2048 \
@@ -38,17 +38,23 @@ jobs:
             -dname "CN=Korean App Admin, OU=Engineering, O=Korean App, L=City, ST=State, C=US" \
             -noprompt
 
-      - name: Build TWA project from scratch
+      - name: Build TWA project
         run: |
           mkdir -p twa-project/app/src/main/res/values
-          mkdir -p twa-project/app/src/main/res/mipmap-mdpi
-          mkdir -p twa-project/app/src/main/res/mipmap-hdpi
-          mkdir -p twa-project/app/src/main/res/mipmap-xhdpi
-          mkdir -p twa-project/app/src/main/res/mipmap-xxhdpi
-          mkdir -p twa-project/app/src/main/res/mipmap-xxxhdpi
           mkdir -p twa-project/gradle/wrapper
+          for d in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
+            mkdir -p twa-project/app/src/main/res/mipmap-$d
+          done
 
-          # --- settings.gradle ---
+          # gradle.properties - الإصلاح الرئيسي
+          cat > twa-project/gradle.properties << 'EOF'
+          android.useAndroidX=true
+          android.enableJetifier=true
+          org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
+          org.gradle.daemon=false
+          EOF
+
+          # settings.gradle
           cat > twa-project/settings.gradle << 'EOF'
           pluginManagement {
               repositories {
@@ -68,14 +74,14 @@ jobs:
           include ':app'
           EOF
 
-          # --- build.gradle (root) ---
+          # build.gradle (root)
           cat > twa-project/build.gradle << 'EOF'
           plugins {
               id 'com.android.application' version '8.2.2' apply false
           }
           EOF
 
-          # --- gradle-wrapper.properties ---
+          # gradle-wrapper.properties
           cat > twa-project/gradle/wrapper/gradle-wrapper.properties << 'EOF'
           distributionBase=GRADLE_USER_HOME
           distributionPath=wrapper/dists
@@ -86,7 +92,7 @@ jobs:
           zipStorePath=wrapper/dists
           EOF
 
-          # --- app/build.gradle ---
+          # app/build.gradle
           cat > twa-project/app/build.gradle << 'EOF'
           plugins {
               id 'com.android.application'
@@ -106,10 +112,10 @@ jobs:
 
               signingConfigs {
                   release {
-                      storeFile file('${{ github.workspace }}/signing.keystore')
-                      storePassword '${{ secrets.KEY_STORE_PASSWORD }}'
+                      storeFile file('../../signing.keystore')
+                      storePassword System.getenv('KEY_STORE_PASSWORD')
                       keyAlias 'my-key-alias'
-                      keyPassword '${{ secrets.KEY_PASSWORD }}'
+                      keyPassword System.getenv('KEY_PASSWORD')
                   }
               }
 
@@ -117,7 +123,6 @@ jobs:
                   release {
                       signingConfig signingConfigs.release
                       minifyEnabled false
-                      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
                   }
               }
 
@@ -132,7 +137,7 @@ jobs:
           }
           EOF
 
-          # --- AndroidManifest.xml ---
+          # AndroidManifest.xml
           cat > twa-project/app/src/main/AndroidManifest.xml << 'EOF'
           <?xml version="1.0" encoding="utf-8"?>
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
@@ -184,7 +189,7 @@ jobs:
           </manifest>
           EOF
 
-          # --- strings.xml ---
+          # strings.xml
           cat > twa-project/app/src/main/res/values/strings.xml << 'EOF'
           <?xml version="1.0" encoding="utf-8"?>
           <resources>
@@ -201,7 +206,7 @@ jobs:
           </resources>
           EOF
 
-          # --- colors.xml ---
+          # colors.xml
           cat > twa-project/app/src/main/res/values/colors.xml << 'EOF'
           <?xml version="1.0" encoding="utf-8"?>
           <resources>
@@ -209,18 +214,18 @@ jobs:
           </resources>
           EOF
 
-          # --- تحميل الأيقونة ---
-          for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
+          # تحميل الأيقونة
+          for d in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
             curl -L -s "https://sayatchan2-web.github.io/My-Korean-app/icon-192.png" \
-              -o twa-project/app/src/main/res/mipmap-${density}/ic_launcher.png
+              -o twa-project/app/src/main/res/mipmap-$d/ic_launcher.png
           done
 
-          # --- تحميل gradlew ---
+          # تحميل gradlew
           curl -L -s "https://raw.githubusercontent.com/gradle/gradle/v8.6.0/gradlew" \
             -o twa-project/gradlew
           chmod +x twa-project/gradlew
 
-          # --- gradle-wrapper.jar ---
+          # تحميل gradle-wrapper.jar
           curl -L -s "https://github.com/gradle/gradle/raw/v8.6.0/gradle/wrapper/gradle-wrapper.jar" \
             -o twa-project/gradle/wrapper/gradle-wrapper.jar
 
@@ -228,10 +233,8 @@ jobs:
         env:
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-          ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
         working-directory: twa-project
-        run: |
-          ./gradlew bundleRelease --no-daemon --stacktrace
+        run: ./gradlew bundleRelease --no-daemon --stacktrace
 
       - name: Upload AAB
         uses: actions/upload-artifact@v4
