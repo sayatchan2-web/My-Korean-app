@@ -7,7 +7,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout source code
+        uses: actions/checkout@v4
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -15,15 +16,23 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      # هذا الأمر لإنشاء الـ APK
-      - name: Build APK
-        run: ./gradlew assembleRelease
+      # هنا قمنا بتعديل المسار والأمر ليدخل مباشرة لمجلد الأندرويد الداخلي دون الحاجة للملف المفقود
+      - name: Build APK directly
+        run: |
+          if [ -f "gradlew" ]; then
+            chmod +x gradlew
+            ./gradlew assembleRelease
+          elif [ -f "android/gradlew" ]; then
+            cd android
+            chmod +x gradlew
+            ./gradlew assembleRelease
+          else
+            cd android && ./gradlew assembleRelease || gradle assembleRelease
+          fi
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Korean-App-APK
-          path: app/build/outputs/apk/release/*.apk
+          path: |
+            **/build/outputs/apk/release/*.apk
