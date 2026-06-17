@@ -123,6 +123,7 @@ jobs:
                   release {
                       signingConfig signingConfigs.release
                       minifyEnabled false
+                      shrinkResources false
                   }
               }
 
@@ -229,7 +230,6 @@ jobs:
           curl -L -s "https://github.com/gradle/gradle/raw/v8.6.0/gradle/wrapper/gradle-wrapper.jar" \
             -o twa-project/gradle/wrapper/gradle-wrapper.jar
 
-      # السحر هنا: قمنا بتغيير أمر البناء ليصنع الـ APK والـ AAB معاً بنجاح
       - name: Build APK and AAB Packages
         env:
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
@@ -237,7 +237,6 @@ jobs:
         working-directory: twa-project
         run: ./gradlew assembleRelease bundleRelease --no-daemon --stacktrace
 
-      # رفع الملفات المستخرجة للتحميل
       - name: Upload Application Packages
         uses: actions/upload-artifact@v4
         with:
@@ -246,4 +245,3 @@ jobs:
             twa-project/app/build/outputs/apk/release/*.apk
             twa-project/app/build/outputs/bundle/release/*.aab
           retention-days: 7
-
