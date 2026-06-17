@@ -15,7 +15,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '11'
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
@@ -201,6 +201,7 @@ jobs:
         run: |
           cd twa-build
           chmod +x gradlew
+          export JAVA_HOME=$JAVA_HOME_11_X64
           ./gradlew bundleRelease
 
       - name: Upload AAB
