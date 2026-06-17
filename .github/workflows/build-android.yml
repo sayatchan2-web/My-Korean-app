@@ -28,7 +28,7 @@ jobs:
       - name: Generate signing keystore
         run: |
           keytool -genkeypair \
-            -keystore signing.keystore \
+            -keystore ${{ github.workspace }}/signing.keystore \
             -alias my-key-alias \
             -keyalg RSA \
             -keysize 2048 \
@@ -38,54 +38,63 @@ jobs:
             -dname "CN=Korean App Admin, OU=Engineering, O=Korean App, L=City, ST=State, C=US" \
             -noprompt
 
-      - name: Clone TWA Quickstart template
+      - name: Build TWA project from scratch
         run: |
-          git clone https://github.com/GoogleChromeLabs/svgomg-twa.git twa-build
+          mkdir -p twa-project/app/src/main/res/values
+          mkdir -p twa-project/app/src/main/res/mipmap-mdpi
+          mkdir -p twa-project/app/src/main/res/mipmap-hdpi
+          mkdir -p twa-project/app/src/main/res/mipmap-xhdpi
+          mkdir -p twa-project/app/src/main/res/mipmap-xxhdpi
+          mkdir -p twa-project/app/src/main/res/mipmap-xxxhdpi
+          mkdir -p twa-project/gradle/wrapper
 
-      - name: Update Gradle wrapper to 8.x
-        run: |
-          cd twa-build
-          # تحديث gradle-wrapper.properties لاستخدام Gradle 8 المتوافق مع Java 17
-          cat > gradle/wrapper/gradle-wrapper.properties << 'PROPS'
+          # --- settings.gradle ---
+          cat > twa-project/settings.gradle << 'EOF'
+          pluginManagement {
+              repositories {
+                  google()
+                  mavenCentral()
+                  gradlePluginPortal()
+              }
+          }
+          dependencyResolutionManagement {
+              repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+          }
+          rootProject.name = "KoreanApp"
+          include ':app'
+          EOF
+
+          # --- build.gradle (root) ---
+          cat > twa-project/build.gradle << 'EOF'
+          plugins {
+              id 'com.android.application' version '8.2.2' apply false
+          }
+          EOF
+
+          # --- gradle-wrapper.properties ---
+          cat > twa-project/gradle/wrapper/gradle-wrapper.properties << 'EOF'
           distributionBase=GRADLE_USER_HOME
           distributionPath=wrapper/dists
-          distributionUrl=https\://services.gradle.org/distributions/gradle-8.4-all.zip
+          distributionUrl=https\://services.gradle.org/distributions/gradle-8.6-bin.zip
+          networkTimeout=10000
+          validateDistributionUrl=true
           zipStoreBase=GRADLE_USER_HOME
           zipStorePath=wrapper/dists
-          PROPS
+          EOF
 
-          # تحديث build.gradle الجذري
-          cat > build.gradle << 'GRADLE'
-          buildscript {
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-              dependencies {
-                  classpath 'com.android.tools.build:gradle:8.1.4'
-              }
-          }
-
-          allprojects {
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-          }
-          GRADLE
-
-      - name: Configure TWA app
-        run: |
-          cd twa-build
-
-          cat > app/build.gradle << 'GRADLE'
+          # --- app/build.gradle ---
+          cat > twa-project/app/build.gradle << 'EOF'
           plugins {
               id 'com.android.application'
           }
 
           android {
-              compileSdk 34
               namespace 'com.korean.learn'
+              compileSdk 34
 
               defaultConfig {
                   applicationId 'com.korean.learn'
@@ -97,10 +106,10 @@ jobs:
 
               signingConfigs {
                   release {
-                      storeFile file('../../signing.keystore')
-                      storePassword System.getenv('KEY_STORE_PASSWORD')
+                      storeFile file('${{ github.workspace }}/signing.keystore')
+                      storePassword '${{ secrets.KEY_STORE_PASSWORD }}'
                       keyAlias 'my-key-alias'
-                      keyPassword System.getenv('KEY_PASSWORD')
+                      keyPassword '${{ secrets.KEY_PASSWORD }}'
                   }
               }
 
@@ -108,6 +117,7 @@ jobs:
                   release {
                       signingConfig signingConfigs.release
                       minifyEnabled false
+                      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
                   }
               }
 
@@ -120,11 +130,62 @@ jobs:
           dependencies {
               implementation 'com.google.androidbrowserhelper:androidbrowserhelper:2.5.0'
           }
-          GRADLE
+          EOF
 
-          mkdir -p app/src/main/res/values
+          # --- AndroidManifest.xml ---
+          cat > twa-project/app/src/main/AndroidManifest.xml << 'EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+              <uses-permission android:name="android.permission.INTERNET" />
+              <application
+                  android:allowBackup="true"
+                  android:icon="@mipmap/ic_launcher"
+                  android:label="@string/app_name"
+                  android:theme="@android:style/Theme.NoTitleBar">
+                  <meta-data
+                      android:name="asset_statements"
+                      android:resource="@string/asset_statements" />
+                  <activity
+                      android:name="com.google.androidbrowserhelper.trusted.LauncherActivity"
+                      android:exported="true">
+                      <meta-data
+                          android:name="android.support.customtabs.trusted.DEFAULT_URL"
+                          android:value="https://sayatchan2-web.github.io/My-Korean-app/" />
+                      <meta-data
+                          android:name="android.support.customtabs.trusted.STATUS_BAR_COLOR"
+                          android:value="#1a1a2e" />
+                      <meta-data
+                          android:name="android.support.customtabs.trusted.NAVIGATION_BAR_COLOR"
+                          android:value="#1a1a2e" />
+                      <meta-data
+                          android:name="android.support.customtabs.trusted.SPLASH_SCREEN_BACKGROUND_COLOR"
+                          android:value="#fce4ec" />
+                      <meta-data
+                          android:name="android.support.customtabs.trusted.SPLASH_SCREEN_FADE_OUT_DURATION"
+                          android:value="300" />
+                      <meta-data
+                          android:name="android.support.customtabs.trusted.FILE_PROVIDER_AUTHORITY"
+                          android:value="com.korean.learn.fileprovider" />
+                      <intent-filter>
+                          <action android:name="android.intent.action.MAIN" />
+                          <category android:name="android.intent.category.LAUNCHER" />
+                      </intent-filter>
+                      <intent-filter android:autoVerify="true">
+                          <action android:name="android.intent.action.VIEW"/>
+                          <category android:name="android.intent.category.DEFAULT" />
+                          <category android:name="android.intent.category.BROWSABLE"/>
+                          <data
+                              android:scheme="https"
+                              android:host="sayatchan2-web.github.io"
+                              android:pathPrefix="/My-Korean-app/" />
+                      </intent-filter>
+                  </activity>
+              </application>
+          </manifest>
+          EOF
 
-          cat > app/src/main/res/values/strings.xml << 'XML'
+          # --- strings.xml ---
+          cat > twa-project/app/src/main/res/values/strings.xml << 'EOF'
           <?xml version="1.0" encoding="utf-8"?>
           <resources>
               <string name="app_name">تعلم الكورية</string>
@@ -138,101 +199,43 @@ jobs:
                   }]
               </string>
           </resources>
-          XML
+          EOF
 
-          cat > app/src/main/res/values/colors.xml << 'XML'
+          # --- colors.xml ---
+          cat > twa-project/app/src/main/res/values/colors.xml << 'EOF'
           <?xml version="1.0" encoding="utf-8"?>
           <resources>
               <color name="colorPrimary">#1a1a2e</color>
-              <color name="colorPrimaryDark">#1a1a2e</color>
-              <color name="colorAccent">#d946ef</color>
           </resources>
-          XML
+          EOF
 
-          cat > app/src/main/AndroidManifest.xml << 'MANIFEST'
-          <?xml version="1.0" encoding="utf-8"?>
-          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
-              <uses-permission android:name="android.permission.INTERNET" />
-
-              <application
-                  android:allowBackup="true"
-                  android:icon="@mipmap/ic_launcher"
-                  android:label="@string/app_name"
-                  android:theme="@android:style/Theme.NoTitleBar">
-
-                  <meta-data
-                      android:name="asset_statements"
-                      android:resource="@string/asset_statements" />
-
-                  <activity
-                      android:name="com.google.androidbrowserhelper.trusted.LauncherActivity"
-                      android:exported="true">
-
-                      <meta-data
-                          android:name="android.support.customtabs.trusted.DEFAULT_URL"
-                          android:value="https://sayatchan2-web.github.io/My-Korean-app/" />
-
-                      <meta-data
-                          android:name="android.support.customtabs.trusted.STATUS_BAR_COLOR"
-                          android:value="#1a1a2e" />
-
-                      <meta-data
-                          android:name="android.support.customtabs.trusted.NAVIGATION_BAR_COLOR"
-                          android:value="#1a1a2e" />
-
-                      <meta-data
-                          android:name="android.support.customtabs.trusted.SPLASH_SCREEN_BACKGROUND_COLOR"
-                          android:value="#fce4ec" />
-
-                      <meta-data
-                          android:name="android.support.customtabs.trusted.SPLASH_SCREEN_FADE_OUT_DURATION"
-                          android:value="300" />
-
-                      <meta-data
-                          android:name="android.support.customtabs.trusted.FILE_PROVIDER_AUTHORITY"
-                          android:value="com.korean.learn.fileprovider" />
-
-                      <intent-filter>
-                          <action android:name="android.intent.action.MAIN" />
-                          <category android:name="android.intent.category.LAUNCHER" />
-                      </intent-filter>
-
-                      <intent-filter android:autoVerify="true">
-                          <action android:name="android.intent.action.VIEW"/>
-                          <category android:name="android.intent.category.DEFAULT" />
-                          <category android:name="android.intent.category.BROWSABLE"/>
-                          <data
-                              android:scheme="https"
-                              android:host="sayatchan2-web.github.io"
-                              android:pathPrefix="/My-Korean-app/" />
-                      </intent-filter>
-                  </activity>
-              </application>
-          </manifest>
-          MANIFEST
-
-      - name: Download app icons
-        run: |
-          cd twa-build
+          # --- تحميل الأيقونة ---
           for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
-            mkdir -p app/src/main/res/mipmap-${density}
-            curl -s "https://sayatchan2-web.github.io/My-Korean-app/icon-192.png" \
-              -o app/src/main/res/mipmap-${density}/ic_launcher.png
+            curl -L -s "https://sayatchan2-web.github.io/My-Korean-app/icon-192.png" \
+              -o twa-project/app/src/main/res/mipmap-${density}/ic_launcher.png
           done
+
+          # --- تحميل gradlew ---
+          curl -L -s "https://raw.githubusercontent.com/gradle/gradle/v8.6.0/gradlew" \
+            -o twa-project/gradlew
+          chmod +x twa-project/gradlew
+
+          # --- gradle-wrapper.jar ---
+          curl -L -s "https://github.com/gradle/gradle/raw/v8.6.0/gradle/wrapper/gradle-wrapper.jar" \
+            -o twa-project/gradle/wrapper/gradle-wrapper.jar
 
       - name: Build AAB
         env:
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
+        working-directory: twa-project
         run: |
-          cd twa-build
-          chmod +x gradlew
-          ./gradlew bundleRelease --stacktrace
+          ./gradlew bundleRelease --no-daemon --stacktrace
 
       - name: Upload AAB
         uses: actions/upload-artifact@v4
         with:
           name: korean-app-release
-          path: twa-build/app/build/outputs/bundle/release/app-release.aab
+          path: twa-project/app/build/outputs/bundle/release/app-release.aab
           retention-days: 7
