@@ -42,7 +42,7 @@ jobs:
         run: |
           mkdir -p twa-project/app/src/main/res/values
           mkdir -p twa-project/gradle/wrapper
-          for d in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
+          for d in mdpi hdpi xxhdpi xxhdpi xxxhdpi; do
             mkdir -p twa-project/app/src/main/res/mipmap-$d
           done
 
@@ -138,7 +138,7 @@ jobs:
           }
           EOF
 
-          # AndroidManifest.xml
+          # AndroidManifest.xml (تم تصحيح الحروف الكبيرة هنا بدقة)
           cat > twa-project/app/src/main/AndroidManifest.xml << 'EOF'
           <?xml version="1.0" encoding="utf-8"?>
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
@@ -155,8 +155,8 @@ jobs:
                       android:name="com.google.androidbrowserhelper.trusted.LauncherActivity"
                       android:exported="true">
                       <meta-data
-                          android:name="android.support.customtabs.trusted.DEFAULT_URL"
-                          android:value="https://sayatchan2-web.github.io/My-Korean-app/" />
+                          **android:name="android.support.customtabs.trusted.DEFAULT_URL"**
+                          **android:value="https://sayatchan2-web.github.io/My-Korean-App/" />**
                       <meta-data
                           android:name="android.support.customtabs.trusted.STATUS_BAR_COLOR"
                           android:value="#1a1a2e" />
@@ -183,7 +183,7 @@ jobs:
                           <data
                               android:scheme="https"
                               android:host="sayatchan2-web.github.io"
-                              android:pathPrefix="/My-Korean-app/" />
+                              **android:pathPrefix="/My-Korean-App/" />**
                       </intent-filter>
                   </activity>
               </application>
@@ -215,9 +215,9 @@ jobs:
           </resources>
           EOF
 
-          # تحميل الأيقونة
-          for d in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
-            curl -L -s "https://sayatchan2-web.github.io/My-Korean-app/icon-192.png" \
+          # تحميل الأيقونة برابط صحيح
+          for d in mdpi hdpi xxhdpi xxhdpi xxxhdpi; do
+            curl -L -s "https://sayatchan2-web.github.io/My-Korean-App/icon-192.png" \
               -o twa-project/app/src/main/res/mipmap-$d/ic_launcher.png
           done
 
