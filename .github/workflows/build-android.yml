@@ -15,7 +15,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '11'
+          java-version: '17'
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
@@ -41,15 +41,43 @@ jobs:
       - name: Clone TWA Quickstart template
         run: |
           git clone https://github.com/GoogleChromeLabs/svgomg-twa.git twa-build
+
+      - name: Update Gradle wrapper to 8.x
+        run: |
           cd twa-build
-          # حذف ملفات الإعداد القديمة
-          rm -f app/build.gradle
+          # تحديث gradle-wrapper.properties لاستخدام Gradle 8 المتوافق مع Java 17
+          cat > gradle/wrapper/gradle-wrapper.properties << 'PROPS'
+          distributionBase=GRADLE_USER_HOME
+          distributionPath=wrapper/dists
+          distributionUrl=https\://services.gradle.org/distributions/gradle-8.4-all.zip
+          zipStoreBase=GRADLE_USER_HOME
+          zipStorePath=wrapper/dists
+          PROPS
+
+          # تحديث build.gradle الجذري
+          cat > build.gradle << 'GRADLE'
+          buildscript {
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+              dependencies {
+                  classpath 'com.android.tools.build:gradle:8.1.4'
+              }
+          }
+
+          allprojects {
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+          }
+          GRADLE
 
       - name: Configure TWA app
         run: |
           cd twa-build
 
-          # إعداد ملف build.gradle الرئيسي للتطبيق
           cat > app/build.gradle << 'GRADLE'
           plugins {
               id 'com.android.application'
@@ -82,6 +110,11 @@ jobs:
                       minifyEnabled false
                   }
               }
+
+              compileOptions {
+                  sourceCompatibility JavaVersion.VERSION_17
+                  targetCompatibility JavaVersion.VERSION_17
+              }
           }
 
           dependencies {
@@ -89,8 +122,8 @@ jobs:
           }
           GRADLE
 
-          # إعداد strings.xml
           mkdir -p app/src/main/res/values
+
           cat > app/src/main/res/values/strings.xml << 'XML'
           <?xml version="1.0" encoding="utf-8"?>
           <resources>
@@ -107,8 +140,15 @@ jobs:
           </resources>
           XML
 
-          # إعداد AndroidManifest.xml
-          mkdir -p app/src/main
+          cat > app/src/main/res/values/colors.xml << 'XML'
+          <?xml version="1.0" encoding="utf-8"?>
+          <resources>
+              <color name="colorPrimary">#1a1a2e</color>
+              <color name="colorPrimaryDark">#1a1a2e</color>
+              <color name="colorAccent">#d946ef</color>
+          </resources>
+          XML
+
           cat > app/src/main/AndroidManifest.xml << 'MANIFEST'
           <?xml version="1.0" encoding="utf-8"?>
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
@@ -142,10 +182,6 @@ jobs:
                           android:value="#1a1a2e" />
 
                       <meta-data
-                          android:name="android.support.customtabs.trusted.SPLASH_IMAGE_DRAWABLE"
-                          android:value="@color/colorPrimary" />
-
-                      <meta-data
                           android:name="android.support.customtabs.trusted.SPLASH_SCREEN_BACKGROUND_COLOR"
                           android:value="#fce4ec" />
 
@@ -166,7 +202,8 @@ jobs:
                           <action android:name="android.intent.action.VIEW"/>
                           <category android:name="android.intent.category.DEFAULT" />
                           <category android:name="android.intent.category.BROWSABLE"/>
-                          <data android:scheme="https"
+                          <data
+                              android:scheme="https"
                               android:host="sayatchan2-web.github.io"
                               android:pathPrefix="/My-Korean-app/" />
                       </intent-filter>
@@ -175,17 +212,7 @@ jobs:
           </manifest>
           MANIFEST
 
-          # إعداد colors.xml
-          cat > app/src/main/res/values/colors.xml << 'XML'
-          <?xml version="1.0" encoding="utf-8"?>
-          <resources>
-              <color name="colorPrimary">#1a1a2e</color>
-              <color name="colorPrimaryDark">#1a1a2e</color>
-              <color name="colorAccent">#d946ef</color>
-          </resources>
-          XML
-
-      - name: Download app icon and create mipmaps
+      - name: Download app icons
         run: |
           cd twa-build
           for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
@@ -201,8 +228,7 @@ jobs:
         run: |
           cd twa-build
           chmod +x gradlew
-          export JAVA_HOME=$JAVA_HOME_11_X64
-          ./gradlew bundleRelease
+          ./gradlew bundleRelease --stacktrace
 
       - name: Upload AAB
         uses: actions/upload-artifact@v4
