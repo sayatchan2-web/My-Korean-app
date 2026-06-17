@@ -8,10 +8,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Java
+      - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
@@ -20,25 +20,10 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Accept Android licenses
-        run: yes | sdkmanager --licenses || true
-
-      - name: Install Android build tools
+      - name: Accept licenses and install tools
         run: |
+          yes | sdkmanager --licenses || true
           sdkmanager "build-tools;34.0.0" "platforms;android-34"
-
-      - name: Generate signing keystore
-        run: |
-          keytool -genkeypair \
-            -v \
-            -keystore signing.keystore \
-            -alias my-key-alias \
-            -keyalg RSA \
-            -keysize 2048 \
-            -validity 10000 \
-            -storepass "${{ secrets.KEY_STORE_PASSWORD }}" \
-            -keypass "${{ secrets.KEY_PASSWORD }}" \
-            -dname "CN=Korean App Admin, OU=Engineering, O=Korean App, L=City, ST=State, C=US"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -48,61 +33,46 @@ jobs:
       - name: Install Bubblewrap
         run: npm install -g @bubblewrap/cli
 
-      - name: Create twa-manifest.json
+      - name: Configure Bubblewrap paths (skip interactive setup)
         run: |
-          cat > twa-manifest.json << 'MANIFEST'
-          {
-            "packageId": "com.korean.learn",
-            "host": "sayatchan2-web.github.io",
-            "name": "تعلم الكورية واستعد للتوبيك",
-            "launcherName": "تعلم الكورية",
-            "display": "standalone",
-            "orientation": "portrait",
-            "themeColor": "#1a1a2e",
-            "themeColorDark": "#1a1a2e",
-            "backgroundColor": "#fce4ec",
-            "startUrl": "/My-Korean-app/",
-            "iconUrl": "https://sayatchan2-web.github.io/My-Korean-app/icon-512.png",
-            "maskableIconUrl": "https://sayatchan2-web.github.io/My-Korean-app/icon-512-maskable.png",
-            "monochromeIconUrl": "https://sayatchan2-web.github.io/My-Korean-app/icon-512.png",
-            "appVersion": "1.0.0",
-            "appVersionCode": 1,
-            "signingKey": {
-              "path": "../signing.keystore",
-              "alias": "my-key-alias"
-            },
-            "enableNotifications": false,
-            "enableLocationDelegation": false,
-            "fullScopeUrl": "https://sayatchan2-web.github.io/My-Korean-app/",
-            "minSdkVersion": 21,
-            "targetSdkVersion": 34,
-            "fallbackType": "customtabs",
-            "features": {},
-            "webManifestUrl": "https://sayatchan2-web.github.io/My-Korean-app/manifest.json",
-            "generatorApp": "bubblewrap-cli",
-            "shortcuts": [],
-            "isChromeOSOnly": false,
-            "isMetaQuest": false,
-            "navigationColor": "#000000",
-            "navigationColorDark": "#000000",
-            "navigationDividerColor": "#000000",
-            "navigationDividerColorDark": "#000000",
-            "enableSiteSettingsShortcut": true
-          }
-          MANIFEST
+          mkdir -p ~/.bubblewrap
+          echo '{
+            "jdkPath": "'"$JAVA_HOME"'",
+            "androidSdkPath": "'"$ANDROID_SDK_ROOT"'"
+          }' > ~/.bubblewrap/config.json
+          cat ~/.bubblewrap/config.json
 
-      - name: Build with Bubblewrap using manifest
+      - name: Generate signing keystore
         run: |
-          mkdir twa-build && cd twa-build
-          cp ../twa-manifest.json ./twa-manifest.json
-          BUBBLEWRAP_SKIP_SETUP=true bubblewrap build \
-            --manifest=./twa-manifest.json \
+          keytool -genkeypair \
+            -keystore signing.keystore \
+            -alias my-key-alias \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -storepass "${{ secrets.KEY_STORE_PASSWORD }}" \
+            -keypass "${{ secrets.KEY_PASSWORD }}" \
+            -dname "CN=Korean App Admin, OU=Engineering, O=Korean App, L=City, ST=State, C=US" \
+            -noprompt
+
+      - name: Init Bubblewrap project
+        run: |
+          mkdir -p twa-build
+          cd twa-build
+          bubblewrap init \
+            --manifest="https://sayatchan2-web.github.io/My-Korean-app/manifest.json" \
+            --directory=.
+
+      - name: Build AAB
+        run: |
+          cd twa-build
+          bubblewrap build \
             --signingKeyPath="../signing.keystore" \
             --signingKeyAlias="my-key-alias" \
             --keystorePassword="${{ secrets.KEY_STORE_PASSWORD }}" \
             --keyPassword="${{ secrets.KEY_PASSWORD }}"
 
-      - name: Upload AAB
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: korean-app-release
